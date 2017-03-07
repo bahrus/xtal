@@ -9,40 +9,43 @@
     <script>
         class XtalBrowserWindow extends Polymer.Element {
             static get is() { return 'xtal-browser-window'; }
-            static get config() {
-                return {
-                    properties: {
-                        linkOnly: {
-                            type: Boolean
-                        },
-                        sandBox: {
-                            type: String
-                        },
-                        windowTop: {
-                            type: Number
-                        },
-                        width: {
-                            type: String,
-                            value: '90%'
-                        },
-                        collapsedText: {
-                            type: String,
-                            value: '►'
-                        },
-                        clicked: {
-                            type: Boolean,
-                            notify: true,
-                            reflectToAttribute: true,
-                        }
-                    }
-                };
-            }
+            // static get config() {
+            //     return {
+            //         properties: {
+            //             linkOnly: {
+            //                 type: Boolean
+            //             },
+            //             sandBox: {
+            //                 type: String
+            //             },
+            //             windowTop: {
+            //                 type: Number
+            //             },
+            //             width: {
+            //                 type: String,
+            //                 value: '90%'
+            //             },
+            //             collapsedText: {
+            //                 type: String,
+            //                 value: '►'
+            //             },
+            //             clicked: {
+            //                 type: Boolean,
+            //                 notify: true,
+            //                 reflectToAttribute: true,
+            //             }
+            //         }
+            //     };
+            // }
             constructor() {
                 super();
                 this.collapsedText = 'i am here';
             }
             connectedCallback() {
                 super.connectedCallback();
+            }
+            ready(){
+                super.ready();
             }
             markClicked() {
                 this.clicked = true;
