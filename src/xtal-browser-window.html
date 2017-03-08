@@ -49,8 +49,15 @@
             }
             ready(){
                 super.ready();
+                var aLink = this.children[0];
+                aLink.target = '_blank';
+                if(this.sandBox){
+                    var iFrame = this.$.iframe;
+                    iFrame.setAttribute('sandbox', this.sandBox);
+                }
             }
             handleOnLoad(){
+                this.$.div_iframe.scrollTop = this.windowTop;
             }
             markClicked(){
                 this.clicked = true;
