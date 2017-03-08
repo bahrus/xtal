@@ -3,7 +3,7 @@
 <dom-module id="xtal-browser-window">
     <template>
         <span style="cursor:pointer" id="toggle_button" raised on-click="toggleIFrame">[[collapsedText]]</span> 
-        <content on-click="markClicked"></content>
+        <slot on-click="markClicked"></slot>
         <div id="div_iframe" 
             style$="display:none;border-style: inset;border-color: grey;overflow: scroll;height: 500px;width: {{width}}"
         >
@@ -14,6 +14,33 @@
     <script>
         class XtalBrowserWindow extends Polymer.Element {
             static get is() { return 'xtal-browser-window'; }
+            static get properties(){
+                return {
+                    linkOnly:{
+                        type: Boolean
+                    },
+                    sandBox:{
+                        type: String
+                    },
+                    windowTop:{
+                        type: Number
+                    },
+                    width:{
+                        type: String,
+                        value: '90%'
+                    },
+                    collapsedText:{
+                        type: String,
+                        value: '►'
+                    },
+                    clicked:{
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true
+                    } 
+                }
+ 
+            }
             constructor() {
                 super();
             }
