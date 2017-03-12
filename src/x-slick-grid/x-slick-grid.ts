@@ -163,6 +163,19 @@ export interface IXtalXSlidGridProperties {
     isContextMenuOpen: boolean | polymer.IPolymerType,
     lastClickedXValue: number | polymer.IPolymerType,
     lastClickedYValue: number | polymer.IPolymerType,
+    selectionModel: string | polymer.IPolymerType,
+    basePath: string | polymer.IPolymerType,
+    useSlickAutoToolTips: boolean | polymer.IPolymerType,
+    useSlickCellCopyManager: boolean | polymer.IPolymerType,
+    useSlickCheckboxSelectColumn: boolean | polymer.IPolymerType,
+    useDataViewDataProvider: boolean | polymer.IPolymerType,
+    useSlickPaging: boolean | polymer.IPolymerType,
+    useSlickColumnPicker: boolean | polymer.IPolymerType,
+    useSlickFormatters: boolean | polymer.IPolymerType,
+    useSlickEditors: boolean | polymer.IPolymerType,
+    useTreeGridHelper: boolean | polymer.IPolymerType,
+    gridRenderParams: object | polymer.IPolymerType,
+    readyFnInitialized: boolean | polymer.IPolymerType,
 }
 
 class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridProperties{
@@ -190,8 +203,8 @@ class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridPropert
     }
     height = '500px';
     width = '600px';
-    fillContainerHeight = false;
-    fillContainerWidth = false;
+    fillContainerHeight : boolean;
+    fillContainerWidth : boolean;
     renderCount = 0;
     clickedCellIndex = 0;
     clickedRowIndex = 0;
@@ -200,6 +213,19 @@ class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridPropert
     isContextMenuOpen = false;
     lastClickedXValue = 0;
     lastClickedYValue = 0;
+    selectionModel;
+    basePath : string;
+    useSlickAutoToolTips: boolean;
+    useSlickCellCopyManager: boolean;
+    useSlickCheckboxSelectColumn: boolean;
+    useDataViewDataProvider: boolean;
+    useSlickPaging: boolean;
+    useSlickColumnPicker: boolean;
+    useSlickFormatters: boolean;
+    useSlickEditors: boolean;
+    useTreeGridHelper: boolean;
+    gridRenderParams: object;
+    readyFnInitialized: boolean;
     static get properties() : IXtalXSlidGridProperties{
         return {
              /**
@@ -279,27 +305,7 @@ class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridPropert
             lastClickedYValue:{
                 type: Number,
                 notify: true,
-            }
-           
-        }
-    }
-}
-Polymer({
-        
-        wcOptions: null,
-        _data: null,
-        grid: null,
-        gridDiv: null,
-        _dataProvider: null,
-        properties:{
-           
-            
-           
-            
-
-
-
-
+            },
             /**
              * Possible values are 'Cell', 'Row' 'RowPlus'
              */
@@ -349,6 +355,26 @@ Polymer({
                 type: Boolean,
                 notify: true,
             }
+        }
+    }
+}
+Polymer({
+        
+        wcOptions: null,
+        _data: null,
+        grid: null,
+        gridDiv: null,
+        _dataProvider: null,
+        properties:{
+           
+            
+           
+            
+
+
+
+
+
         },
         //readyFnInitialized: false,
         ready: function() {

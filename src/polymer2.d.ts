@@ -15,5 +15,6 @@ declare namespace polymer{
         notify?: boolean,
         reflectToAttribute?: boolean,
         readOnly?: boolean,
+        observer?: string,
     }
 }
