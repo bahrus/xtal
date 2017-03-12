@@ -1,12 +1,3 @@
-declare module Polymer{
-    export abstract class Element{
-        connectedCallback();
-        ready();
-        $;
-        children: any[];
-    }
-}
-/** @polymerElement */
 class XtalBrowserWindow extends Polymer.Element {
     static get is() { return 'xtal-browser-window'; }
     static get properties(){
