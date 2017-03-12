@@ -1,0 +1,67 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../x-slick-grid.html" />
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html"/>
+<link rel="import" href="../../js-transformer.html"/>
+<link rel="import" href="../../xtal-form.html"/>
+
+<dom-module id="example1a-component">
+    <template>
+        <table width="100%">
+            <tr>
+                <td valign="top" width="50%">
+                    <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
+                </td>
+                <td valign="top">
+                    <h2>Demonstrates:</h2>
+                    <ul>
+                        <li>basic grid with minimal configuration</li>
+                        <li>Relatively low number of references needed</li>
+                        <li>JQuery / JQuery UI only loaded by the web component if they are not present already</li>
+                    </ul>
+                    <h2>View Source:</h2>
+                    <ul>
+                        <li><A href="https://github.com/bahrus/crystal/blob/master/xtal-elements/x-slick-grid/examples/example1-simple.html"
+                            target="_sourcewindow"> View the source for this example on Github</a></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        
+        <xtal-form auto >
+            <form></form>
+            <iron-ajax
+                    url="generated.json"
+                    method="GET"
+                    handle-as="json"
+                    debounce-duration="2000"
+                    last-response="{{generatedJSON}}"
+            >
+            </iron-ajax>
+            <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
+                [{
+                    columns:[
+                        {id: 'index',       name: 'Index',      field: 'index'},
+                        {id: 'isActive',    name: 'Active',     field: 'isActive'},
+                        {id: 'balance',     name: 'Balance',    field: 'balance'},
+                        {id: 'age',         name: 'Age',        field: 'age'},
+                        {id: 'eyeColor',    name: 'Eye Color',  field: 'eyeColor'},
+                        {id: 'name',        name: 'Name',       field: 'name'},
+                        {id: 'gender',      name: 'Gender',     field: 'gender'},
+                        {id: 'company',     name:'Company',     field: 'company'}
+                    ],
+                    gridOptions:{
+                        enableCellNavigation: true,
+                        enableColumnReorder: false
+                    }
+                }]
+            </js-transformer>
+        </xtal-form>
+    </template>
+    
+
+<script>
+    Polymer({
+        is: 'example1a-component',
+    })
+</script>
+</dom-module>

@@ -1,0 +1,28 @@
+{
+  "name": "xtal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "IE11Test.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "@types/jquery": "^2.0.41",
+    "@types/slickgrid": "^2.1.22",
+    "definitely-typed-jquery": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahrus/xtal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bahrus/xtal/issues"
+  },
+  "homepage": "https://github.com/bahrus/xtal#readme"
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>SlickGrid example 2: Formatters</title>
+    <link rel="stylesheet" href="examples.css" type="text/css"/>
+    <style>
+        .cell-title {
+            font-weight: bold;
+        }
+
+        .cell-effort-driven {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<!--polyfill if needed-->
+<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../x-slick-grid.html" />
+
+<input type="text"/>
+
+<table width="100%">
+    <tr>
+        <td valign="top" width="50%">
+            <!--<link rel="import" href="../SlickFormatters.html"/>-->
+            <x-slick-grid id="myGrid" use-slick-formatters>
+
+            </x-slick-grid>
+        </td>
+        <td valign="top">
+            <h2>Demonstrates:</h2>
+            <ul>
+                <li>width, minWidth, maxWidth, resizable, cssClass column attributes</li>
+                <li>custom column formatters</li>
+                <li>conditional loading of resources (slick.formatters.js)</li>
+            </ul>
+            <h2>View Source:</h2>
+            <ul>
+                <li><A href="https://github.com/bahrus/crystal/blob/master/xtal-elements/x-slick-grid/examples/example2-formatters.html"
+                       target="_sourcewindow"> View the source for this example on Github</a></li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<input type="text"/>
+
+
+
+<script>
+    function formatter(row, cell, value, columnDef, dataContext) {
+        return value;
+    }
+
+
+    var data = [];
+    var columns = [
+        {id: "title", name: "Title", field: "title", width: 120, cssClass: "cell-title", formatter: formatter},
+        {id: "duration", name: "Duration", field: "duration"},
+        {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatterFn: function(e){return Slick.Formatters.PercentCompleteBar}},
+        {id: "start", name: "Start", field: "start", minWidth: 60},
+        {id: "finish", name: "Finish", field: "finish", minWidth: 60},
+        {id: "effort-driven", name: "Effort Driven", sortable: false, width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven",
+            formatterFn: function(e){return Slick.Formatters.Checkmark}}
+    ];
+
+    var options = {
+        editable: false,
+        enableAddRow: false,
+        enableCellNavigation: true
+    };
+
+
+    for (var i = 0; i < 5; i++) {
+        var d = (data[i] = {});
+
+        d["title"] = "<a href='#' tabindex='0'>Task</a> " + i;
+        d["duration"] = "5 days";
+        d["percentComplete"] = Math.min(100, Math.round(Math.random() * 110));
+        d["start"] = "01/01/2009";
+        d["finish"] = "01/05/2009";
+        d["effortDriven"] = (i % 5 == 0);
+    }
+
+    var xslick = document.querySelector('x-slick-grid');
+    if(xslick.setInitialData){
+        xslick.setInitialData(data, columns, options);
+    }else{
+        window.addEventListener('WebComponentsReady', function(e){
+            xslick.setInitialData(data, columns, options);
+        });
+    }
+</script>
+</body>
+</html>

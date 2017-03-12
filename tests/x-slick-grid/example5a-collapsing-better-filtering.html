@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>SlickGrid example 5a: Collapsing, with code reduction via web component</title>
+  <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <style>
+    .cell-title {
+      font-weight: bold;
+    }
+
+    .cell-effort-driven {
+      text-align: center;
+    }
+
+
+
+  </style>
+</head>
+<body>
+<!--polyfill if needed-->
+<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../x-slick-grid.html" />
+<table width="100%">
+  <tr>
+    <td valign="top" width="50%">
+      <div style="border:1px solid gray;background:wheat;padding:6px;">
+        <label>Show tasks with % at least: </label>
+
+        <div style="padding:4px;">
+          <div style="width:100px;" id="pcSlider"></div>
+        </div>
+        <br/>
+        <label>And title including:</label>
+        <input type=text id="txtSearch">
+
+        <div>
+          <a href="javascript:xslick.collapseAll();">Collapse All</a> |
+          <a href="javascript:xslick.expandAll();">Expand All</a>
+        </div>
+
+      </div>
+      <br/>
+
+      <x-slick-grid
+              use-slick-editors
+              use-slick-formatters
+              selection-model="Cell"
+              use-data-view-data-provider
+              use-tree-grid-helper
+      ></x-slick-grid>
+      
+    </td>
+    <td valign="top">
+      <h2>Demonstrates:</h2>
+      <ul>
+        <li>implementing expand/collapse as a filter for DataView</li>
+      </ul>
+
+      <h2>View Source:</h2>
+      <ul>
+        <li><A href="https://github.com/bahrus/crystal/blob/master/xtal-elements/x-slick-grid/examples/example5a-collapsing-better-filtering.html"
+               target="_sourcewindow"> View the source for this example on Github</a></li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+
+
+<script>
+
+// initialize the grid
+  var xslick = document.querySelector('x-slick-grid');
+  xslick.addEventListener('loadedDependencies', function(){
+    initialize();
+    xslick.setInitialData(data, columns, options, wcOptions);
+    addEventHandlers(xslick.grid);
+  });
+
+  function requiredFieldValidator(value) {
+    if (value == null || value == undefined || !value.length) {
+      return {valid: false, msg: "This is a required field"};
+    } else {
+      return {valid: true, msg: null};
+    }
+  }
+
+  var data = [];
+  var analyzedTreeData = false;
+  var percentCompleteThreshold = 0;
+  var searchString = "";
+  var indent = 0;
+  var parents = [];
+  var columns = [];
+  var options = {};
+  var wcOptions = {};
+  function initialize(){
+    columns = [
+      {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: crystal.elements.xslickgrid.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
+      {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
+      {id: "%", name: "% Complete", field: "percentComplete", sortable: true, width: 80,  resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
+      {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
+      {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
+      {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
+    ];
+    options = {
+      editable: true,
+      enableAddRow: true,
+      enableCellNavigation: true,
+      asyncEditorLoading: false
+    };
+    wcOptions = {
+      dataProvider: function(data){
+        return crystal.elements.xslickgrid.createDataViewWithFilter(data, myFilter, {
+          addStandardRowHandling: true,
+          containerFinder: function(){return xslick;}
+        })
+      },
+      eventHandlers:{
+          onCellChange: function(e, args){
+              xslick.dataProvider.updateItem(args.item.id, args.item);
+          },
+          onAddNewRow: function(e, args){
+              var item = {
+                  "id": "new_" + (Math.round(Math.random() * 10000)),
+                  "indent": 0,
+                  "title": "New task",
+                  "duration": "1 day",
+                  "percentComplete": 0,
+                  "start": "01/01/2009",
+                  "finish": "01/01/2009",
+                  "effortDriven": false};
+              $.extend(item, args.item);
+              xslick.dataProvider.addItem(item);
+          },
+          onSort: function(e, args){
+            xslick.sortColumn(args);
+          },
+          // onHeaderClick: function(e, args){
+          //   var sortArgs = {
+          //     sortCol:{
+          //       field: 'percentComplete'
+          //     },
+          //     sortAsc: true
+          //   }
+          //   xslick.sortColumn(sortArgs);
+          // }
+      }
+    };
+    // prepare the data
+    for (var i = 0; i < 1000; i++) {
+      var d = (data[i] = {});
+      var parent;
+
+      if (Math.random() > 0.5 && i > 0) {
+        indent++;
+        parents.push(i - 1);
+      } else if (Math.random() < 0.5 && indent > 0) {
+        indent--;
+        parents.pop();
+      }
+
+      if (parents.length > 0) {
+        parent = parents[parents.length - 1];
+      } else {
+        parent = null;
+      }
+
+      d["id"] = "id_" + i;
+      d["indent"] = indent;
+      d["parent"] = parent;
+      d["title"] = "Task " + i;
+      d["duration"] = "5 days";
+      d["percentComplete"] = Math.round(Math.random() * 100);
+      d["start"] = "01/01/2009";
+      d["finish"] = "01/05/2009";
+      d["effortDriven"] = (i % 5 == 0);
+    }
+  }
+
+  
+  
+  
+  function myFilter(item) {
+    var container = _items.container;
+    return crystal.elements.xslickgrid.filterNode(item, container, analyzedTreeData);
+  }
+
+  
+
+  
+
+
+  
+
+  
+
+  function percentCompleteSort(a, b) {
+    return a["percentComplete"] - b["percentComplete"];
+  }
+
+  
+
+  
+
+
+
+
+  
+
+  function addEventHandlers(grid){
+
+    grid.onClick.subscribe(function (e, args) {
+      if ($(e.target).hasClass("toggle")) {
+        var item = dataView.getItem(args.row);
+        if (item) {
+          if (!item._collapsed) {
+            item._collapsed = true;
+          } else {
+            item._collapsed = false;
+          }
+
+          dataView.updateItem(item.id, item);
+        }
+        e.stopImmediatePropagation();
+      }
+    });
+
+    var h_runfilters = null;
+
+    // wire up the slider to apply the filter to the model
+    $("#pcSlider").slider({
+      "range": "min",
+      "slide": function (event, ui) {
+        Slick.GlobalEditorLock.cancelCurrentEdit();
+
+        if (percentCompleteThreshold != ui.value) {
+          window.clearTimeout(h_runfilters);
+          h_runfilters = window.setTimeout(function(){xslick.dataProvider.refresh(xslick)}, 10);
+          percentCompleteThreshold = ui.value;
+        }
+      }
+    });
+
+
+    // wire up the search textbox to apply the filter to the model
+    $("#txtSearch").keyup(function (e) {
+      Slick.GlobalEditorLock.cancelCurrentEdit();
+
+      // clear on Esc
+      if (e.which == 27) {
+        this.value = "";
+      }
+
+      searchString = this.value;
+      var test = function(item){
+        return item.title.indexOf(searchString) !== -1;
+      }
+        //crystal.elements.xslickgrid.analyzeTreeNodes(xslick, test);
+        xslick.analyzeTreeNodes(test);
+        analyzedTreeData = true;
+        xslick.dataProvider.refresh(xslick);
+    });
+
+
+  }
+
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@ declare namespace polymer{
         type: Function,
         value?: any,
         notify?: boolean,
-        reflectToAttribute?: boolean
+        reflectToAttribute?: boolean,
+        readOnly?: boolean,
     }
 }
