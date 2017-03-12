@@ -1,10 +1,11 @@
 
 declare module Polymer{
-    export abstract class Element{
+    export abstract class Element extends HTMLElement{
         connectedCallback();
         ready();
+        resolveUrl(path: string);
         $;
-        children: any[];
+        $$;
     }
 }
 

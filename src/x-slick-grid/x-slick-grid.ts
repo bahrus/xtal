@@ -226,6 +226,12 @@ class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridPropert
     useTreeGridHelper: boolean;
     gridRenderParams: object;
     readyFnInitialized: boolean;
+
+    //TODO:  type these
+    wcOptions = null;
+    _data = null;
+    gridDiv = null;
+
     static get properties() : IXtalXSlidGridProperties{
         return {
              /**
@@ -357,86 +363,51 @@ class XtalXSlickGrid<T> extends Polymer.Element implements IXtalXSlidGridPropert
             }
         }
     }
-}
-Polymer({
-        
-        wcOptions: null,
-        _data: null,
-        grid: null,
-        gridDiv: null,
-        _dataProvider: null,
-        properties:{
-           
-            
-           
-            
 
-
-
-
-
-        },
-        //readyFnInitialized: false,
-        ready: function() {
-            this.innerHTML = `
-            <div role="grid"></div>
-            `;
-            const $IsDefined = (typeof($) !== 'undefined');
-            const sm = this.selectionModel;
-            const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
-            const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
-            const slickDependencies : crystal.elements.IDynamicImportStep[] = [
-                // !$IsDefined ? {importURL: 'JQuery.html'} : null,
-                // !$IsDefined || !$['ui'] ? {importURL: 'JQueryUI.html'} : null,
-                // !$IsDefined || !$.fn.drag ? {importURL: 'Jquery.Event.DragDrop.html'} : null,
-                // {importURL: 'SlickCore.html'},
-                // {importURL: 'SlickGrid.html'},
-                // this.useSlickEditors ? {importURL: 'SlickEditors.html'}               : null,
-                // incCell ? {importURL: 'Slick.CellRangeSelector.html'}    : null,
-                // incCell ? {importURL: 'Slick.CellSelectionModel.html'}   : null,
-                // incCell ? {importURL: 'Slick.CellRangeDecorator.html'}   : null,
-                // this.useSlickCellCopyManager ? {importURL: 'Slick.CellSelectionModel.html'} : null,
-                // this.useSlickAutoToolTips ? {importURL: 'Slick.AutoToolTips.html'} : null,
-                // this.useSlickCheckboxSelectColumn ? {importURL: 'Slick.CheckboxSelectColumn.html'} : null,
-                // incCell  ? {importURL: 'Slick.RowSelectionModel.html'}    : null,
-                // this.useDataViewDataProvider ? {importURL: 'Slick.DataView.html'}             : null,
-                this.useSlickPaging ? {importURL: 'controls/SlickPager.html'}        : null,
-                this.useSlickColumnPicker  ? {importURL: 'controls/SlickColumnPicker.html'} : null,
-                //this.useSlickFormatters ? {importURL: 'SlickFormatters.html'}            : null,
-                this.useTreeGridHelper ? {importURL: 'TreeGridHelper.html'}             : null,
-                this.useSlickCheckboxSelectColumn ? {importURL: '../xtal-checkbox.html'} : null,
-            ];
-            //const r = this.resolveUrl;
-            const slickJSDependencies : crystal.elements.IDynamicJSLoadStep[] = [
-                !$IsDefined ? {src: this.resolveUrl('../../bower_components/jquery/jquery.min.js')} : null,
-                !$IsDefined || !$['ui'] ? {src: this.resolveUrl('../../bower_components/jquery-ui/jquery-ui.min.js')} : null,
-                !$IsDefined || !$.fn.drag ? {src: this.resolveUrl('../../bower_components/jquery.event/event.drag/jquery.event.drag.js')} : null,
-                {src: this.resolveUrl('js/slick.core.js')},
-                {src: this.resolveUrl('js/slick.grid.js')},
-                this.useSlickEditors ? {src: this.resolveUrl('js/slick.editors.js')} : null,
-                incCell ? {src: this.resolveUrl('js/plugins/slick.cellrangeselector.js')} : null,
-                incCell ? {src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js')} : null,
-                incCell ? {src: this.resolveUrl('js/plugins/slick.cellrangedecorator.js')} : null,
-                this.useSlickCellCopyManager? {src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js')} : null,
-                this.useSlickAutoToolTips ? {src: this.resolveUrl('../../bower_components/handlebars/handlebars.min.js')} : null,
-                this.useSlickAutoToolTips ? {src: this.resolveUrl('js/plugins/slick.autotooltips.js')}: null,
-                this.useSlickCheckboxSelectColumn ? {src: this.resolveUrl('js/plugins/slick.checkboxselectcolumn.js')}: null,
-                (incCell || incRow) ? {src: this.resolveUrl('js/plugins/slick.rowselectionmodel.js')}: null,
-                this.useDataViewDataProvider ? {src: this.resolveUrl('js/slick.dataview.js')}: null,
-                this.useDataViewDataProvider ? {src: this.resolveUrl('js/DataViewHelper.js')}: null,
-                this.useSlickPaging ? {src: this.resolveUrl('controls/slick.pager.js')} : null,
-                this.useSlickColumnPicker ? {src: this.resolveUrl('controls/slick.columnpicker.js')}: null,
-                this.useSlickFormatters ? {src: this.resolveUrl('js/slick.formatters.js')} : null,
-                this.useTreeGridHelper  ? {src: this.resolveUrl('js/treeGridHelper.js')}  : null,                 
-            ];
-            crystal.elements.importHrefs(slickDependencies, this);
-            crystal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
-                const thisGrid = this.$$('[role]');
-                const $thisGrid = $(thisGrid);
-                $thisGrid
-                    .css('height', this.height)
-                    .css('width', this.width);
-                this.gridDiv = $thisGrid;
+    ready() {
+        this.innerHTML = `
+        <div role="grid"></div>
+        `;
+        const $IsDefined = (typeof($) !== 'undefined');
+        const sm = this.selectionModel;
+        const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
+        const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
+        const slickDependencies : xtal.elements.IDynamicImportStep[] = [
+            this.useSlickPaging ? {importURL: 'controls/SlickPager.html'}        : null,
+            this.useSlickColumnPicker  ? {importURL: 'controls/SlickColumnPicker.html'} : null,
+            this.useTreeGridHelper ? {importURL: 'TreeGridHelper.html'}             : null,
+            this.useSlickCheckboxSelectColumn ? {importURL: '../xtal-checkbox.html'} : null,
+        ];
+        const slickJSDependencies : xtal.elements.IDynamicJSLoadStep[] = [
+            !$IsDefined ? {src: this.resolveUrl('../../bower_components/jquery/jquery.min.js')} : null,
+            !$IsDefined || !$['ui'] ? {src: this.resolveUrl('../../bower_components/jquery-ui/jquery-ui.min.js')} : null,
+            !$IsDefined || !$.fn.drag ? {src: this.resolveUrl('../../bower_components/jquery.event/event.drag/jquery.event.drag.js')} : null,
+            {src: this.resolveUrl('js/slick.core.js')},
+            {src: this.resolveUrl('js/slick.grid.js')},
+            this.useSlickEditors ? {src: this.resolveUrl('js/slick.editors.js')} : null,
+            incCell ? {src: this.resolveUrl('js/plugins/slick.cellrangeselector.js')} : null,
+            incCell ? {src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js')} : null,
+            incCell ? {src: this.resolveUrl('js/plugins/slick.cellrangedecorator.js')} : null,
+            this.useSlickCellCopyManager? {src: this.resolveUrl('js/plugins/slick.cellselectionmodel.js')} : null,
+            this.useSlickAutoToolTips ? {src: this.resolveUrl('../../bower_components/handlebars/handlebars.min.js')} : null,
+            this.useSlickAutoToolTips ? {src: this.resolveUrl('js/plugins/slick.autotooltips.js')}: null,
+            this.useSlickCheckboxSelectColumn ? {src: this.resolveUrl('js/plugins/slick.checkboxselectcolumn.js')}: null,
+            (incCell || incRow) ? {src: this.resolveUrl('js/plugins/slick.rowselectionmodel.js')}: null,
+            this.useDataViewDataProvider ? {src: this.resolveUrl('js/slick.dataview.js')}: null,
+            this.useDataViewDataProvider ? {src: this.resolveUrl('js/DataViewHelper.js')}: null,
+            this.useSlickPaging ? {src: this.resolveUrl('controls/slick.pager.js')} : null,
+            this.useSlickColumnPicker ? {src: this.resolveUrl('controls/slick.columnpicker.js')}: null,
+            this.useSlickFormatters ? {src: this.resolveUrl('js/slick.formatters.js')} : null,
+            this.useTreeGridHelper  ? {src: this.resolveUrl('js/treeGridHelper.js')}  : null,                 
+        ];
+        xtal.elements.importHrefs(slickDependencies, this);
+        xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
+        const thisGrid = this.$$('[role]');
+        const $thisGrid = $(thisGrid);
+        $thisGrid
+            .css('height', this.height)
+            .css('width', this.width);
+        this.gridDiv = $thisGrid;
                 if(this.fillContainerWidth || this.fillContainerHeight){
                     window.addEventListener('resize', e => {
                         if(this.fillContainerWidth && this.fillContainerHeight) {
@@ -450,49 +421,32 @@ Polymer({
 
                 }
                 if(this.useTreeGridHelper){
-                    this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
-                    this.sortColumn = crystal.elements.xslickgrid.sortColumn;
+                    this['analyzeTreeNodes'] = crystal.elements.xslickgrid.analyzeTreeNodes;
+                    this['sortColumn'] = crystal.elements.xslickgrid.sortColumn;
                 }
                 this.readyFnInitialized = true;
-                this.fire('loadedDependencies');
+                this['fire']('loadedDependencies');
             });
-            // crystal.elements.importHrefs(slickDependencies, this, () =>{
-            //     const thisGrid = this.$$('[role]');
-            //     const $thisGrid = $(thisGrid);
-            //     $thisGrid
-            //         .css('height', this.height)
-            //         .css('width', this.width);
-            //     this.gridDiv = $thisGrid;
-            //     if(this.fillContainerWidth || this.fillContainerHeight){
-            //         window.addEventListener('resize', e => {
-            //             if(this.fillContainerWidth && this.fillContainerHeight) {
-            //                 this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
-            //             }else if(this.fillContainerHeight){
-            //                 this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
-            //             }else{ //width only
-            //                 this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
-            //             }
-            //         });
+            
 
-            //     }
-            //     if(this.useTreeGridHelper){
-            //         this.analyzeTreeNodes = crystal.elements.xslickgrid.analyzeTreeNodes;
-            //         this.sortColumn = crystal.elements.xslickgrid.sortColumn;
-            //     }
-            //     this.readyFnInitialized = true;
-            // });
-
-        },
-        fillContainerBothDimImpl: function(){
+        };
+        fillContainerBothDimImpl(){
             this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
             this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
-        fillContainerHeightImpl: function(){
+        fillContainerHeightImpl(){
             this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
         },
-        fillContainerWidthImpl: function(){
+        fillContainerWidthImpl(){
             this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         },
+}
+Polymer({
+        
+        
+        
+        //readyFnInitialized: false,
+
         fillContainerXImpl: function(offsetDim: string, clientDim: string , cssDim: string, resize: boolean){
             const thisGrid = this.$$('[role="grid"]');
             const $thisGrid = $(thisGrid);
