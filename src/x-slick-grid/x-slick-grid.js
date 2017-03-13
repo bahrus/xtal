@@ -447,7 +447,7 @@ var xtal;
                 ];
                 xtal.elements.importHrefs(slickDependencies, this);
                 xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
-                    const thisGrid = this.$$('[role]');
+                    const thisGrid = this.querySelector('[role]');
                     const $thisGrid = $(thisGrid);
                     $thisGrid
                         .css('height', this.height)

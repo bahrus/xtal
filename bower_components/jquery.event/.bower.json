@@ -1,0 +1,13 @@
+{
+  "name": "jquery.event",
+  "homepage": "https://github.com/threedubmedia/jquery.threedubmedia",
+  "_release": "2.2",
+  "_resolution": {
+    "type": "tag",
+    "tag": "2.2",
+    "commit": "c534a79ab538c385dda48b3226ee3ee7b3ab5432"
+  },
+  "_source": "https://github.com/threedubmedia/jquery.threedubmedia.git",
+  "_target": "2.2",
+  "_originalSource": "threedubmedia/jquery.threedubmedia"
+}
