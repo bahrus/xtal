@@ -471,7 +471,8 @@ var xtal;
                         this['sortColumn'] = xtal.elements.xslickgrid.sortColumn;
                     }
                     this.readyFnInitialized = true;
-                    this['fire']('loadedDependencies');
+                    //this['fire']('loadedDependencies');
+                    this.dispatchEvent(new CustomEvent('loadedDependencies'));
                 });
             }
         }
