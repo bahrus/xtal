@@ -250,11 +250,11 @@ var xtal;
                 }
                 if (this.useTreeGridHelper) {
                     if (this.useSlickCheckboxSelectColumn) {
-                        crystal.elements.xslickgrid.linkChildren(this);
+                        xtal.elements.xslickgrid.linkChildren(this);
                     }
-                    crystal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
-                    this.collapseAll = crystal.elements.xslickgrid.collapseAll;
-                    this.expandAll = crystal.elements.xslickgrid.expandAll;
+                    xtal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
+                    this.collapseAll = xtal.elements.xslickgrid.collapseAll;
+                    this.expandAll = xtal.elements.xslickgrid.expandAll;
                 }
                 this.renderCount++;
                 return grid;
@@ -467,8 +467,8 @@ var xtal;
                         });
                     }
                     if (this.useTreeGridHelper) {
-                        this['analyzeTreeNodes'] = crystal.elements.xslickgrid.analyzeTreeNodes;
-                        this['sortColumn'] = crystal.elements.xslickgrid.sortColumn;
+                        this['analyzeTreeNodes'] = xtal.elements.xslickgrid.analyzeTreeNodes;
+                        this['sortColumn'] = xtal.elements.xslickgrid.sortColumn;
                     }
                     this.readyFnInitialized = true;
                     this['fire']('loadedDependencies');

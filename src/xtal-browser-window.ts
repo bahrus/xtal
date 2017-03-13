@@ -50,7 +50,7 @@ module xtal.elements{
         }
         ready(){
             super.ready();
-            var aLink = this.children[0];
+            var aLink = this.children[0] as HTMLAnchorElement;
             aLink.target = '_blank';
             if(this.sandBox){
                 var iFrame = this.$.iframe;
@@ -65,7 +65,7 @@ module xtal.elements{
         }
         toggleIFrame(){
             this.clicked = true;
-            var aLink = this.children[0];
+            var aLink = this.children[0] as HTMLAnchorElement;
             if(this.linkOnly){
                 window.open(aLink.href);
                 return;

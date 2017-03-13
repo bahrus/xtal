@@ -350,11 +350,11 @@ module xtal.elements {
             }
             if(this.useTreeGridHelper){
                 if(this.useSlickCheckboxSelectColumn){
-                    crystal.elements.xslickgrid.linkChildren(this);
+                    xtal.elements.xslickgrid.linkChildren(this);
                 }
-                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as crystal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
-                this.collapseAll = crystal.elements.xslickgrid.collapseAll;
-                this.expandAll = crystal.elements.xslickgrid.expandAll;
+                xtal.elements.xslickgrid.attachToggleClickEvent<any>(this as xtal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
+                this.collapseAll = xtal.elements.xslickgrid.collapseAll;
+                this.expandAll = xtal.elements.xslickgrid.expandAll;
             }
             this.renderCount++;
             return grid;
@@ -610,8 +610,8 @@ module xtal.elements {
 
                 }
                 if(this.useTreeGridHelper){
-                    this['analyzeTreeNodes'] = crystal.elements.xslickgrid.analyzeTreeNodes;
-                    this['sortColumn'] = crystal.elements.xslickgrid.sortColumn;
+                    this['analyzeTreeNodes'] = xtal.elements.xslickgrid.analyzeTreeNodes;
+                    this['sortColumn'] = xtal.elements.xslickgrid.sortColumn;
                 }
                 this.readyFnInitialized = true;
                 this['fire']('loadedDependencies');
