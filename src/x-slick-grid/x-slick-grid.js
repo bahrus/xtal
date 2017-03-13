@@ -84,7 +84,7 @@ var xtal;
                 this.collapseAll = null;
                 this.expandAll = null;
             }
-            get is() {
+            static get is() {
                 return 'x-slick-grid';
             }
             fillContainerBothDimImpl() {
@@ -475,6 +475,7 @@ var xtal;
                 });
             }
         }
+        customElements.define(XtalXSlickGrid.is, XtalXSlickGrid);
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=x-slick-grid.js.map

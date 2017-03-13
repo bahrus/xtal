@@ -180,7 +180,7 @@ module xtal.elements {
 
     class XtalXSlickGrid<T> extends Polymer.Element 
     implements IXtalXSlidGridProperties, IXSlickGridElement<T>{
-        get is(){
+        static get is(){
             return 'x-slick-grid';
         }
         
@@ -625,4 +625,7 @@ module xtal.elements {
             
         
     }
+
+    customElements.define(XtalXSlickGrid.is, XtalXSlickGrid);
+    
 }
