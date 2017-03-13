@@ -1,4 +1,3 @@
-///<reference path="../node_modules/@types/polymer/index.d.ts"/>
 var crystal;
 (function (crystal) {
     var elements;
@@ -124,7 +123,7 @@ var crystal;
         }
         elements.performCustElActions = performCustElActions;
         function evalInner(element, isTS) {
-            let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+            let inner = element['getEffectiveChildNodes']()[0].nodeValue;
             if (isTS) {
                 inner = util.stripTypings(inner);
             }

@@ -1,7 +1,7 @@
-///<reference path='SlickGrid.d.ts'/>
+///<reference path='../../../node_modules/@types/slickgrid/index.d.ts'/>
 ///<reference path='../x-slick-grid.ts'/>
 
-module crystal.elements.xslickgrid{
+module xtal.elements.xslickgrid{
 
     export interface IHaveChildIndices{
         childIndices?: number[];

@@ -1,5 +1,3 @@
-///<reference path="../node_modules/@types/polymer/index.d.ts"/>
-
 module crystal.elements{
     export const jsXtaInitTagName = 'js-xtal-init';
     export interface IHTMLActionContext{
@@ -129,8 +127,7 @@ module crystal.elements{
     }
 
     export function evalInner(element: HTMLElement, isTS?: boolean){
-
-        let inner = Polymer.dom(element)['getEffectiveChildNodes']()[0].nodeValue;
+        let inner = element['getEffectiveChildNodes']()[0].nodeValue;
         if(isTS){
             inner = util.stripTypings(inner);
         }

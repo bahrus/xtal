@@ -1,7 +1,7 @@
-///<reference path='SlickGrid.d.ts'/>
+///<reference path='../../../node_modules/@types/slickgrid/index.d.ts'/>
 ///<reference path='../x-slick-grid.ts'/>
-var crystal;
-(function (crystal) {
+var xtal;
+(function (xtal) {
     var elements;
     (function (elements) {
         var xslickgrid;
@@ -378,6 +378,6 @@ var crystal;
             }
             xslickgrid.expandAll = expandAll;
         })(xslickgrid = elements.xslickgrid || (elements.xslickgrid = {}));
-    })(elements = crystal.elements || (crystal.elements = {}));
-})(crystal || (crystal = {}));
+    })(elements = xtal.elements || (xtal.elements = {}));
+})(xtal || (xtal = {}));
 //# sourceMappingURL=treeGridHelper.js.map
