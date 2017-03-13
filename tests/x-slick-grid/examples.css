@@ -1,4 +1,4 @@
-@import url('../css/slick-default-theme.css');
+@import url('../../src/x-slick-grid/css/slick-default-theme.css');
 
 * {
   font-family: arial;
