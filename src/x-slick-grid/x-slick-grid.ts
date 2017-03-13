@@ -272,9 +272,9 @@ module xtal.elements {
                 }
             }
             if(this.useTreeGridHelper){
-                crystal.elements.xslickgrid.attachToggleClickEvent<any>(this as xtal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
-                this.collapseAll = crystal.elements.xslickgrid.collapseAll;
-                this.expandAll = crystal.elements.xslickgrid.expandAll;
+                xtal.elements.xslickgrid.attachToggleClickEvent<any>(this as xtal.elements.IXSlickGridElement<any>, this.useSlickCheckboxSelectColumn);
+                this.collapseAll = xtal.elements.xslickgrid.collapseAll;
+                this.expandAll = xtal.elements.xslickgrid.expandAll;
             }
             const grid = this.grid;
             switch(this.selectionModel){
@@ -292,7 +292,7 @@ module xtal.elements {
             this.wcOptions = wcOptions;
 
             if(wcOptions){
-                crystal.elements.attachEventHandlers(grid, wcOptions.eventHandlers);
+                xtal.elements.attachEventHandlers<T>(grid as any as Slick.Grid<T>, wcOptions.eventHandlers);
                 // if(wcOptions.trackRowHover){
                 //     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
                 //         enableMouseOverSlickGrid(this);
@@ -301,8 +301,8 @@ module xtal.elements {
                 if(wcOptions.trackCurrentRow){
                     this.clickedCellIndex = -1;
                     this.clickedRowIndex = -1;
-                    grid.onClick.subscribe(e => {
-                        var cell = grid.getCellFromEvent(e);
+                    grid.onClick.subscribe(e  => {
+                        var cell = grid.getCellFromEvent(e as any as DOMEvent);
                         this.clickedCellIndex = cell.cell;
                         this.clickedRowIndex = cell.row;
                     });
@@ -320,10 +320,10 @@ module xtal.elements {
                 if(wcOptions.trackContextMenu){
                     this.isContextMenuOpen = false;
                     grid.onContextMenu.subscribe(e =>{
-                        e.preventDefault();
+                        (e as any as Event).preventDefault();
                         this.isContextMenuOpen = true;
-                        this.lastClickedXValue = e.pageX;
-                        this.lastClickedYValue = e.pageY;
+                        this.lastClickedXValue = e['pageX'];
+                        this.lastClickedYValue = e['pageY'];
                         const _thisEl = this;
                         $("body").one("click", function () {
                             _thisEl.isContextMenuOpen = false;

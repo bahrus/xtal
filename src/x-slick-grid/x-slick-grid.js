@@ -174,9 +174,9 @@ var xtal;
                     }
                 }
                 if (this.useTreeGridHelper) {
-                    crystal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
-                    this.collapseAll = crystal.elements.xslickgrid.collapseAll;
-                    this.expandAll = crystal.elements.xslickgrid.expandAll;
+                    xtal.elements.xslickgrid.attachToggleClickEvent(this, this.useSlickCheckboxSelectColumn);
+                    this.collapseAll = xtal.elements.xslickgrid.collapseAll;
+                    this.expandAll = xtal.elements.xslickgrid.expandAll;
                 }
                 const grid = this.grid;
                 switch (this.selectionModel) {
@@ -193,7 +193,7 @@ var xtal;
                 }
                 this.wcOptions = wcOptions;
                 if (wcOptions) {
-                    crystal.elements.attachEventHandlers(grid, wcOptions.eventHandlers);
+                    xtal.elements.attachEventHandlers(grid, wcOptions.eventHandlers);
                     // if(wcOptions.trackRowHover){
                     //     this.importHref(this.resolveUrl('x-slick-grid.mouseOverRow.html'), () =>{
                     //         enableMouseOverSlickGrid(this);
@@ -223,8 +223,8 @@ var xtal;
                         grid.onContextMenu.subscribe(e => {
                             e.preventDefault();
                             this.isContextMenuOpen = true;
-                            this.lastClickedXValue = e.pageX;
-                            this.lastClickedYValue = e.pageY;
+                            this.lastClickedXValue = e['pageX'];
+                            this.lastClickedYValue = e['pageY'];
                             const _thisEl = this;
                             $("body").one("click", function () {
                                 _thisEl.isContextMenuOpen = false;
