@@ -23,7 +23,7 @@ ul {
 }
 
 li {
-  background: url("../css/images/arrow_right_spearmint.png") no-repeat center left;
+  background: url("../../src/x-slick-grid/css/images/arrow_right_spearmint.png") no-repeat center left;
   padding: 0 0 0 14px;
 
   list-style: none;
