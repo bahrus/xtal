@@ -1,0 +1,22 @@
+{
+  "entrypoint": "index.html",
+  "fragments": [],
+  "sources": [
+   "src/**/*",
+   "data/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-loader.js"
+  ],
+  "lint": {
+    "rules": []
+  },
+  "builds": [{
+    "bundle": false,
+    "js": {"minify": true},
+    "css": {"minify": true},
+    "html": {"minify": true}
+  }]
+}
