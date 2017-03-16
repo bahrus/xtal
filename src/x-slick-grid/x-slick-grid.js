@@ -98,7 +98,7 @@ var xtal;
                 this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
             }
             fillContainerXImpl(offsetDim, clientDim, cssDim, resize) {
-                const thisGrid = this.$$('[role="grid"]');
+                const thisGrid = this.querySelector('[role="grid"]');
                 const $thisGrid = $(thisGrid);
                 const offset = this[offsetDim];
                 const containerLength = this.parentElement[clientDim];

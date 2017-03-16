@@ -195,7 +195,7 @@ module xtal.elements {
             this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
         }
         fillContainerXImpl(offsetDim: string, clientDim: string , cssDim: string, resize: boolean){
-            const thisGrid = this.$$('[role="grid"]');
+            const thisGrid = this.querySelector('[role="grid"]');
             const $thisGrid = $(thisGrid);
             const offset = this[offsetDim];
             const containerLength = this.parentElement[clientDim];
