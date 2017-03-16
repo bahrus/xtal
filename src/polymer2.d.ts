@@ -11,7 +11,7 @@ declare module Polymer{
 }
 
 declare namespace polymer{
-    export interface IPolymerType{
+    export interface IPolymerPropertyInfo{
         type: Function,
         value?: any,
         notify?: boolean,
