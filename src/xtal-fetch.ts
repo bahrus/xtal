@@ -1,10 +1,10 @@
 module xtal.elements{
     interface IXtalFetchProperties{
-        reqInfo: RequestInfo | polymer.IPolymerPropertyInfo,
-        reqUrl: string | polymer.IPolymerPropertyInfo,
-        reqInit: RequestInit | polymer.IPolymerPropertyInfo,
-        debounceTimeInMs: number | polymer.IPolymerPropertyInfo,
-        result: any | polymer.IPolymerPropertyInfo,
+        reqInfo: RequestInfo | polymer.PropObjectType,
+        reqUrl: string | polymer.PropObjectType,
+        reqInit: RequestInit | polymer.PropObjectType,
+        debounceTimeInMs: number | polymer.PropObjectType,
+        result: any | polymer.PropObjectType,
     }
     export class XtalFetch extends Polymer.Element implements IXtalFetchProperties{
         reqInfo: RequestInfo;
@@ -39,21 +39,21 @@ module xtal.elements{
             }
         }
         loadNewUrl(){
-            debugger;
-        }
-        ready(){
             if(this.reqUrl){
                 const _this = this;
                 fetch(this.reqUrl).then(resp =>{
                     resp.text().then(txt =>{
                         _this['_setResult'](txt);
-                        _this['result'] = txt;
-                        _this.notifyPath('result');
+                        //_this.notifyPath('result');
                     })
                     
                 })
             }
         }
+        // ready(){
+        //     super.ready();
+            
+        // }
     }
 
     customElements.define(xtal.elements.XtalFetch.is, xtal.elements.XtalFetch);

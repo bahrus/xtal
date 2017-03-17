@@ -30,16 +30,12 @@ var xtal;
                 };
             }
             loadNewUrl() {
-                debugger;
-            }
-            ready() {
                 if (this.reqUrl) {
                     const _this = this;
                     fetch(this.reqUrl).then(resp => {
                         resp.text().then(txt => {
                             _this['_setResult'](txt);
-                            _this['result'] = txt;
-                            _this.notifyPath('result');
+                            //_this.notifyPath('result');
                         });
                     });
                 }

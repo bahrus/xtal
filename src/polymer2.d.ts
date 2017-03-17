@@ -12,12 +12,23 @@ declare module Polymer{
 }
 
 declare namespace polymer{
-    export interface IPolymerPropertyInfo{
-        type: Function,
-        value?: any,
-        notify?: boolean,
-        reflectToAttribute?: boolean,
-        readOnly?: boolean,
-        observer?: string,
-    }
+    // export interface IPolymerPropertyInfo{
+    //     type: Function,
+    //     value?: any,
+    //     notify?: boolean,
+    //     reflectToAttribute?: boolean,
+    //     readOnly?: boolean,
+    //     observer?: string,
+    // }
+  type PropConstructorType = StringConstructor | ObjectConstructor | BooleanConstructor | NumberConstructor | DateConstructor | ArrayConstructor;
+
+  interface PropObjectType {
+    type: PropConstructorType;
+    value?: boolean | number | string | Function | Object;
+    reflectToAttribute?: boolean;
+    readOnly?: boolean;
+    notify?: boolean;
+    computed?: string;
+    observer?: string;
+  }
 }
