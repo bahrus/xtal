@@ -1,11 +1,11 @@
 module xtal.elements{
     interface IXtalBrowserWindow{
-        linkOnly: boolean | polymer.IPolymerPropertyInfo,
-        sandBox: string | polymer.IPolymerPropertyInfo,
-        windowTop: number | polymer.IPolymerPropertyInfo,
-        width: string | polymer.IPolymerPropertyInfo,
-        collapsedText: string | polymer.IPolymerPropertyInfo,
-        clicked: boolean | polymer.IPolymerPropertyInfo
+        linkOnly: boolean | polymer.PropObjectType,
+        sandBox: string | polymer.PropObjectType,
+        windowTop: number | polymer.PropObjectType,
+        width: string | polymer.PropObjectType,
+        collapsedText: string | polymer.PropObjectType,
+        clicked: boolean | polymer.PropObjectType
     }
     export class XtalBrowserWindow extends Polymer.Element implements IXtalBrowserWindow {
         static get is() { return 'xtal-browser-window'; }

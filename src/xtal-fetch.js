@@ -3,9 +3,22 @@ var xtal;
     var elements;
     (function (elements) {
         class XtalFetch extends Polymer.Element {
+            constructor() {
+                super(...arguments);
+                this.as = 'text';
+                // ready(){
+                //     super.ready();
+                // }
+            }
             static get is() { return 'xtal-fetch'; }
             static get properties() {
                 return {
+                    /**
+                     * Possible values are 'text' and 'json'
+                     */
+                    as: {
+                        type: String
+                    },
                     debounceTimeInMs: {
                         type: Number
                     },
@@ -23,7 +36,7 @@ var xtal;
                     * The expression for where to place the result.
                     */
                     result: {
-                        type: String,
+                        type: Object,
                         notify: true,
                         readOnly: true
                     },
@@ -32,9 +45,10 @@ var xtal;
             loadNewUrl() {
                 if (this.reqUrl) {
                     const _this = this;
+                    console.log('as = ' + this.as);
                     fetch(this.reqUrl).then(resp => {
-                        resp.text().then(txt => {
-                            _this['_setResult'](txt);
+                        resp[_this.as]().then(val => {
+                            _this['_setResult'](val);
                             //_this.notifyPath('result');
                         });
                     });

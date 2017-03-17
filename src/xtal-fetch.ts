@@ -4,6 +4,7 @@ module xtal.elements{
         reqUrl: string | polymer.PropObjectType,
         reqInit: RequestInit | polymer.PropObjectType,
         debounceTimeInMs: number | polymer.PropObjectType,
+        as: string | polymer.PropObjectType,
         result: any | polymer.PropObjectType,
     }
     export class XtalFetch extends Polymer.Element implements IXtalFetchProperties{
@@ -11,10 +12,17 @@ module xtal.elements{
         reqInit: RequestInit;
         reqUrl: string;
         result: object;
+        as = 'text';
         debounceTimeInMs: number
         static get is(){return 'xtal-fetch';}
         static get properties() : IXtalFetchProperties{
             return {
+                /**
+                 * Possible values are 'text' and 'json'
+                 */
+                as:{
+                    type: String
+                },
                 debounceTimeInMs:{
                     type: Number
                 },
@@ -32,7 +40,7 @@ module xtal.elements{
                 * The expression for where to place the result.
                 */
                  result:{
-                    type: String,
+                    type: Object,
                     notify: true,
                     readOnly: true
                 },
@@ -41,9 +49,10 @@ module xtal.elements{
         loadNewUrl(){
             if(this.reqUrl){
                 const _this = this;
+                console.log('as = ' + this.as);
                 fetch(this.reqUrl).then(resp =>{
-                    resp.text().then(txt =>{
-                        _this['_setResult'](txt);
+                    resp[_this.as]().then(val =>{
+                        _this['_setResult'](val);
                         //_this.notifyPath('result');
                     })
                     
