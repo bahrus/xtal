@@ -49,7 +49,6 @@ module xtal.elements{
         loadNewUrl(){
             if(this.reqUrl){
                 const _this = this;
-                console.log('as = ' + this.as);
                 fetch(this.reqUrl).then(resp =>{
                     resp[_this.as]().then(val =>{
                         _this['_setResult'](val);
