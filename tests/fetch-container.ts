@@ -16,8 +16,9 @@ class FetchContainer extends HTMLElement {
   }
   set generatedJSON(val){
       this._generatedJSON = val;
-      console.log()
-      this.querySelector('#jsonOutput')
+      console.log(val)
+      const preElement = this.querySelector('#jsonOutput');
+      preElement.innerText = val;
   }
 
 }
