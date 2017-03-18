@@ -2,6 +2,7 @@
 <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 <link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/js-transformer.html"/>
+<script src="../fetch-container.js"></script>
 
 <dom-module id="example1a-component">
     <template>
@@ -10,6 +11,7 @@
             <tr>
                 <td valign="top" width="50%">
                     <xtal-fetch req-url="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+                    <fetch-container watch=[[generatedJSON]]></fetch-container>
                     <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
                         [{
                             columns:[
@@ -59,6 +61,9 @@
                 }
             }
         }
-                customElements.define(Example1a.is, Example1a)
+        customElements.define(Example1a.is, Example1a);
+        class MyInnerNativeCE extends HTMLElement{
+
+        }
     </script>
 </dom-module>
