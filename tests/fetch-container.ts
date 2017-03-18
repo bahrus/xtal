@@ -15,13 +15,22 @@ class FetchContainer extends HTMLElement {
       return this._generatedJSON;
   }
   set generatedJSON(val){
+      debugger;
       this._generatedJSON = val;
       console.log(val)
       const preElement = this.querySelector('#jsonOutput') as HTMLPreElement;
       preElement.innerText = val;
   }
+  _watch;
+  get watch(){
+    return this._watch;
+  }
+
+  set watch(val){
+    console.log('watch called, val = ', val);
+    this._watch = val;
+  }
+
 
 }
-window.addEventListener('WebComponentsReady', function() {
-  customElements.define('fetch-container', FetchContainer);
-});
+customElements.define('fetch-container', FetchContainer);
