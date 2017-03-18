@@ -1,13 +1,33 @@
 <link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../src/xtal-fetch.html"/>
+<link rel="import" href="../../src/js-transformer.html"/>
 
 <dom-module id="example1a-component">
     <template>
-        <xtal-fetch req-url="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+        
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
+                    <xtal-fetch req-url="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+                    <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
+                        [{
+                            columns:[
+                                {id: 'index',       name: 'Index',      field: 'index'},
+                                {id: 'isActive',    name: 'Active',     field: 'isActive'},
+                                {id: 'balance',     name: 'Balance',    field: 'balance'},
+                                {id: 'age',         name: 'Age',        field: 'age'},
+                                {id: 'eyeColor',    name: 'Eye Color',  field: 'eyeColor'},
+                                {id: 'name',        name: 'Name',       field: 'name'},
+                                {id: 'gender',      name: 'Gender',     field: 'gender'},
+                                {id: 'company',     name:'Company',     field: 'company'}
+                            ],
+                            gridOptions:{
+                                enableCellNavigation: true,
+                                enableColumnReorder: false
+                            }
+                        }]
+                    </js-transformer>
                     <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
                 </td>
                 <td valign="top">
@@ -25,31 +45,9 @@
                 </td>
             </tr>
         </table>
-        
-        <xtal-form auto >
             
-            <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
-                [{
-                    columns:[
-                        {id: 'index',       name: 'Index',      field: 'index'},
-                        {id: 'isActive',    name: 'Active',     field: 'isActive'},
-                        {id: 'balance',     name: 'Balance',    field: 'balance'},
-                        {id: 'age',         name: 'Age',        field: 'age'},
-                        {id: 'eyeColor',    name: 'Eye Color',  field: 'eyeColor'},
-                        {id: 'name',        name: 'Name',       field: 'name'},
-                        {id: 'gender',      name: 'Gender',     field: 'gender'},
-                        {id: 'company',     name:'Company',     field: 'company'}
-                    ],
-                    gridOptions:{
-                        enableCellNavigation: true,
-                        enableColumnReorder: false
-                    }
-                }]
-            </js-transformer>
-        </xtal-form>
     </template>
     
-
     <script>
         class Example1a extends Polymer.Element{
             static get is(){return 'example1a-component'}
@@ -61,6 +59,6 @@
                 }
             }
         }
-        customElements.define(Example1a.is, Example1a)
+                customElements.define(Example1a.is, Example1a)
     </script>
 </dom-module>
