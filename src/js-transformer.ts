@@ -150,7 +150,8 @@ module xtal.elements{
 
         }
 
-        attached(){
+        connectedCallback(){
+            super.connectedCallback();
             try{
                 this._transformerFns = eval(this.innerText);
             }catch(e){
@@ -159,4 +160,6 @@ module xtal.elements{
             if(!Array.isArray(this._transformerFns)) delete this._transformerFns;
         }
     }
+
+    customElements.define(JSTransformer.is, JSTransformer);
 }

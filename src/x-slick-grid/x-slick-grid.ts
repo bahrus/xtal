@@ -554,6 +554,7 @@ module xtal.elements {
         }
 
         ready() {
+            super.ready();
             this.innerHTML = `
             <div role="grid"></div>
             `;

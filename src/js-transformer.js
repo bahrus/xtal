@@ -129,7 +129,8 @@ var xtal;
                 delete arg.context;
                 this['_setResult'](transformedObj);
             }
-            attached() {
+            connectedCallback() {
+                super.connectedCallback();
                 try {
                     this._transformerFns = eval(this.innerText);
                 }
@@ -140,6 +141,7 @@ var xtal;
                     delete this._transformerFns;
             }
         }
+        customElements.define(JSTransformer.is, JSTransformer);
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=js-transformer.js.map

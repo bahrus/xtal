@@ -410,6 +410,7 @@ var xtal;
                 };
             }
             ready() {
+                super.ready();
                 this.innerHTML = `
             <div role="grid"></div>
             `;

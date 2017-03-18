@@ -7,7 +7,7 @@ module xtal.elements{
         as: string | polymer.PropObjectType,
         result: any | polymer.PropObjectType,
     }
-    export class XtalFetch extends Polymer.Element implements IXtalFetchProperties{
+    class XtalFetch extends Polymer.Element implements IXtalFetchProperties{
         reqInfo: RequestInfo;
         reqInit: RequestInit;
         reqUrl: string;
@@ -64,5 +64,5 @@ module xtal.elements{
         // }
     }
 
-    customElements.define(xtal.elements.XtalFetch.is, xtal.elements.XtalFetch);
+    customElements.define(XtalFetch.is, XtalFetch);
 }

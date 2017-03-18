@@ -54,8 +54,7 @@ var xtal;
                 }
             }
         }
-        elements.XtalFetch = XtalFetch;
-        customElements.define(xtal.elements.XtalFetch.is, xtal.elements.XtalFetch);
+        customElements.define(XtalFetch.is, XtalFetch);
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-fetch.js.map
