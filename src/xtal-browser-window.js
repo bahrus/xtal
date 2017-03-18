@@ -82,8 +82,7 @@ var xtal;
                 }
             }
         }
-        elements.XtalBrowserWindow = XtalBrowserWindow;
+        customElements.define(XtalBrowserWindow.is, XtalBrowserWindow);
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
-customElements.define(xtal.elements.XtalBrowserWindow.is, xtal.elements.XtalBrowserWindow);
 //# sourceMappingURL=xtal-browser-window.js.map

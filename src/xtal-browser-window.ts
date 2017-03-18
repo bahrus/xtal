@@ -7,7 +7,7 @@ module xtal.elements{
         collapsedText: string | polymer.PropObjectType,
         clicked: boolean | polymer.PropObjectType
     }
-    export class XtalBrowserWindow extends Polymer.Element implements IXtalBrowserWindow {
+    class XtalBrowserWindow extends Polymer.Element implements IXtalBrowserWindow {
         static get is() { return 'xtal-browser-window'; }
         linkOnly = false;
         sandBox = '';
@@ -89,6 +89,7 @@ module xtal.elements{
             
         }
     }
+
+    customElements.define(XtalBrowserWindow.is, XtalBrowserWindow);
 }
 
-customElements.define(xtal.elements.XtalBrowserWindow.is, xtal.elements.XtalBrowserWindow);
