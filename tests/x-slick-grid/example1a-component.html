@@ -1,8 +1,8 @@
 <link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 <link rel="import" href="../../src/xtal-fetch.html"/>
-<link rel="import" href="../../src/js-transformer.html"/>
-<script src="../fetch-container.js"></script>
+<link rel="import" href="../../src/js-merge.html"/>
+
 
 <dom-module id="example1a-component">
     <template>
@@ -10,9 +10,8 @@
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
-                    <xtal-fetch req-url="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
-                    <fetch-container watch=[[generatedJSON]]></fetch-container>
-                    <js-transformer watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
+                    <xtal-fetch href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+                    <js-merge watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
                         [{
                             columns:[
                                 {id: 'index',       name: 'Index',      field: 'index'},
@@ -29,7 +28,7 @@
                                 enableColumnReorder: false
                             }
                         }]
-                    </js-transformer>
+                    </js-merge>
                     <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
                 </td>
                 <td valign="top">

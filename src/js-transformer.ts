@@ -10,7 +10,7 @@ module xtal.elements{
         watch: object | polymer.PropObjectType,
         result: object | polymer.PropObjectType,
         argument: JSTransformerArgument | polymer.PropObjectType,
-        wrapObjectWithPath: string | polymer.PropObjectType
+        
     }
     
     class JSTransformer extends Polymer.Element implements JSTransformerProperties{
@@ -38,9 +38,7 @@ module xtal.elements{
                 argument:{
                     type: Object
                 },
-                wrapObjectWithPath:{
-                    type: String
-                }
+                
             }
         }
         watch: object;
@@ -53,65 +51,19 @@ module xtal.elements{
         * @event transform
         */
         _transformerFns: Function[];
-       //Inspired by Stackoverflow.com/questions/27936772/deep-object-merging-in-es6-es7
+      
 
-       /**
-       * Deep merge two objects.
-       * @param target
-       * @param source
-       */
-        mergeDeep(target, source) {
-            if(typeof target !== 'object') return;
-            if(typeof source !== 'object') return;
-            for (const key in source) {
-                const sourceVal = source[key];
-                const targetVal = target[key];
-                if(!sourceVal) continue; //TODO:  null out property?
-                if(!targetVal){
-                    target[key] = sourceVal;
-                    continue;
-                }
-                if(Array.isArray(sourceVal) && Array.isArray(targetVal)){
-                    //warning!! code below not yet tested
-                    if(targetVal.length > 0 && typeof targetVal[0].id === 'undefined') continue;
-                    for(var i = 0, ii = sourceVal.length; i < ii; i++){
-                        const srcEl = sourceVal[i];
-                        if(typeof srcEl.id === 'undefined') continue;
-                        const targetEl = targetVal.find(function(el){return el.id === srcEl.id;});
-                        if(targetEl){
-                            this.mergeDeep(targetEl, srcEl);
-                        }else{
-                            targetVal.push(srcEl);
-                        }
-                    }
-                    continue;
-                }
-                switch(typeof sourceVal){
-                    case 'object':
-                        switch(typeof targetVal){
-                            case 'object':
-                                this.mergeDeep(targetVal, sourceVal);
-                                break;
-                            default:
-                                target[key] = sourceVal;
-                                break;
-                        }
-                        break;
-                    default:
-                        target[key] = sourceVal;
-                }
-            }
-            return target;
-        }
+
 
         onWatchChange(newVal){
-            let transformedObj;
-            if(this.wrapObjectWithPath) {
-                transformedObj  = {};
-                transformedObj[this.wrapObjectWithPath] = newVal;
-            }else{
-                transformedObj = newVal;
+            if(!this._transformerFns){
+                try{
+                    this._transformerFns = eval(this.innerText);
+                }catch(e){
+                    console.error("Unable to parse " + this.innerText);
+                }
             }
+            
             var arg = this.argument;
             if(!arg){
                 arg = {};
@@ -120,22 +72,21 @@ module xtal.elements{
                 element: this,
                 count: 0,
             };
-            var detail = {obj: transformedObj, arg: arg};
+            var detail = {obj: newVal, arg: arg};
             //this.fire('transform', detail);
-            this.dispatchEvent(new CustomEvent('loadedDependencies', detail))
+            this.dispatchEvent(new CustomEvent('transform', detail))
             arg.context.count++;
-            transformedObj = detail.obj;
+            let transformedObj = detail.obj;
             if(this._transformerFns ){
-                for(var i  = 0, ii = this._transformerFns.length; i < ii; i++)
+                for(let i  = 0, ii = this._transformerFns.length; i < ii; i++)
                 {
-                    var transformerFnOrObj = this._transformerFns[i];
+                    const transformerFnOrObj = this._transformerFns[i];
                     switch(typeof(transformerFnOrObj)){
                         case 'function':
                             transformedObj = transformerFnOrObj(transformedObj, arg);
                             break;
-                        case 'object':
-                            this.mergeDeep(transformedObj, transformerFnOrObj);
-                            break;
+                        default:
+                            throw 'TODO:  error message'
                     }
                     arg.context.count++;
 
@@ -144,7 +95,7 @@ module xtal.elements{
 
 
             detail.obj = transformedObj;
-            this.dispatchEvent(new CustomEvent('loadedDependencies', detail));
+            this.dispatchEvent(new CustomEvent('transform', detail));
             delete arg.context;
             this['_setResult'](transformedObj);
 
@@ -152,11 +103,7 @@ module xtal.elements{
 
         connectedCallback(){
             super.connectedCallback();
-            try{
-                this._transformerFns = eval(this.innerText);
-            }catch(e){
-                console.error("Unable to parse " + this.innerText);
-            }
+            
             if(!Array.isArray(this._transformerFns)) delete this._transformerFns;
         }
     }
