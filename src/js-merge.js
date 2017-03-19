@@ -90,7 +90,6 @@ var xtal;
                 return target;
             }
             onWatchChange(newVal) {
-                console.log('in onWatchChange');
                 let transformedObj;
                 if (this.wrapObjectWithPath) {
                     transformedObj = {};
@@ -122,7 +121,6 @@ var xtal;
                 this['_setResult'](transformedObj);
             }
         }
-        console.log('registering ' + JSMerge.is);
         customElements.define(JSMerge.is, JSMerge);
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));

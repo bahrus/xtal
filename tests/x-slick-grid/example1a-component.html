@@ -1,7 +1,8 @@
 <link rel="import" href="../../src/xtal-fetch.html"/>
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+
 <link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/js-merge.html"/>
+<link rel="import" href="../../src/xtal-inline-iframe.html"/>
 
 
 <dom-module id="example1a-component">
@@ -29,7 +30,12 @@
                             }
                         }]
                     </js-merge>
-                    <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
+                    <xtal-inline-iframe>
+                        <span>I am here</span>
+                        <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+                        <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
+                    </xtal-inline-iframe>
+                   
                 </td>
                 <td valign="top">
                     <h2>Demonstrates:</h2>

@@ -99,7 +99,6 @@ module xtal.elements{
         }
 
         onWatchChange(newVal){
-            console.log('in onWatchChange');
             let transformedObj;
             if(this.wrapObjectWithPath) {
                 transformedObj  = {};
@@ -131,6 +130,5 @@ module xtal.elements{
             this['_setResult'](transformedObj);
         }
     }
-    console.log('registering ' + JSMerge.is);
     customElements.define(JSMerge.is, JSMerge);
 }
