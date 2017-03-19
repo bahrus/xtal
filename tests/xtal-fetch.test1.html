@@ -23,12 +23,13 @@
         </script>
         <dom-module id="x-foo">
             <template>
-            <xtal-fetch req-url="//jsonplaceholder.typicode.com/users" result="{{myFetchResult}}"></xtal-fetch>
+            <xtal-fetch href="generated.json" result="{{myFetchResult}}"></xtal-fetch>
             <div>fetch result: 
                 <pre>{{myFetchResult}}</pre>
             </div>
             </template>
         </dom-module>
         <x-foo></x-foo>
+        <xtal-fetch href="sampleHTMLFragment.html" insert-results></xtal-fetch>
     </body>
 </html>

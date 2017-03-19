@@ -5,7 +5,7 @@ class FetchContainer extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
         <div>This is a Native Custom Element</div>
-        <xtal-fetch req-url="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+        <xtal-fetch href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
         <pre id="jsonOutput">Waiting...</pre>
     `;
     }

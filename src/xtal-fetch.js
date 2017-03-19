@@ -28,7 +28,10 @@ var xtal;
                     reqInit: {
                         type: Object
                     },
-                    reqUrl: {
+                    insertResults: {
+                        type: Boolean
+                    },
+                    href: {
                         type: String,
                         observer: 'loadNewUrl'
                     },
@@ -43,11 +46,14 @@ var xtal;
                 };
             }
             loadNewUrl() {
-                if (this.reqUrl) {
+                if (this.href) {
                     const _this = this;
-                    fetch(this.reqUrl).then(resp => {
+                    fetch(this.href).then(resp => {
                         resp[_this.as]().then(val => {
                             _this['_setResult'](val);
+                            if (typeof val === 'string' && this.insertResults) {
+                                this.innerHTML = val;
+                            }
                             //_this.notifyPath('result');
                         });
                     });
