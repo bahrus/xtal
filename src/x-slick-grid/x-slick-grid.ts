@@ -363,6 +363,7 @@ module xtal.elements {
         
         
         onNewGridRenderParams<T>(newVal: xtal.elements.IGridRenderParams<T>){
+            debugger;
             this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
         }
 

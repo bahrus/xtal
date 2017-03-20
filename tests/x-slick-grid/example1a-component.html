@@ -1,6 +1,4 @@
 <link rel="import" href="../../src/xtal-fetch.html"/>
-
-<link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/js-merge.html"/>
 <link rel="import" href="../../src/xtal-inline-iframe.html"/>
 
@@ -30,10 +28,10 @@
                             }
                         }]
                     </js-merge>
-                    <xtal-inline-iframe>
-                        <span>I am here</span>
+                    <xtal-inline-iframe pass-object="[[gridInfoAndData]]" pass-property-key="gridRenderParams" pass-to="x-slick-grid">
+                        <link rel="stylesheet" href="examples.css" type="text/css"/>
                         <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
-                        <x-slick-grid id="myGrid" grid-render-params="[[gridInfoAndData]]"></x-slick-grid>
+                        <x-slick-grid id="myGrid"></x-slick-grid>
                     </xtal-inline-iframe>
                    
                 </td>
