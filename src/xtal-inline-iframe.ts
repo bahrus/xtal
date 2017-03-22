@@ -47,7 +47,6 @@ module xtal.elements{
             const targetElements = this.$.target.contentWindow.document.querySelectorAll(this['passTo']);
             for(let i = 0, ii = targetElements.length; i < ii; i++){
                 const targetElement = targetElements[i];
-                debugger;
                 targetElement[this['passPropertyKey']] = newVal;
             }
         }

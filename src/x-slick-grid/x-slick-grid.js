@@ -260,7 +260,6 @@ var xtal;
                 return grid;
             }
             onNewGridRenderParams(newVal) {
-                debugger;
                 this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
             }
             get columns() {
