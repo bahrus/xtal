@@ -4,17 +4,20 @@ var xtal;
         connectedCallback() {
             //super.connectedCallback();
             const id = this.tagName.toLowerCase();
-            this.innerHTML = xtal['domLite'][id];
+            const template = xtal['domLite'][id];
+            var clone = document.importNode(template.content, true);
+            this.appendChild(clone);
+            //this.innerHTML = xtal['domLite'][id];
         }
     }
     xtal.XtalLite = XtalLite;
     customElements.define('xtal-lite', XtalLite);
     class DOMLite extends HTMLElement {
         connectedCallback() {
-            const innerHTML = this.innerHTML;
+            const domTemplate = this.querySelector('template');
             if (!xtal['domLite'])
                 xtal['domLite'] = {};
-            xtal['domLite'][this.id] = innerHTML;
+            xtal['domLite'][this.id] = domTemplate;
         }
     }
     customElements.define('dom-lite', DOMLite);
