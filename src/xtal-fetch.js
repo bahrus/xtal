@@ -50,6 +50,7 @@ var xtal;
                     const _this = this;
                     fetch(this.href).then(resp => {
                         resp[_this.as]().then(val => {
+                            debugger;
                             _this['_setResult'](val);
                             if (typeof val === 'string' && this.insertResults) {
                                 this.innerHTML = val;
