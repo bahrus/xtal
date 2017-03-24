@@ -16,22 +16,41 @@ var xtal;
             //     console.log(customElements.get('xtal-fetch'));
             // });
         }
+        addListener(nd, construct) {
+            const cp = construct.properties;
+            if (typeof cp !== 'object')
+                return;
+            for (let key in cp) {
+                const prop = cp[key];
+                //console.log(prop);
+                if (prop['notify'] === true) {
+                    //console.log(this);
+                    nd.addEventListener(key + '-changed', e => {
+                        console.log(e);
+                    });
+                }
+            }
+        }
         getDashedTagNames(nd) {
             if (!nd.hasChildNodes)
                 return;
+            const _this = this;
             for (let i = 0, cn = nd.children, ii = cn.length; i < ii; i++) {
-                console.log('i = ' + i);
                 const childNd = cn[i];
                 let tagName = childNd.tagName;
-                const dc = this.dashedChildren;
                 if (tagName.indexOf('-') > 0) {
                     tagName = tagName.toLowerCase();
-                    if (typeof dc[tagName] === 'undefined') {
+                    const dc = this.dashedChildren;
+                    if (dc[tagName] === undefined) {
                         dc[tagName] = null;
                         customElements.whenDefined(tagName).then(() => {
                             const construct = customElements.get(tagName);
-                            console.log(construct);
+                            dc[tagName] = construct;
+                            _this.addListener(childNd, construct);
                         });
+                    }
+                    else {
+                        _this.addListener(childNd, dc[tagName]);
                     }
                 }
                 else {
