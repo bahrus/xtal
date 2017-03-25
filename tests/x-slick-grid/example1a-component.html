@@ -1,10 +1,11 @@
 <link rel="import" href="../../src/xtal-lite.html">
-<link rel="import" href="../../src/xtal-fetch.html"/>
-<link rel="import" href="../../src/js-merge.html"/>
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+
 
 <dom-lite id="example1a-component">
-    <template>        
+    <template>
+        <link rel="import" href="../../src/xtal-fetch.html"/>
+        <link rel="import" href="../../src/js-merge.html"/>
+        <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />        
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
@@ -48,19 +49,20 @@
     </template>
     
     <script>
-        class Example1a extends xtal.XtalLite{
-            static get is(){return 'example1a-component'}
-            static get properties(){
-                return {
-                    myFetchResult :{
-                        type: String
+        customElements.whenDefined('dom-lite').then(() =>{
+            class Example1a extends xtal.XtalLite{
+                static get is(){return 'example1a-component'}
+                static get properties(){
+                    return {
+                        myFetchResult :{
+                            type: String
+                        }
                     }
                 }
             }
-        }
-        customElements.define(Example1a.is, Example1a);
-        class MyInnerNativeCE extends HTMLElement{
-
-        }
+            customElements.define(Example1a.is, Example1a);
+        });
+        
+        
     </script>
 </dom-module>
