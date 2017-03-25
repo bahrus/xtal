@@ -6,9 +6,6 @@ var xtal;
             constructor() {
                 super(...arguments);
                 this.as = 'text';
-                // ready(){
-                //     super.ready();
-                // }
             }
             static get is() { return 'xtal-fetch'; }
             static get properties() {

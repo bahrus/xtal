@@ -66,10 +66,7 @@ module xtal.elements{
                 })
             }
         }
-        // ready(){
-        //     super.ready();
-            
-        // }
+        
     }
 
     customElements.define(XtalFetch.is, XtalFetch);

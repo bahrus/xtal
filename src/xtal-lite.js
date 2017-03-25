@@ -1,6 +1,8 @@
 var xtal;
 (function (xtal) {
     xtal.domLite = {};
+    const caseMap = {};
+    const CAMEL_TO_DASH = /([A-Z])/g;
     class XtalLite extends HTMLElement {
         constructor() {
             super(...arguments);
@@ -16,24 +18,47 @@ var xtal;
             //     console.log(customElements.get('xtal-fetch'));
             // });
         }
+        /**
+        * Converts "camelCase" identifier (e.g. `fooBarBaz`) to "dash-case"
+        * (e.g. `foo-bar-baz`).  From Polymer utils
+        *
+        * @memberof Polymer.CaseMap
+        * @param {string} camel Camel-case identifier
+        * @return {string} Dash-case representation of the identifier
+        */
+        camelToDashCase(camel) {
+            return caseMap[camel] || (caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase());
+        }
         addListener(nd, construct) {
             const cp = construct.properties;
             if (typeof cp !== 'object')
                 return;
             for (let key in cp) {
                 const prop = cp[key];
-                //console.log(prop);
                 if (prop['notify'] === true) {
-                    //console.log(this);
-                    nd.addEventListener(key + '-changed', e => {
-                        console.log(e);
+                    let resultPath = nd.getAttribute(key);
+                    if (resultPath === undefined)
+                        continue;
+                    if (resultPath.indexOf('{{') !== 0)
+                        continue;
+                    resultPath = resultPath.substr(2, resultPath.length - 4);
+                    nd.addEventListener(this.camelToDashCase(key) + '-changed', e => {
+                        console.log(e, resultPath);
+                        this[resultPath] = e['detail'].value;
                     });
                 }
             }
         }
         getDashedTagNames(nd) {
-            if (!nd.hasChildNodes)
+            console.log('in getDashedTagNames');
+            if (nd.children.length === 0) {
+                const tc = nd.textContent.trim();
+                console.log(nd.outerHTML, tc);
+                if (tc.startsWith('{{') && tc.endsWith('}}')) {
+                    console.log('found binding');
+                }
                 return;
+            }
             const _this = this;
             for (let i = 0, cn = nd.children, ii = cn.length; i < ii; i++) {
                 const childNd = cn[i];
