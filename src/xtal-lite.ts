@@ -7,6 +7,11 @@ module xtal{
     const caseMap = {};
     const CAMEL_TO_DASH = /([A-Z])/g;
     const DASH_TO_CAMEL = /-[a-z]/g;
+    /**
+     * Base class for "Polymer Lite".  This class is meant as a stepping stone to full blown
+     * Polymer elements but for scenarios where the contents can't work easily with Shadow DOM.
+     * Supports getting content from <dom-lite> custom elements
+     */
     export class XtalLite extends HTMLElement{
         dashedChildren: {[key: string] : Function} = {};
         listeningInners: {[key: string] : HTMLElement[]} = {};
