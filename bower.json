@@ -15,15 +15,11 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#2.0.0-rc.2",
-    "webcomponentsjs": "WebComponents/webcomponentsjs#^v1.0.0-rc.5",
+    "polymer": "Polymer/polymer#2.0.0-rc.3",
+    "webcomponentsjs": "WebComponents/webcomponentsjs#^v1.0.0-rc.7",
     "jquery": "~1.8.3",
     "jquery-ui": "~1.8.23",
     "jquery.event": "threedubmedia/jquery.threedubmedia#2.2",
     "jquery-mousewheel": "jquery/jquery-mousewheel#3.0.6"
-  },
-  "resolutions": {
-    "polymer": "2.0.0-rc.1",
-    "webcomponentsjs": "v1.0.0-rc.5"
   }
 }
