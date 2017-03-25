@@ -3,11 +3,13 @@ var xtal;
     xtal.domLite = {};
     const caseMap = {};
     const CAMEL_TO_DASH = /([A-Z])/g;
+    const DASH_TO_CAMEL = /-[a-z]/g;
     class XtalLite extends HTMLElement {
         constructor() {
             super(...arguments);
             this.dashedChildren = {};
             this.listeningInners = {};
+            this.listeningAttributes = {};
         }
         connectedCallback() {
             const id = this.tagName.toLowerCase();
@@ -19,9 +21,12 @@ var xtal;
             //     console.log(customElements.get('xtal-fetch'));
             // });
         }
-        disconnectedCallback() {
-            this.listeningInners = null; //is this necessary?
-        }
+        // disconnectedCallback(){
+        //     super.discon
+        //     // this.listeningInners = null; //is this necessary?
+        //     // this.listeningAttributes = null; //is this necessary?
+        //     // //todo:  remove element listeners?
+        // }
         /**
         * Converts "camelCase" identifier (e.g. `fooBarBaz`) to "dash-case"
         * (e.g. `foo-bar-baz`).  From Polymer utils
@@ -33,6 +38,17 @@ var xtal;
         camelToDashCase(camel) {
             return caseMap[camel] || (caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase());
         }
+        /**
+         * Converts "dash-case" identifier (e.g. `foo-bar-baz`) to "camelCase"
+         * (e.g. `fooBarBaz`).
+         *
+         * @memberof Polymer.CaseMap
+         * @param {string} dash Dash-case identifier
+         * @return {string} Camel-case representation of the identifier
+         */
+        dashToCamelCase(dash) {
+            return caseMap[dash] || (caseMap[dash] = dash.indexOf('-') < 0 ? dash : dash.replace(DASH_TO_CAMEL, (m) => m[1].toUpperCase()));
+        }
         addListener(nd, construct) {
             const cp = construct.properties;
             if (typeof cp !== 'object')
@@ -43,7 +59,7 @@ var xtal;
                     let resultPath = nd.getAttribute(key);
                     if (resultPath === undefined)
                         continue;
-                    const innerBinding = this.getInnerBinding(resultPath);
+                    const innerBinding = this.getInnerBinding(resultPath, '{{', '}}');
                     if (innerBinding === null)
                         continue;
                     console.log('innerBinding = ' + innerBinding);
@@ -57,24 +73,31 @@ var xtal;
                                 il.innerHTML = val;
                             });
                         }
+                        const attrListeners = this.listeningAttributes[innerBinding];
+                        if (attrListeners) {
+                            attrListeners.forEach(al => {
+                                al.el[this.dashToCamelCase(al.propertyKey)] = val;
+                            });
+                        }
                     });
                 }
             }
         }
-        getInnerBinding(s) {
-            if (s.substring(0, 2) !== '{{')
+        getInnerBinding(s, openStr, closedStr) {
+            if (s === null)
+                return null;
+            if (s.substring(0, 2) !== openStr)
                 return null;
             const len = s.length;
-            if (s.substr(len - 2) !== '}}')
+            if (s.substr(len - 2) !== closedStr)
                 return null;
             return s.substring(2, len - 2);
         }
         processChildren(nd) {
-            console.log('in getDashedTagNames');
             if (nd.children.length === 0) {
                 const tc = nd.textContent.trim();
                 console.log(nd.outerHTML, tc);
-                const innerBinding = this.getInnerBinding(tc);
+                const innerBinding = this.getInnerBinding(tc, '{{', '}}');
                 if (innerBinding !== null) {
                     nd.innerHTML = '';
                     const li = this.listeningInners;
@@ -90,6 +113,20 @@ var xtal;
                 let tagName = childNd.tagName;
                 if (tagName.indexOf('-') > 0) {
                     tagName = tagName.toLowerCase();
+                    for (let j = 0, jj = childNd.attributes.length; j < jj; j++) {
+                        const atr = childNd.attributes[j];
+                        const innerBinding = this.getInnerBinding(atr.value, '[[', ']]');
+                        if (innerBinding) {
+                            const la = this.listeningAttributes;
+                            if (!la[innerBinding])
+                                la[innerBinding] = [];
+                            la[innerBinding].push({
+                                el: childNd,
+                                propertyKey: atr.name,
+                            });
+                        }
+                        console.log(atr);
+                    }
                     const dc = this.dashedChildren;
                     if (dc[tagName] === undefined) {
                         dc[tagName] = null;

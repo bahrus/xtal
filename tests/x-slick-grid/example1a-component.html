@@ -1,11 +1,10 @@
+<link rel="import" href="../../src/xtal-lite.html">
 <link rel="import" href="../../src/xtal-fetch.html"/>
 <link rel="import" href="../../src/js-merge.html"/>
-<link rel="import" href="../../src/xtal-inline-iframe.html"/>
+<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
-
-<dom-module id="example1a-component">
-    <template>
-        
+<dom-lite id="example1a-component">
+    <template>        
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
@@ -28,11 +27,7 @@
                             }
                         }]
                     </js-merge>
-                    <xtal-inline-iframe pass-object="[[gridInfoAndData]]" pass-property-key="gridRenderParams" pass-to="x-slick-grid">
-                        <link rel="stylesheet" href="examples.css" type="text/css"/>
-                        <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
-                        <x-slick-grid id="myGrid"></x-slick-grid>
-                    </xtal-inline-iframe>
+                    <x-slick-grid grid-render-params="[[gridInfoAndData]]" ></x-slick-grid>
                    
                 </td>
                 <td valign="top">
@@ -54,7 +49,7 @@
     </template>
     
     <script>
-        class Example1a extends Polymer.Element{
+        class Example1a extends xtal.XtalLite{
             static get is(){return 'example1a-component'}
             static get properties(){
                 return {
