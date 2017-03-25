@@ -7,16 +7,20 @@ var xtal;
         constructor() {
             super(...arguments);
             this.dashedChildren = {};
+            this.listeningInners = {};
         }
         connectedCallback() {
             const id = this.tagName.toLowerCase();
             const template = xtal.domLite[id];
             var clone = document.importNode(template.content, true);
             const nd = this.appendChild(clone);
-            this.getDashedTagNames(this);
+            this.processChildren(this);
             // customElements.whenDefined('xtal-fetch').then(() =>{
             //     console.log(customElements.get('xtal-fetch'));
             // });
+        }
+        disconnectedCallback() {
+            this.listeningInners = null; //is this necessary?
         }
         /**
         * Converts "camelCase" identifier (e.g. `fooBarBaz`) to "dash-case"
@@ -39,23 +43,44 @@ var xtal;
                     let resultPath = nd.getAttribute(key);
                     if (resultPath === undefined)
                         continue;
-                    if (resultPath.indexOf('{{') !== 0)
+                    const innerBinding = this.getInnerBinding(resultPath);
+                    if (innerBinding === null)
                         continue;
-                    resultPath = resultPath.substr(2, resultPath.length - 4);
+                    console.log('innerBinding = ' + innerBinding);
                     nd.addEventListener(this.camelToDashCase(key) + '-changed', e => {
                         console.log(e, resultPath);
-                        this[resultPath] = e['detail'].value;
+                        const val = e['detail'].value;
+                        this[innerBinding] = val;
+                        const innerListeners = this.listeningInners[innerBinding];
+                        if (innerListeners) {
+                            innerListeners.forEach(il => {
+                                il.innerHTML = val;
+                            });
+                        }
                     });
                 }
             }
         }
-        getDashedTagNames(nd) {
+        getInnerBinding(s) {
+            if (s.substring(0, 2) !== '{{')
+                return null;
+            const len = s.length;
+            if (s.substr(len - 2) !== '}}')
+                return null;
+            return s.substring(2, len - 2);
+        }
+        processChildren(nd) {
             console.log('in getDashedTagNames');
             if (nd.children.length === 0) {
                 const tc = nd.textContent.trim();
                 console.log(nd.outerHTML, tc);
-                if (tc.startsWith('{{') && tc.endsWith('}}')) {
-                    console.log('found binding');
+                const innerBinding = this.getInnerBinding(tc);
+                if (innerBinding !== null) {
+                    nd.innerHTML = '';
+                    const li = this.listeningInners;
+                    if (!li[innerBinding])
+                        li[innerBinding] = [];
+                    li[innerBinding].push(nd);
                 }
                 return;
             }
@@ -79,7 +104,7 @@ var xtal;
                     }
                 }
                 else {
-                    this.getDashedTagNames(childNd);
+                    this.processChildren(childNd);
                 }
             }
         }
