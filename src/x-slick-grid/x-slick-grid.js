@@ -480,14 +480,10 @@ var xtal;
             }
             customElements.define(XtalXSlickGrid.is, XtalXSlickGrid);
         }
-        function waitForPolymerElement() {
-            if (typeof Polymer === 'undefined' || Polymer.Element === undefined) {
-                setTimeout(waitForPolymerElement, 50);
-                return;
-            }
-            initXtalXSlickGrid();
-        }
-        waitForPolymerElement();
+        //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+        initXtalXSlickGrid();
+        //}
+        //waitForPolymerElement();
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=x-slick-grid.js.map

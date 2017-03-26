@@ -71,10 +71,10 @@ module xtal.elements{
         }
         customElements.define(XtalFetch.is, XtalFetch);
     }
-    function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+    //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
         initXtalFetch();
-    }
-    waitForPolymerElement();
+   // }
+    //waitForPolymerElement();
 
     
 }

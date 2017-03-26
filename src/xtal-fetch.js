@@ -60,14 +60,10 @@ var xtal;
             }
             customElements.define(XtalFetch.is, XtalFetch);
         }
-        function waitForPolymerElement() {
-            if (typeof Polymer === 'undefined' || Polymer.Element === undefined) {
-                setTimeout(waitForPolymerElement, 50);
-                return;
-            }
-            initXtalFetch();
-        }
-        waitForPolymerElement();
+        //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+        initXtalFetch();
+        // }
+        //waitForPolymerElement();
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-fetch.js.map

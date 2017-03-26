@@ -133,8 +133,8 @@ module xtal.elements{
         }
         customElements.define(JSMerge.is, JSMerge);
     }
-    function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+    //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
         initJSMerge();
-    }
-    waitForPolymerElement();
+    //}
+    //waitForPolymerElement();
 }
