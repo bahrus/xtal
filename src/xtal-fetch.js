@@ -33,8 +33,8 @@ var xtal;
                         observer: 'loadNewUrl'
                     },
                     /**
-                    * The expression for where to place the result.
-                    */
+                     * The expression for where to place the result.
+                     */
                     result: {
                         type: Object,
                         notify: true,

@@ -7,23 +7,23 @@ var xtal;
             static get properties() {
                 return {
                     /**
-                    * The expression to observe and transform when it changes.
-                    */
+                     * The expression to observe and transform when it changes.
+                     */
                     watch: {
                         type: Object,
                         observer: 'onWatchChange'
                     },
                     /**
-                    * The expression for where to place the result.
-                    */
+                     * The expression for where to place the result.
+                     */
                     result: {
                         type: Object,
                         notify: true,
                         readOnly: true
                     },
                     /**
-                    * Configuration argument to pass to the transformer
-                    */
+                     * Configuration argument to pass to the transformer
+                     */
                     argument: {
                         type: Object
                     },
