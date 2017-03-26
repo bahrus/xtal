@@ -2,13 +2,6 @@ var xtal;
 (function (xtal) {
     var elements;
     (function (elements) {
-        function waitForPolymerElement() {
-            if (typeof Polymer === 'undefined' || Polymer.Element === undefined) {
-                setTimeout(waitForPolymerElement, 50);
-                return;
-            }
-            initJSMerge();
-        }
         function initJSMerge() {
             class JSMerge extends Polymer.Element {
                 static get is() { return 'js-merge'; }
@@ -130,6 +123,13 @@ var xtal;
                 }
             }
             customElements.define(JSMerge.is, JSMerge);
+        }
+        function waitForPolymerElement() {
+            if (typeof Polymer === 'undefined' || Polymer.Element === undefined) {
+                setTimeout(waitForPolymerElement, 50);
+                return;
+            }
+            initJSMerge();
         }
         waitForPolymerElement();
     })(elements = xtal.elements || (xtal.elements = {}));

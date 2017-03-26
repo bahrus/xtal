@@ -4,9 +4,6 @@ module xtal.elements{
         watch: object | polymer.PropObjectType,
         result: object | polymer.PropObjectType,
     }
-    function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
-        initJSMerge();
-    }
     function initJSMerge(){
         class JSMerge extends Polymer.Element implements JSMergeProperties{
             static get is(){return 'js-merge';}
@@ -135,6 +132,9 @@ module xtal.elements{
             }
         }
         customElements.define(JSMerge.is, JSMerge);
+    }
+    function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+        initJSMerge();
     }
     waitForPolymerElement();
 }

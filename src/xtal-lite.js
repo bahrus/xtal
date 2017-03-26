@@ -67,9 +67,9 @@ var xtal;
                     const innerBinding = this.getInnerBinding(resultPath, '{{', '}}');
                     if (innerBinding === null)
                         continue;
-                    console.log('innerBinding = ' + innerBinding);
+                    //console.log('innerBinding = ' + innerBinding);
                     nd.addEventListener(this.camelToDashCase(key) + '-changed', e => {
-                        console.log(e, resultPath);
+                        //console.log(e, resultPath);
                         const val = e['detail'].value;
                         this[innerBinding] = val;
                         const innerListeners = this.listeningInners[innerBinding];
@@ -101,7 +101,7 @@ var xtal;
         processChildren(nd) {
             if (nd.children.length === 0) {
                 const tc = nd.textContent.trim();
-                console.log(nd.outerHTML, tc);
+                //console.log(nd.outerHTML, tc);
                 const innerBinding = this.getInnerBinding(tc, '{{', '}}');
                 if (innerBinding !== null) {
                     nd.innerHTML = '';
@@ -130,7 +130,7 @@ var xtal;
                                 propertyKey: atr.name,
                             });
                         }
-                        console.log(atr);
+                        //console.log(atr);
                     }
                     const dc = this.dashedChildren;
                     if (dc[tagName] === undefined) {
