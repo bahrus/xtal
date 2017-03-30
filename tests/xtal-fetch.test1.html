@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
         <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
         <script src="fetch-container.js"></script>
     </head>
@@ -8,18 +9,31 @@
         <link rel="import" href="../src/xtal-fetch.html"/>
         <fetch-container></fetch-container>
         <script>
-            class XFoo extends Polymer.Element {
-                static get is() { return 'x-foo'; }
-        
-                static get properties() {
-                    return {
-                        myFetchResult: {
-                        type: String
-                        }
-                    };
+            function defineXFoo(){
+                 class XFoo extends Polymer.Element {
+                    static get is() { return 'x-foo'; }
+            
+                    static get properties() {
+                        return {
+                            myFetchResult: {
+                            type: String
+                            }
+                        };
+                    }
                 }
+                customElements.define(XFoo.is, XFoo);
             }
-            customElements.define(XFoo.is, XFoo);
+            if(typeof Polymer === undefined || typeof Polymer.Element === undefined){
+                window.addEventListener('WebComponentsReady', function(e) {
+                    console.log('iah');
+                // imports are loaded and elements have been registered
+                    defineXFoo();
+                });
+            }else{
+                defineXFoo();
+            }
+            
+            
         </script>
         <dom-module id="x-foo">
             <template>

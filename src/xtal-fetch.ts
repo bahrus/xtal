@@ -55,6 +55,7 @@ module xtal.elements{
             loadNewUrl(){
                 if(this.href){
                     const _this = this;
+                    console.log('fetching ' + this.href);
                     fetch(this.href).then(resp =>{
                         resp[_this.as]().then(val =>{
                             _this['_setResult'](val);
@@ -65,6 +66,7 @@ module xtal.elements{
                         });
                         
                     })
+                    console.log('done fetching');
                 }
             }
             
