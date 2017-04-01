@@ -1,0 +1,36 @@
+<link rel="import" href="../src/xtal-fetch.html"/>
+<dom-module id="x-foo">
+    <template>
+    <xtal-fetch href="generated.json" result="{{myFetchResult}}"></xtal-fetch>
+    <div>fetch result: 
+        <pre>{{myFetchResult}}</pre>
+    </div>
+    </template>
+    <script>
+            function defineXFoo(){
+                 class XFoo extends Polymer.Element {
+                    static get is() { return 'x-foo'; }
+            
+                    static get properties() {
+                        return {
+                            myFetchResult: {
+                            type: String
+                            }
+                        };
+                    }
+                }
+                customElements.define(XFoo.is, XFoo);
+            }
+            // if(typeof Polymer === undefined || typeof Polymer.Element === undefined){
+            //     window.addEventListener('WebComponentsReady', function(e) {
+            //         alert('iah');
+            //     // imports are loaded and elements have been registered
+            //         defineXFoo();
+            //     });
+            // }else{
+                defineXFoo();
+            // }
+            
+            
+        </script>
+</dom-module>

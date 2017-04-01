@@ -2,55 +2,24 @@
 <html>
     <head>
         <title>Xtal Fetch Test 1</title>
-
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
+        <script src="../bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+        <link rel="import" href="../src/xtal-fetch.html"/>
+        <link rel="import" href="../bower_components/polymer/polymer-element.html">
+        <link rel="import" href="XFoo.html">
+        <!--<script src="fetch-container.js"></script>-->
     </head>
     <body>
         
-        <link rel="import" href="../src/xtal-fetch.html"/>
+        
         <!--<fetch-container></fetch-container>-->
         
         
-        <!--<dom-module id="x-foo">
-            <template>
-            <xtal-fetch href="generated.json" result="{{myFetchResult}}"></xtal-fetch>
-            <div>fetch result: 
-                <pre>{{myFetchResult}}</pre>
-            </div>
-            </template>
-        </dom-module>
+
         <x-foo></x-foo>
-        <script>
-            function defineXFoo(){
-                 class XFoo extends Polymer.Element {
-                    static get is() { return 'x-foo'; }
-            
-                    static get properties() {
-                        return {
-                            myFetchResult: {
-                            type: String
-                            }
-                        };
-                    }
-                }
-                customElements.define(XFoo.is, XFoo);
-            }
-            if(typeof Polymer === undefined || typeof Polymer.Element === undefined){
-                window.addEventListener('WebComponentsReady', function(e) {
-                    console.log('iah');
-                // imports are loaded and elements have been registered
-                    defineXFoo();
-                });
-            }else{
-                defineXFoo();
-            }
-            
-            
-        </script>-->
         <xtal-fetch href="sampleHTMLFragment.html" insert-results></xtal-fetch>
-        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
-        <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-        <link rel="import" href="../bower_components/polymer/polymer-element.html">
-        <script src="fetch-container.js"></script>
-        <!--<script src="xfoo.js"></script>-->
+
+        
     </body>
 </html>
