@@ -24,6 +24,12 @@ module xtal.elements{
                 if(srcRoot.tagName === 'TEMPLATE'){
                     const htmlToEmbed = document.importNode(srcRoot, true) as HTMLElement;
                     innerHTML = htmlToEmbed.innerHTML;
+                    if(innerHTML=== ''){ //ie11
+                        const outerHTML = htmlToEmbed.outerHTML;
+                        innerHTML = outerHTML.replace('<template>', '');
+                        innerHTML = innerHTML.replace('</template>', ''); //TODO replace last only
+                    }
+                    
                 }else{
                     innerHTML = this.innerHTML;
                 }

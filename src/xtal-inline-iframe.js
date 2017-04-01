@@ -27,6 +27,11 @@ var xtal;
                     if (srcRoot.tagName === 'TEMPLATE') {
                         const htmlToEmbed = document.importNode(srcRoot, true);
                         innerHTML = htmlToEmbed.innerHTML;
+                        if (innerHTML === '') {
+                            const outerHTML = htmlToEmbed.outerHTML;
+                            innerHTML = outerHTML.replace('<template>', '');
+                            innerHTML = innerHTML.replace('</template>', ''); //TODO replace last only
+                        }
                     }
                     else {
                         innerHTML = this.innerHTML;
