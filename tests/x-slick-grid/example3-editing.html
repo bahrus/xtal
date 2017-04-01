@@ -16,11 +16,8 @@
   </style>
 </head>
 <body>
-<!--polyfill if needed-->
-<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
-<link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../x-slick-grid.html" />
+<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
 <div style="position:relative">
   <div style="width:600px;">
@@ -41,7 +38,7 @@
     <button onclick="xslick.grid.setOptions({autoEdit:false})">Auto-edit OFF</button>
     <h2>View Source:</h2>
     <ul>
-      <li><A href="https://github.com/bahrus/crystal/blob/master/xtal-elements/x-slick-grid/examples/example3-editing.html"
+      <li><A href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example3-editing.html"
              target="_sourcewindow"> View the source for this example on Github</a></li>
     </ul>
   </div>
