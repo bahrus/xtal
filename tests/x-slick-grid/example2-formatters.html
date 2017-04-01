@@ -16,7 +16,6 @@
 </head>
 <body>
 <!--polyfill if needed-->
-<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
 <link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
@@ -25,10 +24,7 @@
 <table width="100%">
     <tr>
         <td valign="top" width="50%">
-            <!--<link rel="import" href="../SlickFormatters.html"/>-->
-            <x-slick-grid id="myGrid" use-slick-formatters>
-
-            </x-slick-grid>
+            <x-slick-grid id="myGrid" use-slick-formatters></x-slick-grid>
         </td>
         <td valign="top">
             <h2>Demonstrates:</h2>
@@ -39,7 +35,7 @@
             </ul>
             <h2>View Source:</h2>
             <ul>
-                <li><A href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example2-formatters.html"
+                <li><a href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example2-formatters.html"
                        target="_sourcewindow"> View the source for this example on Github</a></li>
             </ul>
         </td>
