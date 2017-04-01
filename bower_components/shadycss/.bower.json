@@ -25,14 +25,14 @@
     "shadydom": "webcomponents/shadydom#master",
     "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
-  "version": "1.0.0-rc.1",
-  "_release": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
+  "_release": "1.0.0-rc.2",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.0-rc.1",
-    "commit": "69704abae0214e3a6516d10ddad44aca878b1c71"
+    "tag": "v1.0.0-rc.2",
+    "commit": "3c4fd2abb326f59a2df2c22001c0e30f4523c3d3"
   },
   "_source": "https://github.com/webcomponents/shadycss.git",
-  "_target": "v1.0.0-rc.1",
+  "_target": "^v1.0.0-rc.1",
   "_originalSource": "webcomponents/shadycss"
 }
