@@ -232,9 +232,7 @@ module xtal.elements.xslickgrid{
     }
 
     export function attachToggleClickEvent<T>(container: IXSlickGridElement<T>, useSlickCheckboxSelectColumn: boolean){
-        
         container['addEventListener']('checkbox-checked', (e, args) =>{
-            //debugger;
             const cb = e.target;
             const row = parseInt(cb.dataset.row);
             const item = container.dataProvider.getItem(row) as ITreeNode;

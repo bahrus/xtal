@@ -212,7 +212,6 @@ var xtal;
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
             function attachToggleClickEvent(container, useSlickCheckboxSelectColumn) {
                 container['addEventListener']('checkbox-checked', (e, args) => {
-                    //debugger;
                     const cb = e.target;
                     const row = parseInt(cb.dataset.row);
                     const item = container.dataProvider.getItem(row);

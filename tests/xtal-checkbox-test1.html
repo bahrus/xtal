@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test xtal-form</title>
+</head>
+<body>
+
+    <link rel="import" href="../src/xtal-checkbox.html">
+    <!--<xtal-checkbox is-checked></xtal-checkbox>-->
+    <div id="container">
+        <xtal-checkbox is-checked></xtal-checkbox>
+    </div>
+    
+    <script>
+        const cb = document.querySelector('#container');
+        cb.addEventListener('checkbox-checked', (e, a) =>{
+            debugger;
+        })
+    </script>
+</body>
+</html>

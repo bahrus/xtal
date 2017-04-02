@@ -34,10 +34,14 @@ var xtal;
                 }
                 handleClickEvent(mouseEvent, ea) {
                     console.log({ handleClickEvent: { mouseEvent: mouseEvent, ea: ea, checked: this.$.checkbox.checked } });
-                    this.isChecked = this.$.checkbox.checked;
+                    this.isChecked = this.$.checkbox.checked; //this fires a non bubbling event "is-checked"
                     //this.fire('checkbox-checked', this.isChecked);
                     this.dispatchEvent(new CustomEvent('checkbox-checked', {
-                        isChecked: this.isChecked
+                        bubbles: true,
+                        composed: true,
+                        detail: {
+                            isChecked: this.isChecked
+                        }
                     }));
                 }
                 ready() {
