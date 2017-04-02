@@ -47,6 +47,7 @@
               selection-model="Cell"
               use-data-view-data-provider
               use-tree-grid-helper
+              onloadedDependencies = 'handleLoadedDependencies()'
       ></x-slick-grid>
       
     </td>
@@ -70,12 +71,8 @@
 <script>
 
 // initialize the grid
-  var xslick = document.querySelector('x-slick-grid');
-  xslick.addEventListener('loadedDependencies', function(){
-    initialize();
-    xslick.setInitialData(data, columns, options, wcOptions);
-    addEventHandlers(xslick.grid);
-  });
+
+
 
   function requiredFieldValidator(value) {
     if (value == null || value == undefined || !value.length) {
@@ -262,6 +259,20 @@
     });
 
 
+  }
+
+  var xslick = document.querySelector('x-slick-grid');
+  if(xslick.readyFnInitialized){
+     initialize();
+      xslick.setInitialData(data, columns, options, wcOptions);
+      addEventHandlers(xslick.grid);
+  }else{
+      xslick.addEventListener('loadedDependencies', function(){
+        console.log('iah3');
+        initialize();
+        xslick.setInitialData(data, columns, options, wcOptions);
+        addEventHandlers(xslick.grid);
+      });
   }
 
 </script>
