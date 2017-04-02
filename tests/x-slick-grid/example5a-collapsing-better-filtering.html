@@ -173,6 +173,9 @@
       d["finish"] = "01/05/2009";
       d["effortDriven"] = (i % 5 == 0);
     }
+
+      xslick.setInitialData(data, columns, options, wcOptions);
+      addEventHandlers(xslick.grid);
   }
 
   
@@ -264,14 +267,11 @@
   var xslick = document.querySelector('x-slick-grid');
   if(xslick.readyFnInitialized){
      initialize();
-      xslick.setInitialData(data, columns, options, wcOptions);
-      addEventHandlers(xslick.grid);
+      
   }else{
-      xslick.addEventListener('loadedDependencies', function(){
-        console.log('iah3');
+      xslick.addEventListener('ready-fn-initialized-changed', function(){
+        console.og('iah');
         initialize();
-        xslick.setInitialData(data, columns, options, wcOptions);
-        addEventHandlers(xslick.grid);
       });
   }
 

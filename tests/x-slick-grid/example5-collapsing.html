@@ -74,11 +74,10 @@
 
 
 <script>
-  var xslick = document.querySelector('x-slick-grid');
-  xslick.addEventListener('loadedDependencies', function(){
-    initialize();
-  });
-  console.log('xslick.readyFnInitialized = ' + xslick.readyFnInitialized);
+  // var xslick = document.querySelector('x-slick-grid');
+  // xslick.addEventListener('loadedDependencies', function(){
+  //   initialize();
+  // });
   function requiredFieldValidator(value) {
     if (value == null || value == undefined || !value.length) {
       return {valid: false, msg: "This is a required field"};
@@ -292,6 +291,16 @@
       searchString = this.value;
       dataView.refresh();
     })
+  }
+
+    var xslick = document.querySelector('x-slick-grid');
+  if(xslick.readyFnInitialized){
+     initialize();
+      
+  }else{
+      xslick.addEventListener('ready-fn-initialized-changed', function(){
+        initialize();
+      });
   }
 
 </script>
