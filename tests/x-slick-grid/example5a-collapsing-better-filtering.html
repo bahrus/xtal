@@ -18,11 +18,8 @@
   </style>
 </head>
 <body>
-<!--polyfill if needed-->
-<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
-<link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../x-slick-grid.html" />
+<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 <table width="100%">
   <tr>
     <td valign="top" width="50%">
@@ -61,7 +58,7 @@
 
       <h2>View Source:</h2>
       <ul>
-        <li><A href="https://github.com/bahrus/crystal/blob/master/xtal-elements/x-slick-grid/examples/example5a-collapsing-better-filtering.html"
+        <li><A href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example5a-collapsing-better-filtering.html"
                target="_sourcewindow"> View the source for this example on Github</a></li>
       </ul>
     </td>
@@ -99,7 +96,7 @@
   var wcOptions = {};
   function initialize(){
     columns = [
-      {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: crystal.elements.xslickgrid.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
+      {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: xtal.elements.xslickgrid.nodeColumnFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
       {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
       {id: "%", name: "% Complete", field: "percentComplete", sortable: true, width: 80,  resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
       {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
@@ -114,7 +111,7 @@
     };
     wcOptions = {
       dataProvider: function(data){
-        return crystal.elements.xslickgrid.createDataViewWithFilter(data, myFilter, {
+        return xtal.elements.xslickgrid.createDataViewWithFilter(data, myFilter, {
           addStandardRowHandling: true,
           containerFinder: function(){return xslick;}
         })
@@ -186,7 +183,7 @@
   
   function myFilter(item) {
     var container = _items.container;
-    return crystal.elements.xslickgrid.filterNode(item, container, analyzedTreeData);
+    return xtal.elements.xslickgrid.filterNode(item, container, analyzedTreeData);
   }
 
   
@@ -259,7 +256,6 @@
       var test = function(item){
         return item.title.indexOf(searchString) !== -1;
       }
-        //crystal.elements.xslickgrid.analyzeTreeNodes(xslick, test);
         xslick.analyzeTreeNodes(test);
         analyzedTreeData = true;
         xslick.dataProvider.refresh(xslick);
