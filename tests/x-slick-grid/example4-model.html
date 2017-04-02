@@ -32,11 +32,8 @@
   </style>
 </head>
 <body>
-<!--polyfill if needed-->
-<script>(function() {if ('registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')) {} else {var e = document.createElement('script'); e.src = '../../../bower_components/webcomponentsjs/webcomponents-lite.min.js';document.body.appendChild(e);}})();</script>
 
-<link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../x-slick-grid.html" />
+<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
 <div style="position:relative">
   <div style="width:600px;">
@@ -241,8 +238,16 @@ for (var i = 0; i < 50000; i++) {
 }
 
 //initialize when ready - boilerplate
-var xslick=document.querySelector('x-slick-grid'); if(xslick.setInitialData){initialize();}else{window.addEventListener('WebComponentsReady', function(e){initialize();});}
-
+//var xslick=document.querySelector('x-slick-grid'); if(xslick.setInitialData){initialize();}else{window.addEventListener('WebComponentsReady', function(e){initialize();});}
+  var xslick = document.querySelector('x-slick-grid');
+  if(xslick.readyFnInitialized){
+    initialize();
+  }else{
+    xslick.addEventListener('loadedDependencies', function(){
+      initialize();
+      
+    });
+  }
 function initialize(){
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
     xslick.setInitialData(dataView, columns, options, wcOptions);
@@ -268,7 +273,7 @@ function addEventHandlers(grid, dataView){
           .appendTo(grid.getTopPanel())
           .show();
 
-  crystal.elements.xslickgrid.addStandardRowHandling(dataView, {
+  xtal.elements.xslickgrid.addStandardRowHandling(dataView, {
       //gridFinder: function(){return xslick.grid;}
     containerFinder: function(){return xslick;}
   });

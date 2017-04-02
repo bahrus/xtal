@@ -5,22 +5,23 @@ var xtal;
 (function (xtal) {
     var elements;
     (function (elements) {
-        function importHrefs(importStep, polymerElement, callBack) {
-            if (importStep.length === 0) {
-                if (callBack)
-                    callBack();
-                return;
-            }
-            const nextStep = importStep.shift();
-            if (!nextStep) {
-                importHrefs(importStep, polymerElement, callBack);
-                return;
-            }
-            const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
-            const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
-            polymerElement.importHref(resolvedURL, () => importHrefs(importStep, polymerElement, callBack), () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement));
-        }
-        elements.importHrefs = importHrefs;
+        // export function importHrefs(importStep: IDynamicImportStep[], polymerElement: Polymer.Element, callBack?: () => void){
+        //     if(importStep.length === 0) {
+        //         if(callBack) callBack();
+        //         return;
+        //     }
+        //     const nextStep = importStep.shift();
+        //     if(!nextStep){
+        //         importHrefs(importStep, polymerElement, callBack);
+        //         return;
+        //     }
+        //     const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
+        //     const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
+        //     polymerElement.importPath(resolvedURL, 
+        //         () => importHrefs(importStep, polymerElement, callBack), 
+        //         () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement)
+        //     );
+        // }
         function downloadJSFilesInParallelButLoadInSequence(refs, callBack) {
             //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
             const notLoadedYet = {};
@@ -44,14 +45,34 @@ var xtal;
             });
         }
         elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
-        function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement) {
-            if (!cdnPath) {
-                importHrefs(importStep, polymerElement, callBack);
-                return;
-            }
-            const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
-            polymerElement.importHref(resolvedURL, () => importHrefs(importStep, polymerElement, callBack));
+        function addCSSLinks(refs) {
+            const notLoadedYet = {};
+            const nonNullRefs = refs.filter(ref => ref !== null);
+            nonNullRefs.forEach(ref => {
+                notLoadedYet[ref.href] = true;
+            });
+            //from http://stackoverflow.com/questions/574944/how-to-load-up-css-files-using-javascript
+            nonNullRefs.forEach(ref => {
+                var head = document.getElementsByTagName('head')[0];
+                var link = document.createElement('link');
+                //link.id   = cssId;
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = ref.href;
+                link.media = 'all';
+                head.appendChild(link);
+            });
         }
+        elements.addCSSLinks = addCSSLinks;
+        // function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement){
+        //     if(!cdnPath) {
+        //         importHrefs(importStep, polymerElement, callBack);
+        //         return;
+        //     }
+        //     const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+        //     polymerElement.importHref(resolvedURL, 
+        //         () => importHrefs(importStep, polymerElement, callBack));
+        // }
         function attachEventHandlers(grid, handlers) {
             if (!handlers)
                 return;
@@ -419,11 +440,10 @@ var xtal;
                     const sm = this.selectionModel;
                     const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
                     const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
-                    const slickDependencies = [
-                        this.useSlickPaging ? { importURL: 'controls/SlickPager.html' } : null,
-                        this.useSlickColumnPicker ? { importURL: 'controls/SlickColumnPicker.html' } : null,
-                        this.useTreeGridHelper ? { importURL: 'TreeGridHelper.html' } : null,
-                        this.useSlickCheckboxSelectColumn ? { importURL: '../xtal-checkbox.html' } : null,
+                    const slickCSSDependencies = [
+                        this.useSlickPaging ? { href: this.resolveUrl('controls/slick.pager.css') } : null,
+                        this.useSlickColumnPicker ? { href: this.resolveUrl('controls/slick.columnpicker.css') } : null,
+                        this.useTreeGridHelper ? { href: this.resolveUrl('css/treeGridHelper.css') } : null,
                     ];
                     const slickJSDependencies = [
                         !$IsDefined ? { src: this.resolveUrl('../../bower_components/jquery/jquery.min.js') } : null,
@@ -447,7 +467,8 @@ var xtal;
                         this.useSlickFormatters ? { src: this.resolveUrl('js/slick.formatters.js') } : null,
                         this.useTreeGridHelper ? { src: this.resolveUrl('js/treeGridHelper.js') } : null,
                     ];
-                    xtal.elements.importHrefs(slickDependencies, this);
+                    //xtal.elements.importHrefs(slickDependencies, this);
+                    xtal.elements.addCSSLinks(slickCSSDependencies);
                     xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
                         const thisGrid = this.querySelector('[role]');
                         const $thisGrid = $(thisGrid);

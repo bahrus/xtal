@@ -35,6 +35,9 @@ module xtal.elements {
     export interface IDynamicJSLoadStep{
         src?: string;
     }
+    export interface IDynamicCSSStep{
+        href?: string;
+    }
     export interface ISlickGridOptions<T> extends Slick.GridOptions<T>{
         frozenColumn: number;
     }
@@ -75,23 +78,23 @@ module xtal.elements {
         onViewportChanged?: (eventData: Slick.OnViewportChangedEventArgs<T>, data?: T) => void;
         onFooterRowCellRendered?: (eventData: any, data?: any) => void;
     }
-    export function importHrefs(importStep: IDynamicImportStep[], polymerElement: Polymer.Element, callBack?: () => void){
-        if(importStep.length === 0) {
-            if(callBack) callBack();
-            return;
-        }
-        const nextStep = importStep.shift();
-        if(!nextStep){
-            importHrefs(importStep, polymerElement, callBack);
-            return;
-        }
-        const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
-        const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
-        polymerElement.importHref(resolvedURL, 
-            () => importHrefs(importStep, polymerElement, callBack), 
-            () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement)
-        );
-    }
+    // export function importHrefs(importStep: IDynamicImportStep[], polymerElement: Polymer.Element, callBack?: () => void){
+    //     if(importStep.length === 0) {
+    //         if(callBack) callBack();
+    //         return;
+    //     }
+    //     const nextStep = importStep.shift();
+    //     if(!nextStep){
+    //         importHrefs(importStep, polymerElement, callBack);
+    //         return;
+    //     }
+    //     const cdnPath = polymerElement['basePath'] ? polymerElement['basePath'] : '';
+    //     const resolvedURL = polymerElement.resolveUrl(cdnPath + nextStep.importURL);
+    //     polymerElement.importPath(resolvedURL, 
+    //         () => importHrefs(importStep, polymerElement, callBack), 
+    //         () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement)
+    //     );
+    // }
 
     export function downloadJSFilesInParallelButLoadInSequence(refs: IDynamicJSLoadStep[], callBack?:() => void){
         //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
@@ -114,15 +117,33 @@ module xtal.elements {
             document.head.appendChild(script);
         });
     }
-    function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement){
-        if(!cdnPath) {
-            importHrefs(importStep, polymerElement, callBack);
-            return;
-        }
-        const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
-        polymerElement.importHref(resolvedURL, 
-            () => importHrefs(importStep, polymerElement, callBack));
+    export function addCSSLinks(refs: IDynamicCSSStep[]){
+        const notLoadedYet : {[key: string] : boolean} = {};
+        const nonNullRefs = refs.filter(ref => ref !== null);
+        nonNullRefs.forEach(ref => {
+            notLoadedYet[ref.href] = true;
+        });
+        //from http://stackoverflow.com/questions/574944/how-to-load-up-css-files-using-javascript
+        nonNullRefs.forEach(ref =>{
+            var head  = document.getElementsByTagName('head')[0];
+            var link  = document.createElement('link');
+            //link.id   = cssId;
+            link.rel  = 'stylesheet';
+            link.type = 'text/css';
+            link.href = ref.href;
+            link.media = 'all';
+            head.appendChild(link);
+        });
     }
+    // function tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement){
+    //     if(!cdnPath) {
+    //         importHrefs(importStep, polymerElement, callBack);
+    //         return;
+    //     }
+    //     const resolvedURL = polymerElement.resolveUrl(nextStep.importURL);
+    //     polymerElement.importHref(resolvedURL, 
+    //         () => importHrefs(importStep, polymerElement, callBack));
+    // }
     export function attachEventHandlers<T>(grid: Slick.Grid<T>, handlers: ISlickGridEventHandlers<T>){
         if(!handlers) return;
         for(const key in handlers){
@@ -562,11 +583,11 @@ module xtal.elements {
                 const sm = this.selectionModel;
                 const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
                 const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
-                const slickDependencies : xtal.elements.IDynamicImportStep[] = [
-                    this.useSlickPaging ? {importURL: 'controls/SlickPager.html'}        : null,
-                    this.useSlickColumnPicker  ? {importURL: 'controls/SlickColumnPicker.html'} : null,
-                    this.useTreeGridHelper ? {importURL: 'TreeGridHelper.html'}             : null,
-                    this.useSlickCheckboxSelectColumn ? {importURL: '../xtal-checkbox.html'} : null,
+                const slickCSSDependencies : xtal.elements.IDynamicCSSStep[] = [
+                    this.useSlickPaging ? {href: this.resolveUrl( 'controls/slick.pager.css')}        : null,
+                    this.useSlickColumnPicker  ? {href: this.resolveUrl('controls/slick.columnpicker.css')} : null,
+                    this.useTreeGridHelper ? {href: this.resolveUrl('css/treeGridHelper.css')}             : null,
+                    //this.useSlickCheckboxSelectColumn ? {importURL: '../xtal-checkbox.html'} : null,
                 ];
                 const slickJSDependencies : xtal.elements.IDynamicJSLoadStep[] = [
                     !$IsDefined ? {src: this.resolveUrl('../../bower_components/jquery/jquery.min.js')} : null,
@@ -590,7 +611,8 @@ module xtal.elements {
                     this.useSlickFormatters ? {src: this.resolveUrl('js/slick.formatters.js')} : null,
                     this.useTreeGridHelper  ? {src: this.resolveUrl('js/treeGridHelper.js')}  : null,                 
                 ];
-                xtal.elements.importHrefs(slickDependencies, this);
+                //xtal.elements.importHrefs(slickDependencies, this);
+                xtal.elements.addCSSLinks(slickCSSDependencies);
                 xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
                     const thisGrid = this.querySelector('[role]');
                     const $thisGrid = $(thisGrid);

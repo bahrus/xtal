@@ -6,7 +6,7 @@ declare module Polymer{
         resolveUrl(path: string);
         $;
         debounce(name: string, fn: Function, timeInMilliSeconds: number);
-        importHref(path: string, fnSuccess: Function, fnError: Function);
+        importPath(path: string, fnSuccess: Function, fnError: Function);
         notifyPath(path: string);
     }
 }
