@@ -653,8 +653,9 @@ module xtal.elements {
         customElements.define(XtalXSlickGrid.is, XtalXSlickGrid);
 
     }
-    //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
-        initXtalXSlickGrid();
-    //}
-    //waitForPolymerElement();
+    // function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
+    //     initXtalXSlickGrid();
+    // }
+    // waitForPolymerElement();
+    customElements.whenDefined('xtal-ball').then(() => initXtalXSlickGrid());
 }

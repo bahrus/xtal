@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<link async rel="import" href="../bower_components/polymer/polymer-element.html" onload="xtal.elements.bootstrap()">
+<script>
+    var xtal;
+    (function (xtal) {
+        var elements;
+        (function (elements) {
+            function bootstrap() {
+                class XtalBall extends Polymer.Element {
+                }
+                customElements.define('xtal-ball', XtalBall);
+                elements.XtalBall = XtalBall;
+            }
+            elements.bootstrap = bootstrap;
+            
+            
+        })(elements = xtal.elements || (xtal.elements = {}));
+    })(xtal || (xtal = {}));
+</script>

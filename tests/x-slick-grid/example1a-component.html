@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<link rel="import" href="../../src/xtal-lite.html">
-<link rel="import" href="../../src/xtal-fetch.html"/>
-<link rel="import" href="../../src/js-merge.html"/>
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+<link async rel="import" href="../../src/xtal-ball.html"/>
+<!--<link async rel="import" href="../../src/xtal-lite.html">-->
+<link async rel="import" href="../../src/xtal-fetch.html"/>
+<link async rel="import" href="../../src/js-merge.html"/>
+<link async rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
-<dom-lite id="example1a-component">
+<dom-module id="example1a-component">
     <template>
                 
         <table width="100%">
@@ -50,14 +51,19 @@
     </template>
     
     <script>
-        customElements.whenDefined('dom-lite').then(() =>{
-            class Example1a extends xtal.XtalLite{
+        customElements.whenDefined('xtal-ball').then(() =>{
+            class Example1a extends Polymer.Element{
                 static get is(){return 'example1a-component'}
                 static get properties(){
                     return {
                         myFetchResult :{
                             type: String
                         }
+                    }
+                }
+                _attachDom(dom) {
+                    if (dom) {
+                        return this.appendChild(dom);
                     }
                 }
             }

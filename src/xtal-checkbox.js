@@ -52,7 +52,7 @@ var xtal;
             }
             customElements.define(XtalCheckbox.is, XtalCheckbox);
         }
-        initXtalCheckbox();
+        customElements.whenDefined('xtal-ball').then(() => initXtalCheckbox());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-checkbox.js.map

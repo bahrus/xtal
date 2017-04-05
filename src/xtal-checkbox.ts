@@ -50,5 +50,6 @@ module xtal.elements{
         }
         customElements.define(XtalCheckbox.is, XtalCheckbox);
     }
-    initXtalCheckbox();
+    customElements.whenDefined('xtal-ball').then(()=> initXtalCheckbox());
+    
 }

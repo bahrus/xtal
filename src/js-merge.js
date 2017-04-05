@@ -125,9 +125,10 @@ var xtal;
             customElements.define(JSMerge.is, JSMerge);
         }
         //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
-        initJSMerge();
+        //    initJSMerge();
         //}
         //waitForPolymerElement();
+        customElements.whenDefined('xtal-ball').then(() => initJSMerge());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=js-merge.js.map

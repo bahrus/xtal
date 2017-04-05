@@ -63,9 +63,10 @@ var xtal;
             customElements.define(XtalFetch.is, XtalFetch);
         }
         //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
-        initXtalFetch();
+        //    initXtalFetch();
         // }
         //waitForPolymerElement();
+        customElements.whenDefined('xtal-ball').then(() => initXtalFetch());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-fetch.js.map
