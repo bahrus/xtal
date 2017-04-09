@@ -7,7 +7,11 @@ var xtal;
                 static get is() { return 'xtal-defaults'; }
                 ready() {
                     super.ready();
-                    const defaultTags = this.getElementsByTagName('template')['content'].children;
+                    const templates = this.getElementsByTagName('template');
+                    if (templates.length !== 1)
+                        return;
+                    const template = templates[0];
+                    const defaultTags = template.content.children;
                     for (let i = 0, ii = defaultTags.length; i < ii; i++) {
                         const defaultTag = defaultTags[i];
                         const tagName = defaultTag.nodeName.toLowerCase();
