@@ -13,12 +13,12 @@ module xtal.elements{
                     const tagName = defaultTag.nodeName.toLowerCase();
                     const matchingTags = document.getElementsByTagName(tagName);
                     const attribs = defaultTag.attributes;
-                    for(var j = 0, jj = attribs.length; j < jj; j++){
-                        var attrib = attribs[j];
-                        var attribName = attrib.nodeName;
-                        var val = attrib.nodeValue;
-                        for(var k = 0, kk = matchingTags.length; k < kk; k++){
-                            var matchingTag = matchingTags[k];
+                    for(let j = 0, jj = attribs.length; j < jj; j++){
+                        const attrib = attribs[j];
+                        const attribName = attrib.nodeName;
+                        const val = attrib.nodeValue;
+                        for(let k = 0, kk = matchingTags.length; k < kk; k++){
+                            const matchingTag = matchingTags[k];
                             matchingTag.setAttribute(attribName, val);
                         }
                     }
