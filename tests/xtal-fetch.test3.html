@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Xtal Fetch Test 2</title>
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
+        <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+        <link rel="import" href="../src/xtal-fetch.html"/>
+        <link rel="import" href="../bower_components/polymer/polymer-element.html">
+    </head>
+    <body>
+        <dom-module id="my-component">
+           <template>
+              <xtal-fetch href="generated.json?s={{ts}}"></xtal-fetch>
+           </template>
+        </dom-module>
+        <script>
+            customElements.whenDefined('xtal-ball').then(() => {
+                class MyComponent extends Polymer.Element{
+                    constructor(){
+                        super();
+                        this.ts = '12345';
+                    }
+                    static get is(){return 'my-component'}
+                    static get properties(){
+                        return{
+                            ts:{
+                                type: String
+                            }
+                        }
+                    }
+                   
+                }
+                customElements.define(MyComponent.is, MyComponent);
+            })
+        </script>
+        
+        
+        <my-component></my-component>
+        
+    </body>
+</html>
