@@ -22,15 +22,11 @@
                 }
                 customElements.define(XFoo.is, XFoo);
             }
-            // if(typeof Polymer === undefined || typeof Polymer.Element === undefined){
-            //     window.addEventListener('WebComponentsReady', function(e) {
-            //         alert('iah');
-            //     // imports are loaded and elements have been registered
-            //         defineXFoo();
-            //     });
-            // }else{
+            
+            customElements.whenDefined('xtal-ball').then(() =>{
                 defineXFoo();
-            // }
+            })
+                
             
             
         </script>
