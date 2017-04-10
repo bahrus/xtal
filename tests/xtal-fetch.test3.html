@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Xtal Fetch Test 2</title>
+        <title>Xtal Fetch Test 3</title>
         <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
         <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
         <link rel="import" href="../src/xtal-fetch.html"/>
+        <link rel="import" href="../src/xtal-form.html"/>
         <link rel="import" href="../bower_components/polymer/polymer-element.html">
     </head>
     <body>
         <dom-module id="my-component">
            <template>
+             <xtal-form serialized-form="{{iamhere}}">
+                 <form method="GET" action="generated.json">
+                     <input type="hidden" name="myHiddenField1" value="hello">
+                 </form>
+             </xtal-form>
               <xtal-fetch href="generated.json?s={{ts}}"></xtal-fetch>
            </template>
         </dom-module>

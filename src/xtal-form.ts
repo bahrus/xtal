@@ -1,5 +1,10 @@
 module xtal.elements{
-
+    interface IXtalFormProperties{
+        disabled: boolean | polymer.PropObjectType,
+        serializedForm: object | polymer.PropObjectType,
+        computedRequestUrl: string | polymer.PropObjectType,
+        computedRequestBody: string | polymer.PropObjectType,
+    }
     function serialize(form: HTMLFormElement, asObject?: boolean) : string | {[key: string] : string | string[]} {
         if (!form || form.nodeName !== "FORM") {
             return;
@@ -138,24 +143,100 @@ module xtal.elements{
     }
 
      function initXtalForm(){
-        class XtalForm{
+        class XtalForm extends Polymer.Element implements IXtalFormProperties{
+            disabled = false;
+            serializedForm;
+            computedRequestUrl;
+            computedRequestBody;
+            recomputeOnEnable = false;
             static get is(){return 'xtal-form';}
-            static get properties(){
+            static get properties() : IXtalFormProperties{
                 return{
-                    auto:{
-                        type: Boolean
-                    },
-                    ironAjaxSelector:{
-                        type: String,
-                    },
-                    cacheAll:{
-                        type: Boolean
-                    },
                     disabled:{
                         type: Boolean,
                         observer: 'onDisabledChange'
+                    },
+                    serializedForm:{
+                        type: Object,
+                        notify: true,
+                        readOnly: true,
+                    },
+                    computedRequestUrl:{
+                        type: String,
+                        notify: true,
+                        readOnly: true,
+                    },
+                    computedRequestBody:{
+                        type: String,
+                        notify: true,
+                        readOnly: true,
                     }
                 }
+            }
+            validate(formElm: HTMLFormElement, serializedForm: any) : boolean {
+                if(!formElm) formElm = this.querySelector('form') as HTMLFormElement;
+                if(!serializedForm) serializedForm = serialize(formElm, true);
+                const validator = this.querySelector('js-validator') as HTMLElement;
+                let  customValidatorFns;
+                if(validator){
+                    customValidatorFns = eval(validator.innerText);
+                }
+                if(customValidatorFns){
+                    for(const customValidatorFn of customValidatorFns){
+                        if(!customValidatorFn(serializedForm)) return false;
+                    }
+                }
+                return true;
+            }
+            updateInfo(formElm: HTMLFormElement){
+                if(!formElm) formElm = this.querySelector('form') as HTMLFormElement;
+                if(this.disabled){
+                    this.recomputeOnEnable = true;
+                    return;
+                }
+                const formData = serialize(formElm, true);
+                if(!this.validate(formElm, formData)) return;
+                this['_setSerializedForm'](formData);
+                const queryString = serialize(formElm, false);
+                const method = formElm.method.toLowerCase();
+                const action = formElm.action;
+                switch(method){
+                    case 'get':
+                        const delim = action.indexOf('?') > -1 ? '&' :  '?';
+                        this['_setComputedRequestUrl'] = action + delim + queryString;
+                        this['_setcomputedRequestBody'] = '';
+                        break;
+                    case 'post':
+                        this['_setComputedRequestUrl'] = action;
+                        this['_setcomputedRequestBody'] = queryString;
+                        break;
+                }
+
+            }
+            ready(){
+                super.ready();
+                const formElm = this.querySelector('form') as HTMLFormElement;
+                if(!formElm) throw 'Need a form inside this element';
+                const childInputs = formElm.querySelectorAll('input');
+
+                for(let i = 0, ii = childInputs.length; i < ii; i++){
+                    const childInput = childInputs[i] as HTMLInputElement;
+
+                    childInput['_value'] = childInput.value;
+
+                    Object.defineProperty(childInput, "value", {
+                        get: function() {return this._value;},
+                        set: function(v) {
+                            this._value = v;
+                            if(!validateInputElement(this as HTMLInputElement)) return;
+                            this.updateInfo(formElm);
+                            //if(_thisForm['auto'] && formElm.checkValidity()) {
+
+
+                        }
+                    });
+                }
+                this.updateInfo(formElm);
             }
         }
         customElements.define(XtalForm.is, XtalForm);
