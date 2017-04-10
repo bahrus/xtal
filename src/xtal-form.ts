@@ -200,15 +200,16 @@ module xtal.elements{
                 const queryString = serialize(formElm, false);
                 const method = formElm.method.toLowerCase();
                 const action = formElm.action;
+                console.log(method);
                 switch(method){
                     case 'get':
                         const delim = action.indexOf('?') > -1 ? '&' :  '?';
-                        this['_setComputedRequestUrl'] = action + delim + queryString;
-                        this['_setcomputedRequestBody'] = '';
+                        this['_setComputedRequestUrl'](action + delim + queryString);
+                        this['_setComputedRequestBody']('');
                         break;
                     case 'post':
-                        this['_setComputedRequestUrl'] = action;
-                        this['_setcomputedRequestBody'] = queryString;
+                        this['_setComputedRequestUrl'](action);
+                        this['_setComputedRequestBody'](queryString);
                         break;
                 }
 

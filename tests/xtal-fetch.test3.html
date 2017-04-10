@@ -9,9 +9,10 @@
         <link rel="import" href="../bower_components/polymer/polymer-element.html">
     </head>
     <body>
+        
         <dom-module id="my-component">
            <template>
-             <xtal-form serialized-form="{{iamhere}}">
+             <xtal-form serialized-form="{{sf}}" computed-request-url="{{cru}}" computed-request-body="{{crb}}">
                  <form method="GET" action="generated.json">
                      <input type="hidden" name="myHiddenField1" value="hello">
                  </form>
