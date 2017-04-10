@@ -219,25 +219,22 @@ module xtal.elements{
                 const formElm = this.querySelector('form') as HTMLFormElement;
                 if(!formElm) throw 'Need a form inside this element';
                 const childInputs = formElm.querySelectorAll('input');
-
                 for(let i = 0, ii = childInputs.length; i < ii; i++){
                     const childInput = childInputs[i] as HTMLInputElement;
-
                     childInput['_value'] = childInput.value;
-
                     Object.defineProperty(childInput, "value", {
                         get: function() {return this._value;},
                         set: function(v) {
                             this._value = v;
                             if(!validateInputElement(this as HTMLInputElement)) return;
                             this.updateInfo(formElm);
-                            //if(_thisForm['auto'] && formElm.checkValidity()) {
-
-
                         }
                     });
                 }
                 this.updateInfo(formElm);
+            }
+            onDisabledChange(newVal){
+                if(newVal) this.updateInfo(null);
             }
         }
         customElements.define(XtalForm.is, XtalForm);
