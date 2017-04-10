@@ -56,15 +56,22 @@
             effortDriven: (i % 5 == 0)
         };
     }
-
-    var xslick = document.querySelector('x-slick-grid');
-    if(xslick.setInitialData){
-        xslick.setInitialData(data, columns, options);
-    }else{
-        window.addEventListener('WebComponentsReady', function(e){
+    function init(){
+        customElements.whenDefined('x-slick-grid').then(() =>{
+            var xslick = document.querySelector('x-slick-grid');
             xslick.setInitialData(data, columns, options);
         });
     }
+    if(typeof customElements === 'undefined'){
+        window.addEventListener('WebComponentsReady', function(e){
+            init();
+        });
+    }else{
+        init();
+    }
+    
+    
+    
 
 </script>
 </body>
