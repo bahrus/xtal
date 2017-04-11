@@ -269,8 +269,7 @@
      initialize();
       
   }else{
-      xslick.addEventListener('ready-fn-initialized-changed', function(){
-        console.og('iah');
+      xslick.addEventListener('loadedDependencies', function(){
         initialize();
       });
   }
