@@ -5,6 +5,7 @@
   <title>SlickGrid example 3: Editing</title>
 
   <link rel="stylesheet" href="examples.css" type="text/css"/>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
   <style>
     .cell-title {
       font-weight: bold;
@@ -17,7 +18,7 @@
 </head>
 <body>
 
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+<link async rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
 <div style="position:relative">
   <div style="width:600px;">
@@ -30,6 +31,7 @@
       <li>adding basic keyboard navigation and editing</li>
       <li>custom editors and validators</li>
       <li>auto-edit settings</li>
+      <li>multi-layer asynchonous initialization</li>
     </ul>
 
     <h2>Options:</h2>
@@ -38,7 +40,7 @@
     <button onclick="xslick.grid.setOptions({autoEdit:false})">Auto-edit OFF</button>
     <h2>View Source:</h2>
     <ul>
-      <li><A href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example3-editing.html"
+      <li><a href="https://github.com/bahrus/xtal/blob/master/tests/x-slick-grid/example3-editing.html"
              target="_sourcewindow"> View the source for this example on Github</a></li>
     </ul>
   </div>
@@ -98,26 +100,19 @@
       grid.render();
     });
   }
-  // var xslick = document.querySelector('x-slick-grid');
-  // if(xslick.setInitialData){
-  //   xslick.setInitialData(data, columns, options);
-  //   addEventHandlers();
-  // }else{
-  //   window.addEventListener('WebComponentsReady', function(e){
-  //     xslick.setInitialData(data, columns, options);
-  //     addEventHandlers();
-  //   });
-  // }
+  
     var xslick = document.querySelector('x-slick-grid');
     function init2(){
         xslick.setInitialData(data, columns, options);
         addEventHandlers();
     }
     function init(){
+        //wait for x-slick-grid to load
         customElements.whenDefined('x-slick-grid').then(() =>{
             if(xslick.readyFnInitialized){
                 init2();
             }else{
+              //wait for some slickgrid dependencies to load
               xslick.addEventListener('loadedDependencies', function(){
                 init2();
               });
@@ -126,6 +121,7 @@
         });
     }
     if(typeof customElements === 'undefined'){
+        //for browsers that don't support webcomponents natively, need to wait for web components polyfills to load
         window.addEventListener('WebComponentsReady', function(e){
             init();
         });
