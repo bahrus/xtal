@@ -16,8 +16,8 @@
 </head>
 <body>
 <!--polyfill if needed-->
-
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+<script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+<link async rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 
 <input type="text"/>
 
@@ -82,12 +82,17 @@
     }
 
     var xslick = document.querySelector('x-slick-grid');
-    if(xslick.setInitialData){
-        xslick.setInitialData(data, columns, options);
-    }else{
-        window.addEventListener('WebComponentsReady', function(e){
+    function init(){
+        customElements.whenDefined('x-slick-grid').then(() =>{
             xslick.setInitialData(data, columns, options);
         });
+    }
+    if(typeof customElements === 'undefined'){
+        window.addEventListener('WebComponentsReady', function(e){
+            init();
+        });
+    }else{
+        init();
     }
 </script>
 </body>

@@ -7,7 +7,7 @@
 </head>
 <body>
 <script src="../../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-<link rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
+<link async rel="import" href="../../src/x-slick-grid/x-slick-grid.html" />
 <table width="100%">
     <tr>
         <td valign="top" width="50%">
@@ -56,9 +56,9 @@
             effortDriven: (i % 5 == 0)
         };
     }
+    var xslick = document.querySelector('x-slick-grid');
     function init(){
         customElements.whenDefined('x-slick-grid').then(() =>{
-            var xslick = document.querySelector('x-slick-grid');
             xslick.setInitialData(data, columns, options);
         });
     }
