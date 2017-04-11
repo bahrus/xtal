@@ -98,16 +98,40 @@
       grid.render();
     });
   }
-  var xslick = document.querySelector('x-slick-grid');
-  if(xslick.setInitialData){
-    xslick.setInitialData(data, columns, options);
-    addEventHandlers();
-  }else{
-    window.addEventListener('WebComponentsReady', function(e){
-      xslick.setInitialData(data, columns, options);
-      addEventHandlers();
-    });
-  }
+  // var xslick = document.querySelector('x-slick-grid');
+  // if(xslick.setInitialData){
+  //   xslick.setInitialData(data, columns, options);
+  //   addEventHandlers();
+  // }else{
+  //   window.addEventListener('WebComponentsReady', function(e){
+  //     xslick.setInitialData(data, columns, options);
+  //     addEventHandlers();
+  //   });
+  // }
+    var xslick = document.querySelector('x-slick-grid');
+    function init2(){
+        xslick.setInitialData(data, columns, options);
+        addEventHandlers();
+    }
+    function init(){
+        customElements.whenDefined('x-slick-grid').then(() =>{
+            if(xslick.readyFnInitialized){
+                init2();
+            }else{
+              xslick.addEventListener('loadedDependencies', function(){
+                init2();
+              });
+            }
+            
+        });
+    }
+    if(typeof customElements === 'undefined'){
+        window.addEventListener('WebComponentsReady', function(e){
+            init();
+        });
+    }else{
+        init();
+    }
 </script>
 </body>
 </html>
