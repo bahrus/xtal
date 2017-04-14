@@ -240,11 +240,14 @@ var xtal;
                                 if (!validateInputElement(this))
                                     return;
                                 this.updateInfo(formElm);
-                                //if(_thisForm['auto'] && formElm.checkValidity()) {
                             }
                         });
                     }
                     this.updateInfo(formElm);
+                }
+                onDisabledChange(newVal) {
+                    if (newVal)
+                        this.updateInfo(null);
                 }
             }
             customElements.define(XtalForm.is, XtalForm);
