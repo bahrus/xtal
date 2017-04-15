@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test 2</title>
+        <link async rel="import" href="../../src/xtal-ball.html"/>
+        <link href="../../src/xtal-json-editor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+        <link rel="import" href="../../src/xtal-json-editor/xtal-json-editor.html">
+    </head>
+    <body>
+        <dom-module id="json-editor-test2-component">
+            <template>
+                <xtal-json-editor></xtal-json-editor>
+            </template>
+        </dom-module>
+        <script>
+        customElements.whenDefined('xtal-ball').then(() =>{
+            class JsonEditorTest2 extends Polymer.Element{
+                static get is(){return 'json-editor-test2-component'}
+                // _attachDom(dom) {
+                //     if (dom) {
+                //         return this.appendChild(dom);
+                //     }
+                // }
+            }
+            customElements.define(JsonEditorTest2.is, JsonEditorTest2);
+        });
+        
+        
+    </script>
+    <json-editor-test2-component></json-editor-test2-component>
+    </body>
+</html>

@@ -33,7 +33,7 @@ module xtal.exports{
             }
             onWatchChange(newVal){
                 const options = {};
-                const editor = new JSONEditor(this, options);
+                const editor = new JSONEditor(this.$.xcontainer, options);
                 editor.set(newVal);
 
                 // // get json
