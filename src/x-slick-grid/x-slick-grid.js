@@ -22,29 +22,27 @@ var xtal;
         //         () => tryWithoutCDN(cdnPath, nextStep, importStep, callBack, polymerElement)
         //     );
         // }
-        function downloadJSFilesInParallelButLoadInSequence(refs, callBack) {
-            //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
-            const notLoadedYet = {};
-            const nonNullRefs = refs.filter(ref => ref !== null);
-            nonNullRefs.forEach(ref => {
-                notLoadedYet[ref.src] = true;
-            });
-            nonNullRefs.forEach(ref => {
-                const script = document.createElement('script');
-                script.src = ref.src;
-                script.async = false;
-                script.onload = () => {
-                    //console.log(script.src + ' loaded');
-                    delete notLoadedYet[script.src];
-                    if (Object.keys(notLoadedYet).length === 0) {
-                        if (callBack)
-                            callBack();
-                    }
-                };
-                document.head.appendChild(script);
-            });
-        }
-        elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
+        // export function downloadJSFilesInParallelButLoadInSequence(refs: IDynamicJSLoadStep[], callBack?:() => void){
+        //     //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
+        //     const notLoadedYet : {[key: string] : boolean} = {};
+        //     const nonNullRefs = refs.filter(ref => ref !== null);
+        //     nonNullRefs.forEach(ref => {
+        //         notLoadedYet[ref.src] = true;
+        //     });
+        //     nonNullRefs.forEach(ref =>{
+        //         const script = document.createElement('script');
+        //         script.src = ref.src;
+        //         script.async = false;
+        //         script.onload = () =>{
+        //             //console.log(script.src + ' loaded');
+        //             delete notLoadedYet[script.src];
+        //             if(Object.keys(notLoadedYet).length === 0){
+        //                 if(callBack) callBack();
+        //             }
+        //         }
+        //         document.head.appendChild(script);
+        //     });
+        // }
         function addCSSLinks(refs) {
             const notLoadedYet = {};
             const nonNullRefs = refs.filter(ref => ref !== null);

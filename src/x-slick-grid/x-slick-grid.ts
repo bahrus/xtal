@@ -96,27 +96,27 @@ module xtal.elements {
     //     );
     // }
 
-    export function downloadJSFilesInParallelButLoadInSequence(refs: IDynamicJSLoadStep[], callBack?:() => void){
-        //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
-        const notLoadedYet : {[key: string] : boolean} = {};
-        const nonNullRefs = refs.filter(ref => ref !== null);
-        nonNullRefs.forEach(ref => {
-            notLoadedYet[ref.src] = true;
-        });
-        nonNullRefs.forEach(ref =>{
-            const script = document.createElement('script');
-            script.src = ref.src;
-            script.async = false;
-            script.onload = () =>{
-                //console.log(script.src + ' loaded');
-                delete notLoadedYet[script.src];
-                if(Object.keys(notLoadedYet).length === 0){
-                    if(callBack) callBack();
-                }
-            }
-            document.head.appendChild(script);
-        });
-    }
+    // export function downloadJSFilesInParallelButLoadInSequence(refs: IDynamicJSLoadStep[], callBack?:() => void){
+    //     //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
+    //     const notLoadedYet : {[key: string] : boolean} = {};
+    //     const nonNullRefs = refs.filter(ref => ref !== null);
+    //     nonNullRefs.forEach(ref => {
+    //         notLoadedYet[ref.src] = true;
+    //     });
+    //     nonNullRefs.forEach(ref =>{
+    //         const script = document.createElement('script');
+    //         script.src = ref.src;
+    //         script.async = false;
+    //         script.onload = () =>{
+    //             //console.log(script.src + ' loaded');
+    //             delete notLoadedYet[script.src];
+    //             if(Object.keys(notLoadedYet).length === 0){
+    //                 if(callBack) callBack();
+    //             }
+    //         }
+    //         document.head.appendChild(script);
+    //     });
+    // }
     export function addCSSLinks(refs: IDynamicCSSStep[]){
         const notLoadedYet : {[key: string] : boolean} = {};
         const nonNullRefs = refs.filter(ref => ref !== null);
