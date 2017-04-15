@@ -15,24 +15,10 @@ module xtal.exports{
                 }
             }
 
-            ready(){
-                super.ready();
-                var json = {
-                    "Array": [1, 2, 3],
-                    "Boolean": true,
-                    "Null": null,
-                    "Number": 123,
-                    "Object": {"a": "b", "c": "d"},
-                    "String": "Hello World"
-                };
-                this.onWatchChange(json);
-            //     const jsonEditorDependency : xtal.elements.IDynamicJSLoadStep[] = [
-            //         {src: this.resolveUrl('jsoneditor.min.js')}
-            //     ]
-            //     xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
-            }
+            
             onWatchChange(newVal){
                 const options = {};
+                this.$.xcontainer.innerHTML = '';
                 const editor = new JSONEditor(this.$.xcontainer, options);
                 editor.set(newVal);
 

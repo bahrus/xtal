@@ -4,9 +4,10 @@
         <title>Xtal Fetch Test 3</title>
         <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
         <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-        <link rel="import" href="../src/xtal-fetch.html"/>
-        <link rel="import" href="../src/xtal-form.html"/>
-        <link rel="import" href="../bower_components/polymer/polymer-element.html">
+        <link async rel="import" href="../src/xtal-fetch.html"/>
+        <link async rel="import" href="../src/xtal-form.html"/>
+        <link async rel="import" href="../src/xtal-json-editor/xtal-json-editor.html">
+        <link async rel="import" href="../bower_components/polymer/polymer-element.html">
     </head>
     <body>
         
@@ -17,7 +18,9 @@
                      <input type="hidden" name="myHiddenField1" value="hello">
                  </form>
              </xtal-form>
-              <xtal-fetch href="[[cru]]"></xtal-fetch>
+             <xtal-json-editor watch="[[sf]]"></xtal-json-editor>
+              <xtal-fetch as="json" href="[[cru]]" result="{{generatedJSON}}"></xtal-fetch>
+              <xtal-json-editor watch="[[generatedJSON]]"></xtal-json-editor>
            </template>
         </dom-module>
         <script>
