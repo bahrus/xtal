@@ -41,9 +41,11 @@
                             }
                         }
                     }
-                    transformResult(customEvt, arg2){
-                        debugger;                        
-                        customEvt.detail.obj = 'iam here';
+                    transformResult(customEvt){
+                        if(customEvt.detail.arg.context.count === 0){
+                            customEvt.detail.obj = customEvt.detail.obj.length;
+                        }
+                        
 
                     }
                 }
