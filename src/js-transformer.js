@@ -11,7 +11,7 @@ var xtal;
                      */
                     watch: {
                         type: Object,
-                        observer: 'onWatchChange'
+                        observer: 'onPropsChange'
                     },
                     /**
                      * The expression for where to place the result.

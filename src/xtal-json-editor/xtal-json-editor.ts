@@ -1,29 +1,47 @@
-declare var JSONEditor;
+///<reference path="../../node_modules/@types/jsoneditor/index.d.ts"/>
+
+//type JSONEditor =  jsoneditor.JSONEditor;
 module xtal.exports{
+    interface IXtalJsonEditorProperties{
+        watch: object | polymer.PropObjectType,
+        options: jsoneditor.JSONEditorOptions | polymer.PropObjectType
+    }
     customElements.whenDefined('xtal-ball').then(() =>{
-        class XtalJsonEditor extends Polymer.Element{
+        /**
+         * Polymer based web component wrapper around the JSON Editor api
+         * https://github.com/josdejong/jsoneditor
+         */
+        class XtalJsonEditor extends Polymer.Element implements IXtalJsonEditorProperties{
             static get is(){return 'xtal-json-editor';}
-            static get properties(){
+            watch: object;
+            options: jsoneditor.JSONEditorOptions;
+            static get properties() : IXtalJsonEditorProperties{
                 return{
                     /**
-                    * The expression to observe and transform when it changes.
+                    * The expression that points to an object to edit.
                     */
                     watch:{
                         type: Object,
-                        observer: 'onWatchChange'
+                        observer: 'onPropsChange'
                     },
+                    /**
+                     * JsonEditor options, implements jsoneditor.JSONEditorOptions
+                     */
+                    options:{
+                        type: Object,
+                        observer: 'onPropsChange'
+                    }
                 }
             }
-
-            
-            onWatchChange(newVal){
-                const options = {};
+            private _jsonEditor: JSONEditor
+            get jsonEditor(){
+                return this._jsonEditor
+            }
+            onPropsChange(newVal){
+                if(!this.watch) return;
                 this.$.xcontainer.innerHTML = '';
-                const editor = new JSONEditor(this.$.xcontainer, options);
-                editor.set(newVal);
-
-                // // get json
-                // var json = editor.get();
+                this._jsonEditor = new JSONEditor(this.$.xcontainer as HTMLElement, this.options);
+                this._jsonEditor.set(this.watch);
             }
         }
         customElements.define(XtalJsonEditor.is, XtalJsonEditor);
