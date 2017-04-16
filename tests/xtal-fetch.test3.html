@@ -8,6 +8,7 @@
         <link async rel="import" href="../src/xtal-form.html"/>
         <link async rel="import" href="../src/xtal-json-editor/xtal-json-editor.html">
         <link async rel="import" href="../bower_components/polymer/polymer-element.html">
+        <link async rel="import" href="../src/js-transformer.html"/>
     </head>
     <body>
         
@@ -21,6 +22,8 @@
              <xtal-json-editor watch="[[sf]]"></xtal-json-editor>
               <xtal-fetch as="json" href="[[cru]]" result="{{generatedJSON}}"></xtal-fetch>
               <xtal-json-editor watch="[[generatedJSON]]"></xtal-json-editor>
+              <js-transformer watch="[[generatedJSON]]" on-transform="transformResult" result="{{transformedObj}}"></js-transformer>
+              <div>[[transformedObj]]</div>
            </template>
         </dom-module>
         <script>
@@ -38,7 +41,11 @@
                             }
                         }
                     }
-                   
+                    transformResult(customEvt, arg2){
+                        debugger;                        
+                        customEvt.detail.obj = 'iam here';
+
+                    }
                 }
                 customElements.define(MyComponent.is, MyComponent);
             })
