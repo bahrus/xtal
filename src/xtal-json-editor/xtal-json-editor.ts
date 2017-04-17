@@ -7,9 +7,9 @@ module xtal.exports{
         options: jsoneditor.JSONEditorOptions | polymer.PropObjectType
     }
     customElements.whenDefined('xtal-ball').then(() =>{
-        /**
-         * Polymer based web component wrapper around the JSON Editor api
-         * https://github.com/josdejong/jsoneditor
+         /**
+         * Polymer based web component wrapper around the JSON Editor api.
+         * Code can be found at https://github.com/josdejong/jsoneditor
          */
         class XtalJsonEditor extends Polymer.Element implements IXtalJsonEditorProperties{
             static get is(){return 'xtal-json-editor';}
