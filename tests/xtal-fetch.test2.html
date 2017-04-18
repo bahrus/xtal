@@ -2,18 +2,29 @@
 <html>
     <head>
         <title>Xtal Fetch Test 2</title>
-        <!--<script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>-->
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=default,fetch"></script>
         <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
-        <!--<link rel="import" href="../src/xtal-fetch.html"/>-->
-        <link rel="import" href="../bower_components/polymer/polymer-element.html">
-        <link rel="import" href="../bower_components/polymer/lib/elements/dom-bind.html">
+        <link rel="import" href="../src/xtal-fetch.html"/>
+         <link async rel="import" href="../src/xtal-form.html"/>
+        <link async rel="import" href="../src/xtal-json-editor/xtal-json-editor.html">
+        <link async rel="import" href="../bower_components/polymer/polymer-element.html">
+        <link async rel="import" href="../bower_components/polymer/lib/elements/dom-bind.html">
+        <link async rel="import" href="../src/js-transformer.html"/>
     </head>
     <body>
         
         <dom-bind id="mytest">
             <template>
-                <input type="text">
-                <!--<xtal-fetch href="sampleHTMLFragment.html" insert-results></xtal-fetch>-->
+            <xtal-form serialized-form="{{sf}}" computed-request-url="{{cru}}" computed-request-body="{{crb}}">
+                 <form method="GET" action="generated.json">
+                     <input type="hidden" name="myHiddenField1" value="hello">
+                 </form>
+             </xtal-form>
+             <xtal-json-editor watch="[[sf]]"></xtal-json-editor>
+              <xtal-fetch as="json" href="[[cru]]" result="{{generatedJSON}}"></xtal-fetch>
+              <xtal-json-editor watch="[[generatedJSON]]"></xtal-json-editor>
+              <!--<js-transformer watch="[[generatedJSON]]" on-transform="transformResult" result="{{transformedObj}}"></js-transformer>
+              <div>[[transformedObj]]</div>-->
             </template>
         </dom-bind>
         

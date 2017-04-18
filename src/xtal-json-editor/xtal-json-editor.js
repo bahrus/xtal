@@ -7,6 +7,7 @@ var xtal;
         customElements.whenDefined('xtal-ball').then(() => {
             /**
             * Polymer based web component wrapper around the JSON Editor api.
+            *
             * Code can be found at https://github.com/josdejong/jsoneditor
             */
             class XtalJsonEditor extends Polymer.Element {
