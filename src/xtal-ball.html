@@ -6,9 +6,17 @@
         var elements;
         (function (elements) {
             function bootstrap() {
+                let xball = customElements.get('xtal-ball');
+                if(xball) return xball;
                 class XtalBall extends Polymer.Element {
+                    _attachDom(dom) {
+                        if (dom) {
+                            return this.appendChild(dom);
+                        }
+                    }
                 }
                 customElements.define('xtal-ball', XtalBall);
+                return XtalBall;
             }
             function downloadJSFilesInParallelButLoadInSequence(refs, callBack) {
                 //see https://www.html5rocks.com/en/tutorials/speed/script-loading/

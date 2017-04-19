@@ -51,13 +51,13 @@
     
     <script>
         customElements.whenDefined('xtal-ball').then(() =>{
-            class Example1a extends Polymer.Element{
+            class Example1a extends xtal.elements.bootstrap(){
                 static get is(){return 'example1a-component'}
-                _attachDom(dom) {
-                    if (dom) {
-                        return this.appendChild(dom);
-                    }
-                }
+                // _attachDom(dom) {
+                //     if (dom) {
+                //         return this.appendChild(dom);
+                //     }
+                // }
             }
             customElements.define(Example1a.is, Example1a);
         });

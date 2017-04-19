@@ -99,7 +99,7 @@ module xtal.elements{
                 return target;
             }
 
-            onWatchChange(newVal){
+            onPropsChange(newVal){
                 let transformedObj;
                 if(this.wrapObjectWithPath) {
                     transformedObj  = {};
