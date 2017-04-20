@@ -109,7 +109,7 @@ module xtal.elements{
                 }
                 if(!this._objectsToMerge){
                     try{
-                        this._objectsToMerge = eval(this.innerText);
+                        this._objectsToMerge = JSON.parse( this.innerText);
                     }catch(e){
                         console.error("Unable to parse " + this.innerText);
                     }
