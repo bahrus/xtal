@@ -32,6 +32,12 @@ var xtal;
                             notify: true,
                             readOnly: true
                         },
+                        /**
+                         * Function substitutions
+                         */
+                        refs: {
+                            type: Object
+                        }
                     };
                 }
                 /**
@@ -101,7 +107,19 @@ var xtal;
                     }
                     if (!this._objectsToMerge) {
                         try {
-                            this._objectsToMerge = JSON.parse(this.innerText);
+                            if (this.refs) {
+                                this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
+                                    if (typeof val !== 'string')
+                                        return val;
+                                    if (!val.startsWith('${this.refs.') || !val.endsWith('}'))
+                                        return val;
+                                    const realKey = val.substring(12, val.length - 1);
+                                    return this.refs[realKey];
+                                });
+                            }
+                            else {
+                                this._objectsToMerge = JSON.parse(this.innerText);
+                            }
                         }
                         catch (e) {
                             console.error("Unable to parse " + this.innerText);

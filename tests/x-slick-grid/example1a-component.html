@@ -11,23 +11,25 @@
             <tr>
                 <td valign="top" width="50%">
                     <xtal-fetch href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
-                    <js-merge watch="[[generatedJSON]]" wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
-                        [{
-                            "columns":[
-                                {"id": "index",       "name": "Index",      "field": "index"},
-                                {"id": "isActive",    "name": "Active⚡",     "field": "isActive"},
-                                {"id": "balance",     "name": "Balance",    "field": "balance"},
-                                {"id": "age",         "name": "Age",        "field": "age"},
-                                {"id": "eyeColor",    "name": "Eye Color",  "field": "eyeColor"},
-                                {"id": "name",        "name": "Name",       "field": "name"},
-                                {"id": "gender",      "name": "Gender",     "field": "gender"},
-                                {"id": "company",     "name":"Company",     "field": "company"}
-                            ],
-                            "gridOptions":{
-                                "enableCellNavigation": true,
-                                "enableColumnReorder": false
+                    <js-merge watch="[[generatedJSON]]" refs="[[test]]"  wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
+                        [
+                            {
+                                "columns":[
+                                    {"id": "index",       "name": "Index",      "field": "index"},
+                                    {"id": "isActive",    "name": "Active",     "field": "isActive"},
+                                    {"id": "balance",     "name": "Balance",    "field": "balance", "formatter": "${this.refs.testFormatter}"},
+                                    {"id": "age",         "name": "Age",        "field": "age"},
+                                    {"id": "eyeColor",    "name": "Eye Color",  "field": "eyeColor"},
+                                    {"id": "name",        "name": "Name",       "field": "name"},
+                                    {"id": "gender",      "name": "Gender",     "field": "gender"},
+                                    {"id": "company",     "name":"Company",     "field": "company"}
+                                ],
+                                "gridOptions":{
+                                    "enableCellNavigation": true,
+                                    "enableColumnReorder": false
+                                }
                             }
-                        }]
+                        ]
                     </js-merge>
                     <x-slick-grid grid-render-params="[[gridInfoAndData]]" ></x-slick-grid>
                 </td>
@@ -52,12 +54,28 @@
     <script>
         customElements.whenDefined("xtal-ball").then(() =>{
             class Example1a extends xtal.elements.bootstrap(){
+                constructor(){
+                    super();
+                    this.test = {
+                        testFormatter: function(){
+                            debugger;
+                        }
+                    };
+                }
                 static get is(){return "example1a-component"}
+                static get properties(){
+                    return {
+                        test: {
+                            type: Object
+                        }
+                    }
+                }
                 // _attachDom(dom) {
                 //     if (dom) {
                 //         return this.appendChild(dom);
                 //     }
                 // }
+                
             }
             customElements.define(Example1a.is, Example1a);
         });
