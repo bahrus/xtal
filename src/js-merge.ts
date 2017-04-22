@@ -36,7 +36,7 @@ module xtal.elements{
                         readOnly: true
                     },
                     /**
-                     * Function substitutions
+                     * Allow for substitions into JSON object, where the value is of the form "key":"${this.refs.xyz}""
                      */
                     refs:{
                         type: Object
