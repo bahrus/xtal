@@ -17,7 +17,7 @@
                                 "columns":[
                                     {"id": "index",       "name": "Index",      "field": "index"},
                                     {"id": "isActive",    "name": "Active",     "field": "isActive"},
-                                    {"id": "balance",     "name": "Balance",    "field": "balance", "formatter": "${this.refs.testFormatter}"},
+                                    {"id": "balance",     "name": "Balance",    "field": "balance", "formatter": "${refs.testFormatter}"},
                                     {"id": "age",         "name": "Age",        "field": "age"},
                                     {"id": "eyeColor",    "name": "Eye Color",  "field": "eyeColor"},
                                     {"id": "name",        "name": "Name",       "field": "name"},
@@ -70,12 +70,7 @@
                         }
                     }
                 }
-                // _attachDom(dom) {
-                //     if (dom) {
-                //         return this.appendChild(dom);
-                //     }
-                // }
-                
+
             }
             customElements.define(Example1a.is, Example1a);
         });

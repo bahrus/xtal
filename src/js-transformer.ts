@@ -52,7 +52,7 @@ module xtal.elements{
             argument: JSTransformerArgument;
             wrapObjectWithPath: string;
             /**
-            * Fired when a transform is in progress.
+            * Fired twice when a transform is in progress.  Once before 
             *
             * @event transform
             */

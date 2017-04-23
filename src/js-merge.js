@@ -3,6 +3,12 @@ var xtal;
     var elements;
     (function (elements) {
         function initJSMerge() {
+            /**
+             * <js-mergee></js-merge> is a Polymer-based helper element, that watches for changes to a property defined in
+             * its containing host polymer element.  When it changes, this element will merge the data with an array of JSON
+             * elements contained inside the tag.
+             * The JSON can reference items from the refs property using ${this.refs.myProp}
+             */
             class JSMerge extends Polymer.Element {
                 static get is() { return 'js-merge'; }
                 static get properties() {
@@ -33,7 +39,7 @@ var xtal;
                             readOnly: true
                         },
                         /**
-                         * Allow for substitions into JSON object, where the value is of the form "key":"${this.refs.xyz}""
+                         * Allow for substitions into JSON object, where the value is of the form "key":"${this.refs.xyz}"
                          */
                         refs: {
                             type: Object
@@ -111,9 +117,9 @@ var xtal;
                                 this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
                                     if (typeof val !== 'string')
                                         return val;
-                                    if (!val.startsWith('${this.refs.') || !val.endsWith('}'))
+                                    if (!val.startsWith('${refs.') || !val.endsWith('}'))
                                         return val;
-                                    const realKey = val.substring(12, val.length - 1);
+                                    const realKey = val.substring(7, val.length - 1);
                                     return this.refs[realKey];
                                 });
                             }
