@@ -112,7 +112,7 @@ module xtal.elements{
                 }
                 return target;
             }
-
+            
             onPropsChange(newVal){
                 let transformedObj;
                 if(this.wrapObjectWithPath) {
@@ -121,7 +121,7 @@ module xtal.elements{
                 }else{
                     transformedObj = newVal;
                 }
-                if(!this._objectsToMerge){
+                //if(!this._objectsToMerge){
                     try{
                         if(this.refs){
                             this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
@@ -137,7 +137,7 @@ module xtal.elements{
                     }catch(e){
                         console.error("Unable to parse " + this.innerText);
                     }
-                }
+                //}
                 if(this._objectsToMerge && transformedObj){
                     for(let i  = 0, ii = this._objectsToMerge.length; i < ii; i++)
                     {

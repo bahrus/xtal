@@ -111,26 +111,26 @@ var xtal;
                     else {
                         transformedObj = newVal;
                     }
-                    if (!this._objectsToMerge) {
-                        try {
-                            if (this.refs) {
-                                this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
-                                    if (typeof val !== 'string')
-                                        return val;
-                                    if (!val.startsWith('${refs.') || !val.endsWith('}'))
-                                        return val;
-                                    const realKey = val.substring(7, val.length - 1);
-                                    return this.refs[realKey];
-                                });
-                            }
-                            else {
-                                this._objectsToMerge = JSON.parse(this.innerText);
-                            }
+                    //if(!this._objectsToMerge){
+                    try {
+                        if (this.refs) {
+                            this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
+                                if (typeof val !== 'string')
+                                    return val;
+                                if (!val.startsWith('${refs.') || !val.endsWith('}'))
+                                    return val;
+                                const realKey = val.substring(7, val.length - 1);
+                                return this.refs[realKey];
+                            });
                         }
-                        catch (e) {
-                            console.error("Unable to parse " + this.innerText);
+                        else {
+                            this._objectsToMerge = JSON.parse(this.innerText);
                         }
                     }
+                    catch (e) {
+                        console.error("Unable to parse " + this.innerText);
+                    }
+                    //}
                     if (this._objectsToMerge && transformedObj) {
                         for (let i = 0, ii = this._objectsToMerge.length; i < ii; i++) {
                             const objToMerge = this._objectsToMerge[i];
@@ -155,4 +155,4 @@ var xtal;
         customElements.whenDefined('xtal-ball').then(() => initJSMerge());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
-//# sourceMappingURL=js-merge.js.map
+//# sourceMappingURL=json-merge.js.map
