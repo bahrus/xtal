@@ -9,15 +9,14 @@
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
-                    <div>{{te}}</div>
                     <xtal-fetch href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
-                    <js-merge watch="[[generatedJSON]]" refs="[[test]]"  wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
+                    <json-merge watch="[[generatedJSON]]" refs="[[test]]"  wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
                         [
                             {   
                                 "columns":[
                                     {"id": "index",       "name": "Index",      "field": "index"},
                                     {"id": "isActive",    "name": "Active",     "field": "isActive"},
-                                    {"id": "balance",     "name": "Balance",    "field": "balance", "formatter":  "${refs.textFormatter}"},
+                                    {"id": "balance",     "name": "Balance",    "field": "balance", "formatter":  "${refs.testFormatter}"},
                                     {"id": "age",         "name": "Age",        "field": "age"},
                                     {"id": "eyeColor",    "name": "Eye Color",  "field": "eyeColor"},
                                     {"id": "name",        "name": "Name",       "field": "name"},
@@ -30,7 +29,7 @@
                                 }
                             }
                         ]
-                    </js-merge>
+                    </json-merge>
                     
                     <x-slick-grid grid-render-params="[[gridInfoAndData]]" ></x-slick-grid>
                 </td>

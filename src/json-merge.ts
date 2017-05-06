@@ -1,20 +1,20 @@
 module xtal.elements{
-    interface JSMergeProperties{
+    interface JSONMergeProperties{
         wrapObjectWithPath: string | polymer.PropObjectType,
         watch: object | polymer.PropObjectType,
         result: object | polymer.PropObjectType,
         refs: {[key: string] : any} | polymer.PropObjectType,
     }
-    function initJSMerge(){
+    function initJSONMerge(){
         /**
          * <js-mergee></js-merge> is a Polymer-based helper element, that watches for changes to a property defined in 
          * its containing host polymer element.  When it changes, this element will merge the data with an array of JSON 
          * elements contained inside the tag.
          * The JSON can reference items from the refs property using ${this.refs.myProp}
          */
-        class JSMerge extends Polymer.Element implements JSMergeProperties{
-            static get is(){return 'js-merge';}
-            static get properties() : JSMergeProperties{
+        class JSONMerge extends Polymer.Element implements JSONMergeProperties{
+            static get is(){return 'json-merge';}
+            static get properties() : JSONMergeProperties{
                 return {
                     /**
                      * Wrap the incoming object inside a new empty object, with key equal to this value.
@@ -155,11 +155,11 @@ module xtal.elements{
                 this['_setResult'](transformedObj);
             }
         }
-        customElements.define(JSMerge.is, JSMerge);
+        customElements.define(JSONMerge.is, JSONMerge);
     }
     //function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
     //    initJSMerge();
     //}
     //waitForPolymerElement();
-    customElements.whenDefined('xtal-ball').then(() => initJSMerge());
+    customElements.whenDefined('xtal-ball').then(() => initJSONMerge());
 }
