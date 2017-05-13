@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#2.0.0-rc.7",
-    "webcomponentsjs": "WebComponents/webcomponentsjs#^v1.0.0-rc.8",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "jquery": "~1.8.3",
     "jquery-ui": "~1.8.23",
     "jquery.event": "threedubmedia/jquery.threedubmedia#2.2",
