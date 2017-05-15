@@ -10,7 +10,16 @@ On the other hand, with the introduction of the first truly web enabled phone in
 
 Eventually, some brave, innovative companies who were trying to make the mobile web work, like Twitter, AirBnB and Facebook, began to question the wisdom of pumping down all the client-side logic to the browser before anything rendered. Why it took so long to change course is an indication of how developer habits and biases tend to outlive their usefulness.  AirBnb famously introduced the concept of isomorphic rendering, and React added a functional view twist which increased the popularity of this approach.  (AirBnB would eventually adopt React).  Many frameworks have since followed suit, providing their own flavors of isomorphism (or "universalism").
 
-But one framework or library has bucked that trend - Polymer, a framework that relies heavily on HTML5+ standards (some of which have not yet been fully ratified).  Their motto is "Use the Platform", rather than clever JavaScript workarounds.  Polymer (and the Chrome team and other browser vendors) have standardized a number of 
+But one framework or library has bucked that trend -- Polymer, a framework that relies heavily on HTM5+ standards (some of which have not yet been fully ratified).  Their motto is "Use the Platform", rather than clever JavaScript workarounds.  Polymer (and the Chrome team and other browser vendors) have standardized a number of api's and protocols
+including HTTP/2, service workers, and various mechanisms for pushing / lazy loading static resources.  They suggest that all you need is to use the PRPL pattern, using techniques showcased in the Polymer Shop App.
+
+The Polymer team has gone so far as to question whether the complexity associated with isomorphic solutions is worth it, when the performance doesn't necessarily outperform what can be done by sticking to the platform.  
+
+On the other hand, the case for server-side rendering has not vanished, even among the "use the platform" crowd.  The AMP project recently announced that they are looking at server-side rendering in conjunction with their AMP custom elements.  It can be argued that the start kits the Polymer project has provide might cover some use cases well, but for enterprise line of business applications, it may fall short.
+
+For example, consider a scenario where the initial view users will see is a fairly sophisticated grid, requiring column customization, nested columns / rows, the works.  Most grid libraries that support this rich technology don't yet "progressively boot",but rather, the entire library needs to be downloaded before the grid becomes functional.  While waiting for the libraries to download, it could be be beneficial to at least display a simple read-only display of the data.
+
+So given the given state of the art of the browser platform, how would an enterprise line of business application best
 
 PuRPLiSh pattern
 
