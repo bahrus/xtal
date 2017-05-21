@@ -2,14 +2,27 @@
 <html>
     <head>
         <title>Xtal Lattice Test 1</title>
-        <script src="../src/xtal-lattice.js"></script>
+        <script defer src="../src/xtal-lattice.js"></script>
     </head>
     <xtal-lattice>
         <table>
+            <thead>
+                <tr>
+                    <th data-hrc="0,0">header 1</th>
+                    <th data-hrc="0,1">header 2</th>
+                </tr>
+            </thead>
             <tr>
-                <td>cell 1</td>
-                <td>cell 2</td>
+                <td data-rc="0,0">cell 1</td>
+                <td data-rc="0,1">cell 2</td>
             </tr>
         </table>
     </xtal-lattice>
+    <script>
+        const data = [
+            ['hello', 'world']
+        ];
+        console.log('setting data');
+        document.querySelector('xtal-lattice').data = data;
+    </script>
 </html>
