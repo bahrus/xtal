@@ -4,7 +4,7 @@ var xtal;
     (function (elements) {
         function initJSONMerge() {
             /**
-             * <js-mergee></js-merge> is a Polymer-based helper element, that watches for changes to a property defined in
+             * <js-merge></js-merge> is a Polymer-based helper element, that watches for changes to a property defined in
              * its containing host polymer element.  When it changes, this element will merge the data with an array of JSON
              * elements contained inside the tag.
              * The JSON can reference items from the refs property using ${this.refs.myProp}
