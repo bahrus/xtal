@@ -35,7 +35,6 @@ var xtal;
                 this._data.forEach((row, idx) => {
                     row.forEach((cell, jdx) => {
                         const el = this._els[idx][jdx];
-                        console.log({ el: el, cell: cell });
                         el.innerText = cell;
                     });
                 });

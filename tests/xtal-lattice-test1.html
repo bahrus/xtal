@@ -3,8 +3,10 @@
     <head>
         <title>Xtal Lattice Test 1</title>
         <script defer src="../src/xtal-lattice.js"></script>
+        <script defer src="../src/xtal-get.js"></script>
     </head>
     <xtal-lattice>
+        <xtal-get href="simple.json"></xtal-get>
         <table>
             <thead>
                 <tr>
@@ -13,16 +15,20 @@
                 </tr>
             </thead>
             <tr>
-                <td data-rc="0,0">cell 1</td>
-                <td data-rc="0,1">cell 2</td>
+                <td data-rc="0,0"></td>
+                <td data-rc="0,1"></td>
+            </tr>
+            <tr>
+                <td data-rc="1,0"></td>
+                <td data-rc="1,1"></td>
             </tr>
         </table>
     </xtal-lattice>
-    <script>
+    <!--<script>
         const data = [
             ['hello', 'world']
         ];
         console.log('setting data');
         document.querySelector('xtal-lattice').data = data;
-    </script>
+    </script>-->
 </html>
