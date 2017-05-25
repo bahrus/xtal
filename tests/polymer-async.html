@@ -5,20 +5,10 @@
     </head>
     <body>
         [Imagine a shell from another framwork goes here]
-        <!--<link async rel="import" href="../bower_components/polymer/polymer.html">-->
-        <link async rel="import" href="xtal-ball.html"/>
+        <link async rel="import" href="../bower_components/polymer/polymer.html">
         <link async rel="import" href="../bower_components/iron-list/iron-list.html">
         <link async rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
         <iron-list></iron-list>
-        <my-component></my-component>
-        <script>
-            customElements.whenDefined('xtal-ball').then(()=>{
-                class MyComponent extends Polymer.Element{
-                    static is(){return 'my-component'}
-                }
-                customElements.define(MyComponent.is, MyComponent)
-            })
-        </script>
     </body>
     
 </html>
