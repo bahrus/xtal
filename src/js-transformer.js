@@ -39,7 +39,9 @@ var xtal;
                 onPropsChange(newVal) {
                     if (!this._transformerFns) {
                         try {
-                            this._transformerFns = eval(this.innerText);
+                            //this._transformerFns = eval(this.innerText);
+                            const splitStr = this.innerText.replace('[', '').replace(']', '').split('').map(s => s.trim());
+                            this._transformerFns = splitStr.map(s => new Function(s));
                         }
                         catch (e) {
                             console.error("Unable to parse " + this.innerText);
