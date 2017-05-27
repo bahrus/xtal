@@ -1,0 +1,40 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="ohr-block">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h3>[[mydata.title]] [[_isType('one')]]</h3>
+        <template is="dom-if" if="[[_isType('one')]]"> <!-- problem is here -->
+            <div>Should be displayed</div>
+        </template>
+    </template>
+
+    <script>
+        /**
+        * @customElement
+        * @polymer
+        */
+        class OhrBlock extends Polymer.Element {
+            static get is() { return 'ohr-block'; }
+
+            static get properties() {
+                return {
+                    mydata: {
+                        type: Object,
+                        value: {"title": "my title", "type" : "one"}
+                    }
+                };
+            }
+
+            _isType(type) {
+                return this.mydata.type === type;
+            }
+        }
+
+        window.customElements.define(OhrBlock.is, OhrBlock);
+    </script>
+</dom-module>

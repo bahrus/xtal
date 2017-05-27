@@ -1,0 +1,8 @@
+{
+    "entrypoint": "index.html",
+    "builds":[{
+        "preset": "es6-unbundled"
+    }]
+}
+
+    
