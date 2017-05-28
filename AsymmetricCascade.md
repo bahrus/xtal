@@ -1,4 +1,4 @@
-The diminishing returns of isomorphism
+## The diminishing returns of isomorphism
 
 I think it is time to take a fresh look at what problems isomorphic solutions solved, and ask ourselves if the problems it solved has relevance in the age of HTTP/2 and Service workers.  Does server-side rendering have anything near the potency it once did? Does the PRPL pattern, combined with web components and the addition of key api's built into the browser, address everything isomorphic solutions addressed?  Or is a new paradigm needed, which leverages a lighter-weight server-rendering layer?  
 
@@ -24,7 +24,7 @@ So given the current state-of-the-art of the browser platform, how would an ente
 
 PuRPLiSh pattern
 
-1. Requests / pushes for content / resources that change frequently,or are sensitive in nature, must be kept separate from requests / pushes for non sensitive resources that change infrequently, so that the latter resources can be cached effectively.
+1. Requests / pushes for content / resources that change frequently, or are sensitive in nature, must be kept separate from requests / pushes for non sensitive resources that change infrequently, so that the latter resources can be cached effectively.
     1. In fact, in many contexts, caching of the sensitive data could be considered an auditing violation.
 2. For first time visitors, who have no cached resources, it is desirable to prioritize displaying:
     1. A navigational shell, so users can jump to where they want to go, followed by:
@@ -32,5 +32,12 @@ PuRPLiSh pattern
 3.  As the PRPL pattern suggests, it is desirable to conduct a certain amount of preloading / caching of resources in the background that will be used for secondary views.
 4.  On repeated visits, everything should be cached except the highly dynamic and/or sensitive data.  That data needs to be retrieved fresh every time a view is loaded.
 5. For both first time visits and repeated visits, only those resources required for a particular view should be loaded first.
+
+## The problem with class inheritance and mixins for progressive enhancement
+
+Class Hierarchies or Polymer mixins require all the dependdencies to load before the class can be defined and the associated custom element registered.
+
+What we need instead is to 
+
 
  
