@@ -2,31 +2,37 @@ module xtal.elements{
 
     function initXtalPromix(){
         interface IXtalDeferProperties{
-            setAttributesOnReady: string | polymer.PropObjectType;
+            //setAttributesOnReady: string | polymer.PropObjectType;
         }
+        /**
+         * "Promix" is a portmeanteau of "promise" and "mixin" (dropping the "in" for brevity).//
+         */
         class XtalPromix extends Polymer.Element implements IXtalDeferProperties{
             static alreadyApplied : {[key: string] : boolean} = {};
             unresolvedElements : number;
             static get is(){return 'xtal-promix';}
             static get properties(){
                 return {
-                    setAttributesOnReady:{
-                        type: String,
-                        //observer: 'onSetAttributesOnReadyChange'
-                    } as polymer.PropObjectType
+                    // setAttributesOnReady:{
+                    //     type: String,
+                    //     //observer: 'onSetAttributesOnReadyChange'
+                    // } as polymer.PropObjectType
                 } as IXtalDeferProperties
             }
             decrementUnresolvedElements(){
                 this.unresolvedElements--;
-                if(this.unresolvedElements === 0) this.readyToSetAttributes();
-                const thingsToShow = this.querySelectorAll('[until="ready"]');
-                console.log({thingsToShow: thingsToShow});
-                for(let i = 0, ii = thingsToShow.length; i < ii; i++){
-                    const thingToShow = thingsToShow[i] as HTMLElement;
-                    thingToShow.style.display = 'block';
+                if(this.unresolvedElements === 0) {
+                    //this.readyToSetAttributes();
+                    const thingsToShow = this.querySelectorAll('[until="ready"]');
+                    console.log({thingsToShow: thingsToShow});
+                    for(let i = 0, ii = thingsToShow.length; i < ii; i++){
+                        const thingToShow = thingsToShow[i] as HTMLElement;
+                        thingToShow.style.display = 'block';
+                    }
                 }
+                
             }
-            setAttributesOnReady;
+            //setAttributesOnReady;
             connectedCallback(){
                 super.connectedCallback();
                 const dependencies = this.querySelectorAll('[is="mixin"]');
@@ -38,25 +44,25 @@ module xtal.elements{
                     this.processTag(tagName);
                 }
             }
-            readyToSetAttributes(){
-                const newVal = this.getAttribute('set-attributes-on-ready');
-                if(!newVal) return;
-                const attribs = newVal.split(';');
-                const parent = this.parentElement;
-                for(const attrib of attribs){
-                    const splitAttrib = attrib.split(':');
-                    const key = splitAttrib[0];
-                    if(key.startsWith('on-')){
-                        const eventName = key.substr(3);
-                        const eventHandlerName = splitAttrib[1];
-                        console.log('eventName = ' + eventName);
-                        parent.addEventListener(eventName, parent[eventHandlerName]);
-                    }else{
-                         parent.setAttribute(key, splitAttrib[1]);
-                    }
+            // readyToSetAttributes(){
+            //     const newVal = this.getAttribute('set-attributes-on-ready');
+            //     if(!newVal) return;
+            //     const attribs = newVal.split(';');
+            //     const parent = this.parentElement;
+            //     for(const attrib of attribs){
+            //         const splitAttrib = attrib.split(':');
+            //         const key = splitAttrib[0];
+            //         if(key.startsWith('on-')){
+            //             const eventName = key.substr(3);
+            //             const eventHandlerName = splitAttrib[1];
+            //             console.log('eventName = ' + eventName);
+            //             parent.addEventListener(eventName, parent[eventHandlerName]);
+            //         }else{
+            //              parent.setAttribute(key, splitAttrib[1]);
+            //         }
                    
-                }
-            }
+            //     }
+            // }
             processTag(tagName: string){
                 if(XtalPromix.alreadyApplied[tagName]) {
                     this.decrementUnresolvedElements();
@@ -77,6 +83,14 @@ module xtal.elements{
                             console.log(key);
                             if(key === 'constructor') continue;
                             superClass[key] = mixinClass[key];
+                        }
+                        if(mixinClass.init){
+                            debugger;
+                            const allSuperClassElements = document.querySelectorAll(superClassTagName); //TODO!
+                            for(let i = 0, ii = allSuperClassElements.length; i < ii; i++){
+                                const el = allSuperClassElements[i];
+                                el['init']();
+                            }
                         }
                         _this.decrementUnresolvedElements();
                     }) 

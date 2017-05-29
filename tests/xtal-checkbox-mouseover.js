@@ -6,6 +6,9 @@ var xtal;
             handleMouseOver() {
                 console.log(this);
             }
+            init() {
+                this.addEventListener('mouseover', this.handleMouseOver);
+            }
         }
         customElements.define('xtal-checkbox-mouseover', XtalCheckboxMouseover);
     })(elements = xtal.elements || (xtal.elements = {}));
