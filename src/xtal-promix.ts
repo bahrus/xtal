@@ -1,13 +1,13 @@
 module xtal.elements{
 
-    function initXtalDefer(){
+    function initXtalPromix(){
         interface IXtalDeferProperties{
             setAttributesOnReady: string | polymer.PropObjectType;
         }
-        class XtalDefer extends Polymer.Element implements IXtalDeferProperties{
+        class XtalPromix extends Polymer.Element implements IXtalDeferProperties{
             static alreadyApplied : {[key: string] : boolean} = {};
             unresolvedElements : number;
-            static get is(){return 'xtal-defer';}
+            static get is(){return 'xtal-promix';}
             static get properties(){
                 return {
                     setAttributesOnReady:{
@@ -52,11 +52,11 @@ module xtal.elements{
                 }
             }
             processTag(tagName: string){
-                if(XtalDefer.alreadyApplied[tagName]) {
+                if(XtalPromix.alreadyApplied[tagName]) {
                     this.decrementUnresolvedElements();
                     return;
                 }
-                XtalDefer.alreadyApplied[tagName] = true;
+                XtalPromix.alreadyApplied[tagName] = true;
                 const _this = this;
                 customElements.whenDefined(tagName).then(() =>{
                     
@@ -77,7 +77,7 @@ module xtal.elements{
                 });
             }
         }
-        customElements.define(XtalDefer.is, XtalDefer);
+        customElements.define(XtalPromix.is, XtalPromix);
     }
-    customElements.whenDefined('xtal-ball').then(()=> initXtalDefer());
+    customElements.whenDefined('xtal-ball').then(()=> initXtalPromix());
 }

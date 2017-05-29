@@ -2,9 +2,9 @@ var xtal;
 (function (xtal) {
     var elements;
     (function (elements) {
-        function initXtalDefer() {
-            class XtalDefer extends Polymer.Element {
-                static get is() { return 'xtal-defer'; }
+        function initXtalPromix() {
+            class XtalPromix extends Polymer.Element {
+                static get is() { return 'xtal-promix'; }
                 static get properties() {
                     return {
                         setAttributesOnReady: {
@@ -49,11 +49,11 @@ var xtal;
                     }
                 }
                 processTag(tagName) {
-                    if (XtalDefer.alreadyApplied[tagName]) {
+                    if (XtalPromix.alreadyApplied[tagName]) {
                         this.decrementUnresolvedElements();
                         return;
                     }
-                    XtalDefer.alreadyApplied[tagName] = true;
+                    XtalPromix.alreadyApplied[tagName] = true;
                     const _this = this;
                     customElements.whenDefined(tagName).then(() => {
                         const posOfLastSlash = tagName.lastIndexOf('-');
@@ -73,10 +73,10 @@ var xtal;
                     });
                 }
             }
-            XtalDefer.alreadyApplied = {};
-            customElements.define(XtalDefer.is, XtalDefer);
+            XtalPromix.alreadyApplied = {};
+            customElements.define(XtalPromix.is, XtalPromix);
         }
-        customElements.whenDefined('xtal-ball').then(() => initXtalDefer());
+        customElements.whenDefined('xtal-ball').then(() => initXtalPromix());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
-//# sourceMappingURL=xtal-defer.js.map
+//# sourceMappingURL=xtal-promix.js.map
