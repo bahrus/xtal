@@ -39,5 +39,17 @@ Class Hierarchies or Polymer mixins require all the dependdencies to load before
 
 What we need instead is to 
 
+```html
+<my-grid>
+    <column>
+        <xtal-defer><my-grid-toggler is="dependency"></my-grid-toggler>
+            <toggle-button hidden until="ready" on-click="toggle"></toggle-button>
+        </xtal-defer>
+    </column>
+</my-grid>
+```
+
+The xtal-defer element looks for all child elements with attribute is="dependency".  It waits for the element to load, then applies the methods of the prototype to the prototype of the element before the last dash.  So for example, the methods in element "my-grid-toggler" would be added to the prototype of the class associated with element "my-grid"
+
 
  

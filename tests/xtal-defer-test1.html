@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Xtal Defer Test 1</title>
+    </head>
+    <body>
+        <link async rel="import" href="../src/xtal-checkbox.html">
+        <link async rel="import" href="../src/xtal-defer.html">
+        <link async rel="import" href="xtal-checkbox-mouseover.html">
+        <xtal-checkbox>
+            <xtal-defer set-attributes-on-ready="on-mouseover:handleMouseOver">
+                <xtal-checkbox-mouseover is="dependency"></xtal-checkbox-mouseover>
+            </xtal-defer>
+        </xtal-checkbox>
+        
+    </body>
+</html>

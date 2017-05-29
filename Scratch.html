@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        class MyClass {
+            doSomething(){
+                console.log('in doSomething');
+            }
+        } 
+        const obj = new MyClass();
+        MyClass.prototype.doSomething2 = function(){
+            console.log('in doSomething2');
+            this.doSomething();
+        }
+        obj.doSomething2();
+        debugger;
+    </script>
+</head>
+</html>
