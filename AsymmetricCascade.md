@@ -42,9 +42,9 @@ What we need instead is to
 ```html
 <my-grid>
     <column>
-        <xtal-defer><my-grid-toggler is="dependency"></my-grid-toggler>
+        <xtal-promix><my-grid-toggler is="mixin"></my-grid-toggler>
             <toggle-button hidden until="ready" on-click="toggle"></toggle-button>
-        </xtal-defer>
+        </xtal-promix>
     </column>
 </my-grid>
 ```

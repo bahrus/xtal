@@ -9,10 +9,13 @@
         <link async rel="import" href="xtal-checkbox-mouseover.html">
         <xtal-checkbox>
             <xtal-promix set-attributes-on-ready="on-mouseover:handleMouseOver">
-                <xtal-checkbox-mouseover is="dependency"></xtal-checkbox-mouseover>
+                <xtal-checkbox-mouseover is="mixin"></xtal-checkbox-mouseover>
             </xtal-promix>
         </xtal-checkbox>
-        
+        <xtal-promix>
+                <xtal-checkbox-mouseover is="mixin"></xtal-checkbox-mouseover>
+                <div style="display:none" until="ready">I am here</div>
+       </xtal-promix>
         
     </body>
 </html>

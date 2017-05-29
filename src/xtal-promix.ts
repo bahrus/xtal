@@ -19,11 +19,17 @@ module xtal.elements{
             decrementUnresolvedElements(){
                 this.unresolvedElements--;
                 if(this.unresolvedElements === 0) this.readyToSetAttributes();
+                const thingsToShow = this.querySelectorAll('[until="ready"]');
+                console.log({thingsToShow: thingsToShow});
+                for(let i = 0, ii = thingsToShow.length; i < ii; i++){
+                    const thingToShow = thingsToShow[i] as HTMLElement;
+                    thingToShow.style.display = 'block';
+                }
             }
             setAttributesOnReady;
             connectedCallback(){
                 super.connectedCallback();
-                const dependencies = this.querySelectorAll('[is="dependency"]');
+                const dependencies = this.querySelectorAll('[is="mixin"]');
                 const len = dependencies.length;
                 this.unresolvedElements = len;
                 for(let i = 0; i < len; i++){
