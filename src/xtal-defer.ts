@@ -1,27 +1,68 @@
 module xtal.elements{
 
     function initXtalDefer(){
-        class XtalDefer extends Polymer.Element{
+        interface IXtalDeferProperties{
+            setAttributesOnReady: string | polymer.PropObjectType;
+        }
+        class XtalDefer extends Polymer.Element implements IXtalDeferProperties{
             static alreadyApplied : {[key: string] : boolean} = {};
+            unresolvedElements : number;
             static get is(){return 'xtal-defer';}
-
+            static get properties(){
+                return {
+                    setAttributesOnReady:{
+                        type: String,
+                        //observer: 'onSetAttributesOnReadyChange'
+                    } as polymer.PropObjectType
+                } as IXtalDeferProperties
+            }
+            decrementUnresolvedElements(){
+                this.unresolvedElements--;
+                if(this.unresolvedElements === 0) this.readyToSetAttributes();
+            }
+            setAttributesOnReady;
             connectedCallback(){
                 super.connectedCallback();
                 const dependencies = this.querySelectorAll('[is="dependency"]');
-                for(let i = 0, ii = dependencies.length; i < ii; i++){
+                const len = dependencies.length;
+                this.unresolvedElements = len;
+                for(let i = 0; i < len; i++){
                     const dependency = dependencies[i];
                     const tagName = dependency.tagName.toLowerCase();
                     this.processTag(tagName);
                 }
             }
-
+            readyToSetAttributes(){
+                const newVal = this.getAttribute('set-attributes-on-ready');
+                if(!newVal) return;
+                const attribs = newVal.split(';');
+                const parent = this.parentElement;
+                for(const attrib of attribs){
+                    const splitAttrib = attrib.split(':');
+                    const key = splitAttrib[0];
+                    if(key.startsWith('on-')){
+                        const eventName = key.substr(3);
+                        const eventHandlerName = splitAttrib[1];
+                        console.log('eventName = ' + eventName);
+                        parent.addEventListener(eventName, parent[eventHandlerName]);
+                    }else{
+                         parent.setAttribute(key, splitAttrib[1]);
+                    }
+                   
+                }
+            }
             processTag(tagName: string){
-                if(XtalDefer.alreadyApplied[tagName]) return;
+                if(XtalDefer.alreadyApplied[tagName]) {
+                    this.decrementUnresolvedElements();
+                    return;
+                }
                 XtalDefer.alreadyApplied[tagName] = true;
+                const _this = this;
                 customElements.whenDefined(tagName).then(() =>{
                     
                     const posOfLastSlash = tagName.lastIndexOf('-');
                     const superClassTagName = tagName.substr(0, posOfLastSlash);
+                    
                     customElements.whenDefined(superClassTagName).then(() =>{
                         const superClass = customElements.get(superClassTagName).prototype;
                         const mixinClass = customElements.get(tagName).prototype;
@@ -31,6 +72,7 @@ module xtal.elements{
                             if(key === 'constructor') continue;
                             superClass[key] = mixinClass[key];
                         }
+                        _this.decrementUnresolvedElements();
                     }) 
                 });
             }
