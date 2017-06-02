@@ -35,24 +35,6 @@ var xtal;
                         this.processTag(tagName);
                     }
                 }
-                // readyToSetAttributes(){
-                //     const newVal = this.getAttribute('set-attributes-on-ready');
-                //     if(!newVal) return;
-                //     const attribs = newVal.split(';');
-                //     const parent = this.parentElement;
-                //     for(const attrib of attribs){
-                //         const splitAttrib = attrib.split(':');
-                //         const key = splitAttrib[0];
-                //         if(key.startsWith('on-')){
-                //             const eventName = key.substr(3);
-                //             const eventHandlerName = splitAttrib[1];
-                //             console.log('eventName = ' + eventName);
-                //             parent.addEventListener(eventName, parent[eventHandlerName]);
-                //         }else{
-                //              parent.setAttribute(key, splitAttrib[1]);
-                //         }
-                //     }
-                // }
                 processTag(tagName) {
                     if (XtalPromix.alreadyApplied[tagName]) {
                         this.decrementUnresolvedElements();
@@ -66,15 +48,12 @@ var xtal;
                         customElements.whenDefined(superClassTagName).then(() => {
                             const superClass = customElements.get(superClassTagName).prototype;
                             const mixinClass = customElements.get(tagName).prototype;
-                            //debugger;
                             for (const key of Object.getOwnPropertyNames(mixinClass)) {
-                                console.log(key);
                                 if (key === 'constructor')
                                     continue;
                                 superClass[key] = mixinClass[key];
                             }
                             if (mixinClass.init) {
-                                debugger;
                                 const allSuperClassElements = document.querySelectorAll(superClassTagName); //TODO!
                                 for (let i = 0, ii = allSuperClassElements.length; i < ii; i++) {
                                     const el = allSuperClassElements[i];
