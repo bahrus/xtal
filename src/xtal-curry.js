@@ -6,6 +6,7 @@ var xtal;
             class XtalCurry extends Polymer.Element {
                 constructor() {
                     super(...arguments);
+                    this.eventListeners = {};
                     this.clickMessageOptions = {
                         bubbles: true,
                         composed: false,
@@ -22,7 +23,6 @@ var xtal;
                             };
                         }
                     };
-                    this.eventListeners = {};
                 }
                 static get is() { return 'xtal-curry'; }
                 static get properties() {
@@ -53,6 +53,11 @@ var xtal;
                         this.addCustomEventListener(newVal, this.clickEventHandler);
                     }
                 }
+                registerInputHandler(newVal) {
+                    if (newVal) {
+                        this.addCustomEventListener(newVal, this.inputEventHandler);
+                    }
+                }
                 addCustomEventListener(key, listener) {
                     this.eventListeners[key] = listener;
                     this.addEventListener(key, listener);
@@ -62,6 +67,13 @@ var xtal;
                         detail: this.clickMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
                         bubbles: this.clickMessageOptions.bubbles,
                         composed: this.clickMessageOptions.composed
+                    }));
+                }
+                inputEventHandler(e) {
+                    this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                        detail: this.inputMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
+                        bubbles: this.inputMessageOptions.bubbles,
+                        composed: this.inputMessageOptions.composed
                     }));
                 }
             }

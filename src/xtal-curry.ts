@@ -20,6 +20,7 @@ module xtal.elements{
         
         class XtalCurry extends Polymer.Element implements IXtalCurryProperties{
             clickMessage:string;inputMessage:string;
+            eventListeners : {[key: string]: (e: Event) => void} = {};
             clickMessageOptions = {
                 bubbles: true,
                 composed: false,
@@ -67,17 +68,29 @@ module xtal.elements{
                 }
                 
             }
+            registerInputHandler(newVal){
+                if(newVal){
+                    this.addCustomEventListener(newVal, this.inputEventHandler);
+                }
+            }
             addCustomEventListener(key: string, listener: (e: Event) => void){
                 this.eventListeners[key] = listener;
                 this.addEventListener(key, listener);
             }
             
-            eventListeners : {[key: string]: (e: Event) => void} = {};
             clickEventHandler(e: Event){
                 this.dispatchEvent(new CustomEvent(this.clickMessage, {
-                    detail: this.clickMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
-                    bubbles: this.clickMessageOptions.bubbles,
+                    detail:   this.clickMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
+                    bubbles:  this.clickMessageOptions.bubbles,
                     composed: this.clickMessageOptions.composed
+                } as CustomEventInit));
+            }
+
+            inputEventHandler(e: Event){
+                this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                    detail:   this.inputMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
+                    bubbles:  this.inputMessageOptions.bubbles,
+                    composed: this.inputMessageOptions.composed
                 } as CustomEventInit));
             }
         }
