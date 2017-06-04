@@ -21,6 +21,7 @@ module xtal.elements{
         class XtalCurry extends Polymer.Element implements IXtalCurryProperties{
             clickMessage:string;inputMessage:string;
             eventListeners : {[key: string]: (e: Event) => void} = {};
+            __inputDebouncer;
             clickMessageOptions = {
                 bubbles: true,
                 composed: false,
@@ -28,7 +29,7 @@ module xtal.elements{
             inputMessageOptions = {
                 bubbles: true,
                 composed: false,
-                debounceInterval: 100,
+                debounceInterval: 1000,
                 detailFn: e => {
                     const src = e.srcElement as HTMLInputElement
                     return {
@@ -47,6 +48,7 @@ module xtal.elements{
                     },
                     inputMessage:{
                         type: String,
+                        observer: 'registerInputHandler'
                     },
                     inputMessageOptions:{
                         type: Object,
@@ -64,13 +66,24 @@ module xtal.elements{
             }
             registerClickHandler(newVal){
                 if(newVal){
-                    this.addCustomEventListener(newVal, this.clickEventHandler);
+                    this.addCustomEventListener('click', this.clickEventHandler);
                 }
                 
             }
             registerInputHandler(newVal){
                 if(newVal){
-                    this.addCustomEventListener(newVal, this.inputEventHandler);
+                    if(!this.__inputDebouncer){
+                        const _this = this;
+                        this.__inputDebouncer = xtal.elements['debounce']((e) =>{
+                            console.log('debouncer');
+                            _this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                                detail:   _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
+                                bubbles:  _this.inputMessageOptions.bubbles,
+                                composed: _this.inputMessageOptions.composed
+                            } as CustomEventInit));
+                        }, this.inputMessageOptions.debounceInterval);
+                    }
+                    this.addCustomEventListener('input', this.__inputDebouncer);
                 }
             }
             addCustomEventListener(key: string, listener: (e: Event) => void){
@@ -86,14 +99,21 @@ module xtal.elements{
                 } as CustomEventInit));
             }
 
-            inputEventHandler(e: Event){
-                this.dispatchEvent(new CustomEvent(this.inputMessage, {
-                    detail:   this.inputMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
-                    bubbles:  this.inputMessageOptions.bubbles,
-                    composed: this.inputMessageOptions.composed
-                } as CustomEventInit));
-            }
+            // inputEventHandler(e: Event){
+                
+            //     console.log('in inputEventHandler');
+            //     xtal.elements['debounce'](() =>{
+            //         console.log('debouncer');
+            //         _this.dispatchEvent(new CustomEvent(this.inputMessage, {
+            //             detail:   _this.inputMessageOptions.detailFn ? _this.clickMessageOptions.detailFn(e) : null,
+            //             bubbles:  _this.inputMessageOptions.bubbles,
+            //             composed: _this.inputMessageOptions.composed
+            //         } as CustomEventInit));
+            //     }, this.inputMessageOptions.debounceInterval)
+                
+            // }
         }
         customElements.define(XtalCurry.is, XtalCurry)
     }
+    customElements.whenDefined('xtal-ball').then(() => initXtalCurry());
 }

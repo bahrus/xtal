@@ -14,7 +14,7 @@ var xtal;
                     this.inputMessageOptions = {
                         bubbles: true,
                         composed: false,
-                        debounceInterval: 100,
+                        debounceInterval: 1000,
                         detailFn: e => {
                             const src = e.srcElement;
                             return {
@@ -23,6 +23,17 @@ var xtal;
                             };
                         }
                     };
+                    // inputEventHandler(e: Event){
+                    //     console.log('in inputEventHandler');
+                    //     xtal.elements['debounce'](() =>{
+                    //         console.log('debouncer');
+                    //         _this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                    //             detail:   _this.inputMessageOptions.detailFn ? _this.clickMessageOptions.detailFn(e) : null,
+                    //             bubbles:  _this.inputMessageOptions.bubbles,
+                    //             composed: _this.inputMessageOptions.composed
+                    //         } as CustomEventInit));
+                    //     }, this.inputMessageOptions.debounceInterval)
+                    // }
                 }
                 static get is() { return 'xtal-curry'; }
                 static get properties() {
@@ -33,6 +44,7 @@ var xtal;
                         },
                         inputMessage: {
                             type: String,
+                            observer: 'registerInputHandler'
                         },
                         inputMessageOptions: {
                             type: Object,
@@ -50,12 +62,23 @@ var xtal;
                 }
                 registerClickHandler(newVal) {
                     if (newVal) {
-                        this.addCustomEventListener(newVal, this.clickEventHandler);
+                        this.addCustomEventListener('click', this.clickEventHandler);
                     }
                 }
                 registerInputHandler(newVal) {
                     if (newVal) {
-                        this.addCustomEventListener(newVal, this.inputEventHandler);
+                        if (!this.__inputDebouncer) {
+                            const _this = this;
+                            this.__inputDebouncer = xtal.elements['debounce']((e) => {
+                                console.log('debouncer');
+                                _this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                                    detail: _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
+                                    bubbles: _this.inputMessageOptions.bubbles,
+                                    composed: _this.inputMessageOptions.composed
+                                }));
+                            }, this.inputMessageOptions.debounceInterval);
+                        }
+                        this.addCustomEventListener('input', this.__inputDebouncer);
                     }
                 }
                 addCustomEventListener(key, listener) {
@@ -69,16 +92,10 @@ var xtal;
                         composed: this.clickMessageOptions.composed
                     }));
                 }
-                inputEventHandler(e) {
-                    this.dispatchEvent(new CustomEvent(this.inputMessage, {
-                        detail: this.inputMessageOptions.detailFn ? this.clickMessageOptions.detailFn(e) : null,
-                        bubbles: this.inputMessageOptions.bubbles,
-                        composed: this.inputMessageOptions.composed
-                    }));
-                }
             }
             customElements.define(XtalCurry.is, XtalCurry);
         }
+        customElements.whenDefined('xtal-ball').then(() => initXtalCurry());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-curry.js.map

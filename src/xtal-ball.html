@@ -19,6 +19,11 @@
                 return XtalBall;
             }
             function debounce(callback, wait, context = this) {
+                console.log({
+                    callback: callback,
+                    wait: wait,
+                    context: context
+                });
                 //from https://gist.github.com/beaucharman/1f93fdd7c72860736643d1ab274fee1a
                 let timeout = null 
                 let callbackArgs = null
