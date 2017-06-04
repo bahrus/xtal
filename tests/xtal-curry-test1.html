@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link async rel="import" href="../src/json-init.html">
+        <link async rel="import" href="../src/xtal-curry.html">
+    </head>
+    <body>
+        <json-init>
+        </json-init>
+        <xtal-curry input-message="myCustomMessage"><input type="text" name="myInputBo"></xtal-curry>
+    </body>
+    <script>
+        document.body.addEventListener('myCustomMessage', e => {
+            console.log(e);
+        });
+    </script>
+</html>
