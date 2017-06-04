@@ -3,6 +3,8 @@ declare module Polymer{
     export abstract class Element extends HTMLElement{
         connectedCallback();
         ready();
+        disconnectedCallback();
+        attributeChangedCallback();
         resolveUrl(path: string);
         $;
         debounce(name: string, fn: Function, timeInMilliSeconds: number);

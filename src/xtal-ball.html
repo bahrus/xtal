@@ -18,6 +18,20 @@
                 customElements.define('xtal-ball', XtalBall);
                 return XtalBall;
             }
+            function debounce(callback, wait, context = this) {
+                //from https://gist.github.com/beaucharman/1f93fdd7c72860736643d1ab274fee1a
+                let timeout = null 
+                let callbackArgs = null
+                
+                const later = () => callback.apply(context, callbackArgs)
+                
+                return function() {
+                    callbackArgs = arguments
+                    clearTimeout(timeout)
+                    timeout = setTimeout(later, wait)
+                }
+            }
+
             function downloadJSFilesInParallelButLoadInSequence(refs, callBack) {
                 //see https://www.html5rocks.com/en/tutorials/speed/script-loading/
                 const notLoadedYet = {};
@@ -42,6 +56,7 @@
             }
             elements.bootstrap = bootstrap;
             elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
+            elements.debounce = debounce;
             
         })(elements = xtal.elements || (xtal.elements = {}));
     })(xtal || (xtal = {}));
