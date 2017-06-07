@@ -4,6 +4,7 @@ module xtal.elements{
         watch: object | polymer.PropObjectType,
         result: object | polymer.PropObjectType,
         refs: {[key: string] : any} | polymer.PropObjectType,
+        passThruOnInit: boolean | polymer.PropObjectType
     }
     function initJSONMerge(){
         /**
@@ -12,7 +13,7 @@ module xtal.elements{
          * elements contained inside the tag.
          * The JSON can reference items from the refs property using ${this.refs.myProp}
          */
-        class JSONMerge extends Polymer.Element implements JSONMergeProperties{
+        class JSONMerge extends MyMixin( Polymer.Element) implements JSONMergeProperties{
             static get is(){return 'json-merge';}
             static get properties() : JSONMergeProperties{
                 return {
@@ -46,6 +47,12 @@ module xtal.elements{
                      */
                     refs:{
                         type: Object
+                    },
+                    /**
+                     * If set to true, the JSON object will directly go to result during initalization
+                     */
+                    passThruOnInit:{
+                        type: Boolean
                     }
                 }
             }
@@ -61,6 +68,7 @@ module xtal.elements{
             watch: object;
             result: object;
             refs: {[key: string] : any} ;
+            passThruOnInit = false;
 
             /**
              * Deep merge two objects.
@@ -114,6 +122,7 @@ module xtal.elements{
             }
             
             onPropsChange(newVal){
+                debugger;
                 let transformedObj;
                 if(this.wrapObjectWithPath) {
                     transformedObj  = {};
@@ -154,6 +163,13 @@ module xtal.elements{
                 }
                 this['_setResult'](transformedObj);
             }
+
+            ready(){
+                super.ready();
+                if(this.passThruOnInit){
+                    this.onPropsChange({});
+                }
+            }
         }
         customElements.define(JSONMerge.is, JSONMerge);
     }
@@ -162,4 +178,18 @@ module xtal.elements{
     //}
     //waitForPolymerElement();
     customElements.whenDefined('xtal-ball').then(() => initJSONMerge());
+
+   const MyMixin = function(superClass) {
+    return class extends superClass {
+      // Code that you want common to elements.
+      // If you're going to override a lifecycle method, remember that a) you
+      // might need to call super but b) it might not exist
+      connectedCallback() {
+        if (super.connectedCallback) {
+          super.connectedCallback();
+        }
+        /* ... */
+      }
+    }
+  }
 }

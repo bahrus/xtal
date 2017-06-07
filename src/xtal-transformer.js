@@ -55,12 +55,6 @@ var xtal;
                     this.dispatchEvent(new CustomEvent('transform', {
                         detail: detail
                     }));
-                    let transformedObj = detail.obj;
-                    detail.obj = transformedObj;
-                    this.dispatchEvent(new CustomEvent('transform', {
-                        detail: detail
-                    }));
-                    delete arg.context;
                     this['_setResult'](detail.obj);
                 }
             }

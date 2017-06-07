@@ -14,14 +14,7 @@ var xtal;
                     this.inputMessageOptions = {
                         bubbles: true,
                         composed: false,
-                        debounceInterval: 1000,
-                        detailFn: e => {
-                            const src = e.srcElement;
-                            return {
-                                name: src.name,
-                                value: src.value,
-                            };
-                        }
+                        debounceInterval: 100,
                     };
                     // inputEventHandler(e: Event){
                     //     console.log('in inputEventHandler');
@@ -70,7 +63,15 @@ var xtal;
                         if (!this.__inputDebouncer) {
                             const _this = this;
                             this.__inputDebouncer = xtal.elements['debounce']((e) => {
-                                console.log('debouncer');
+                                if (!this.inputMessageOptions.detailFn) {
+                                    this.inputMessageOptions.detailFn = (e) => {
+                                        const src = e.srcElement;
+                                        return {
+                                            name: src.name,
+                                            value: src.value,
+                                        };
+                                    };
+                                }
                                 _this.dispatchEvent(new CustomEvent(this.inputMessage, {
                                     detail: _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
                                     bubbles: _this.inputMessageOptions.bubbles,

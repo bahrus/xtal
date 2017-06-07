@@ -9,7 +9,11 @@ var xtal;
              * elements contained inside the tag.
              * The JSON can reference items from the refs property using ${this.refs.myProp}
              */
-            class JSONMerge extends Polymer.Element {
+            class JSONMerge extends MyMixin(Polymer.Element) {
+                constructor() {
+                    super(...arguments);
+                    this.passThruOnInit = false;
+                }
                 static get is() { return 'json-merge'; }
                 static get properties() {
                     return {
@@ -43,6 +47,12 @@ var xtal;
                          */
                         refs: {
                             type: Object
+                        },
+                        /**
+                         * If set to true, the JSON object will directly go to result during initalization
+                         */
+                        passThruOnInit: {
+                            type: Boolean
                         }
                     };
                 }
@@ -103,6 +113,7 @@ var xtal;
                     return target;
                 }
                 onPropsChange(newVal) {
+                    debugger;
                     let transformedObj;
                     if (this.wrapObjectWithPath) {
                         transformedObj = {};
@@ -145,6 +156,12 @@ var xtal;
                     }
                     this['_setResult'](transformedObj);
                 }
+                ready() {
+                    super.ready();
+                    if (this.passThruOnInit) {
+                        this.onPropsChange({});
+                    }
+                }
             }
             customElements.define(JSONMerge.is, JSONMerge);
         }
@@ -153,6 +170,19 @@ var xtal;
         //}
         //waitForPolymerElement();
         customElements.whenDefined('xtal-ball').then(() => initJSONMerge());
+        const MyMixin = function (superClass) {
+            return class extends superClass {
+                // Code that you want common to elements.
+                // If you're going to override a lifecycle method, remember that a) you
+                // might need to call super but b) it might not exist
+                connectedCallback() {
+                    if (super.connectedCallback) {
+                        super.connectedCallback();
+                    }
+                    /* ... */
+                }
+            };
+        };
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=json-merge.js.map

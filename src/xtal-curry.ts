@@ -29,14 +29,8 @@ module xtal.elements{
             inputMessageOptions = {
                 bubbles: true,
                 composed: false,
-                debounceInterval: 1000,
-                detailFn: e => {
-                    const src = e.srcElement as HTMLInputElement
-                    return {
-                        name: src.name,
-                        value: src.value,
-                    }
-                }
+                debounceInterval: 100,
+                
             } as IInputMessageOptions;
 
             static get is() {return 'xtal-curry';}
@@ -72,10 +66,20 @@ module xtal.elements{
             }
             registerInputHandler(newVal){
                 if(newVal){
+
                     if(!this.__inputDebouncer){
                         const _this = this;
                         this.__inputDebouncer = xtal.elements['debounce']((e) =>{
-                            console.log('debouncer');
+                            if(!this.inputMessageOptions.detailFn){
+                                this.inputMessageOptions.detailFn = (e: Event) => {
+                                    const src = e.srcElement as HTMLInputElement
+                                    return {
+                                        name: src.name,
+                                        value: src.value,
+                                    }
+                                }
+                            
+                            }
                             _this.dispatchEvent(new CustomEvent(this.inputMessage, {
                                 detail:   _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
                                 bubbles:  _this.inputMessageOptions.bubbles,
