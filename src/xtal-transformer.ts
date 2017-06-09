@@ -73,7 +73,6 @@ module xtal.elements{
                 this.dispatchEvent(new CustomEvent('transform', {
                     detail: detail
                 }));
-                
                 this['_setResult'](detail.obj);
 
             }

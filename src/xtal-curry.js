@@ -47,6 +47,18 @@ var xtal;
                         }
                     };
                 }
+                connectedCallback() {
+                    const jsonMergeInit = this.querySelector('json-merge[role="init"]');
+                    if (jsonMergeInit) {
+                        customElements.whenDefined('json-merge').then(() => {
+                            const initObjs = jsonMergeInit.loadJSON();
+                            debugger;
+                            if (initObjs) {
+                                initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj));
+                            }
+                        });
+                    }
+                }
                 disconnectedCallback() {
                     super.disconnectedCallback();
                     for (const key in this.eventListeners) {
@@ -59,6 +71,7 @@ var xtal;
                     }
                 }
                 registerInputHandler(newVal) {
+                    debugger;
                     if (newVal) {
                         if (!this.__inputDebouncer) {
                             const _this = this;

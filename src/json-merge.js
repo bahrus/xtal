@@ -112,17 +112,7 @@ var xtal;
                     }
                     return target;
                 }
-                onPropsChange(newVal) {
-                    debugger;
-                    let transformedObj;
-                    if (this.wrapObjectWithPath) {
-                        transformedObj = {};
-                        transformedObj[this.wrapObjectWithPath] = newVal;
-                    }
-                    else {
-                        transformedObj = newVal;
-                    }
-                    //if(!this._objectsToMerge){
+                loadJSON() {
                     try {
                         if (this.refs) {
                             this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
@@ -141,7 +131,19 @@ var xtal;
                     catch (e) {
                         console.error("Unable to parse " + this.innerText);
                     }
-                    //}
+                    return this._objectsToMerge;
+                }
+                onPropsChange(newVal) {
+                    debugger;
+                    let transformedObj;
+                    if (this.wrapObjectWithPath) {
+                        transformedObj = {};
+                        transformedObj[this.wrapObjectWithPath] = newVal;
+                    }
+                    else {
+                        transformedObj = newVal;
+                    }
+                    this.loadJSON();
                     if (this._objectsToMerge && transformedObj) {
                         for (let i = 0, ii = this._objectsToMerge.length; i < ii; i++) {
                             const objToMerge = this._objectsToMerge[i];

@@ -6,6 +6,17 @@ module xtal.elements{
         refs: {[key: string] : any} | polymer.PropObjectType,
         passThruOnInit: boolean | polymer.PropObjectType
     }
+    export interface JSONMergeMethods{
+        loadJSON() : object[];
+        /**
+         * Deep merge two objects.
+         * Inspired by Stackoverflow.com/questions/27936772/deep-object-merging-in-es6-es7
+         * @param target
+         * @param source
+         * 
+         */
+        mergeDeep(target, source)
+    }
     function initJSONMerge(){
         /**
          * <js-merge></js-merge> is a Polymer-based helper element, that watches for changes to a property defined in 
@@ -120,6 +131,25 @@ module xtal.elements{
                 }
                 return target;
             }
+
+            loadJSON(){
+                try{
+                    if(this.refs){
+                        this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
+                            if(typeof val !== 'string') return val;
+                            if(!val.startsWith('${refs.') || !val.endsWith('}')) return val;
+                            const realKey = val.substring(7, val.length - 1);
+                            return this.refs[realKey];
+                        } );
+                    }else{
+                        this._objectsToMerge = JSON.parse( this.innerText);
+                    }
+                    
+                }catch(e){
+                    console.error("Unable to parse " + this.innerText);
+                }
+                return this._objectsToMerge;    
+            }
             
             onPropsChange(newVal){
                 debugger;
@@ -130,23 +160,7 @@ module xtal.elements{
                 }else{
                     transformedObj = newVal;
                 }
-                //if(!this._objectsToMerge){
-                    try{
-                        if(this.refs){
-                            this._objectsToMerge = JSON.parse(this.innerText, (key, val) => {
-                                if(typeof val !== 'string') return val;
-                                if(!val.startsWith('${refs.') || !val.endsWith('}')) return val;
-                                const realKey = val.substring(7, val.length - 1);
-                                return this.refs[realKey];
-                            } );
-                        }else{
-                            this._objectsToMerge = JSON.parse( this.innerText);
-                        }
-                        
-                    }catch(e){
-                        console.error("Unable to parse " + this.innerText);
-                    }
-                //}
+                this.loadJSON();
                 if(this._objectsToMerge && transformedObj){
                     for(let i  = 0, ii = this._objectsToMerge.length; i < ii; i++)
                     {

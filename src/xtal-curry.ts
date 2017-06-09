@@ -52,6 +52,20 @@ module xtal.elements{
                     }
                 }
             }
+            connectedCallback(){
+                const jsonMergeInit = <any>this.querySelector('json-merge[role="init"]') as xtal.elements.JSONMergeMethods;
+                if(jsonMergeInit){
+                    customElements.whenDefined('json-merge').then(() =>{
+                        const initObjs = jsonMergeInit.loadJSON();
+                        debugger;
+                        if(initObjs){
+                            initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj))
+                            
+                        }
+                        
+                    });
+                }
+            }
             disconnectedCallback(){
                 super.disconnectedCallback();
                 for(const key in this.eventListeners){
@@ -65,6 +79,7 @@ module xtal.elements{
                 
             }
             registerInputHandler(newVal){
+                debugger;
                 if(newVal){
 
                     if(!this.__inputDebouncer){
