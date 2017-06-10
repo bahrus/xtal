@@ -8,7 +8,7 @@ module xtal.elements{
 
     }
     export interface IInputMessageOptions extends IMessageOptions{
-        debounceInterval?: number,
+        debounceTimeInMs?: number,
     }
     export interface IXtalCurryProperties{
         clickMessage : string | polymer.PropObjectType,
@@ -29,7 +29,7 @@ module xtal.elements{
             inputMessageOptions = {
                 bubbles: true,
                 composed: false,
-                debounceInterval: 100,
+                debounceTimeInMs: 100,
                 
             } as IInputMessageOptions;
 
@@ -92,7 +92,7 @@ module xtal.elements{
                             bubbles:  _this.inputMessageOptions.bubbles,
                             composed: _this.inputMessageOptions.composed
                         } as CustomEventInit));
-                    }, this.inputMessageOptions.debounceInterval);
+                    }, this.inputMessageOptions.debounceTimeInMs);
                 }
                 this.addCustomEventListener('input', this.__inputDebouncer);
             }

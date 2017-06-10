@@ -14,7 +14,7 @@ var xtal;
                     this.inputMessageOptions = {
                         bubbles: true,
                         composed: false,
-                        debounceInterval: 100,
+                        debounceTimeInMs: 100,
                     };
                     // inputEventHandler(e: Event){
                     //     console.log('in inputEventHandler');
@@ -83,7 +83,7 @@ var xtal;
                                 bubbles: _this.inputMessageOptions.bubbles,
                                 composed: _this.inputMessageOptions.composed
                             }));
-                        }, this.inputMessageOptions.debounceInterval);
+                        }, this.inputMessageOptions.debounceTimeInMs);
                     }
                     this.addCustomEventListener('input', this.__inputDebouncer);
                 }

@@ -3,10 +3,14 @@ var xtal;
     var elements;
     (function (elements) {
         function initXtalFetch() {
-            class XtalFetch extends Polymer.Element {
+            class XtalFetch extends xtal.elements['InitMerge'](Polymer.Element) {
                 constructor() {
                     super(...arguments);
+                    this.reqInit = {
+                        credentials: 'include'
+                    };
                     this.as = 'text';
+                    this._initialized = false;
                 }
                 static get is() { return 'xtal-fetch'; }
                 static get properties() {
@@ -20,9 +24,9 @@ var xtal;
                         debounceTimeInMs: {
                             type: Number
                         },
-                        reqInfo: {
-                            type: Object,
-                        },
+                        // reqInfo: {
+                        //     type: Object,
+                        // },
                         reqInit: {
                             type: Object
                         },
@@ -44,10 +48,11 @@ var xtal;
                     };
                 }
                 loadNewUrl() {
+                    if (!this._initialized)
+                        return;
                     if (this.href) {
                         const _this = this;
-                        console.log('fetching ' + this.href);
-                        fetch(this.href).then(resp => {
+                        fetch(this.href, this.reqInit).then(resp => {
                             resp[_this.as]().then(val => {
                                 _this['_setResult'](val);
                                 if (typeof val === 'string' && this.insertResults) {
@@ -56,8 +61,14 @@ var xtal;
                                 //_this.notifyPath('result');
                             });
                         });
-                        console.log('done fetching');
                     }
+                }
+                connectedCallback() {
+                    super.connectedCallback();
+                    this.init().then(() => {
+                        this._initialized = true;
+                        this.loadNewUrl();
+                    });
                 }
             }
             customElements.define(XtalFetch.is, XtalFetch);

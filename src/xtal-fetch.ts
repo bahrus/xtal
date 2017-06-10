@@ -1,20 +1,24 @@
 module xtal.elements{
+    // interface IFetchRequest{
+    //     credentials?: 'include' | 'omit'
+    // }
     interface IXtalFetchProperties{
-        reqInfo: RequestInfo | polymer.PropObjectType,
+        reqInit: RequestInit| polymer.PropObjectType,
         href: string | polymer.PropObjectType,
-        reqInit: RequestInit | polymer.PropObjectType,
         debounceTimeInMs: number | polymer.PropObjectType,
         as: string | polymer.PropObjectType,
         result: any | polymer.PropObjectType,
         insertResults: boolean | polymer.PropObjectType,
     }
     function initXtalFetch(){
-        class XtalFetch extends Polymer.Element implements IXtalFetchProperties{
-            reqInfo: RequestInfo;
-            reqInit: RequestInit;
+        class XtalFetch  extends xtal.elements['InitMerge'](Polymer.Element)  implements IXtalFetchProperties{
+            reqInit = {
+                credentials: 'include'
+            } as RequestInit;
             href: string;
             result: object;
             as = 'text';
+            _initialized = false;
             debounceTimeInMs: number;
             insertResults: boolean;
             static get is(){return 'xtal-fetch';}
@@ -29,9 +33,9 @@ module xtal.elements{
                     debounceTimeInMs:{
                         type: Number
                     },
-                    reqInfo: {
-                        type: Object,
-                    },
+                    // reqInfo: {
+                    //     type: Object,
+                    // },
                     reqInit:{
                         type: Object
                     },
@@ -53,10 +57,10 @@ module xtal.elements{
                 }
             }
             loadNewUrl(){
+                if(!this._initialized) return;
                 if(this.href){
                     const _this = this;
-                    console.log('fetching ' + this.href);
-                    fetch(this.href).then(resp =>{
+                    fetch(this.href, this.reqInit).then(resp =>{
                         resp[_this.as]().then(val =>{
                             _this['_setResult'](val);
                             if(typeof val === 'string' && this.insertResults){
@@ -66,8 +70,15 @@ module xtal.elements{
                         });
                         
                     })
-                    console.log('done fetching');
                 }
+            }
+
+            connectedCallback(){
+                super.connectedCallback();
+                this.init().then(() => {
+                    this._initialized = true;
+                    this.loadNewUrl();
+                });
             }
             
         }
