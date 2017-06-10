@@ -96,6 +96,7 @@ module xtal.elements{
                     const targetVal = target[key];
                     if(!sourceVal) continue; //TODO:  null out property?
                     if(!targetVal){
+                        console.log(key);
                         target[key] = sourceVal;
                         continue;
                     }
@@ -121,11 +122,13 @@ module xtal.elements{
                                     this.mergeDeep(targetVal, sourceVal);
                                     break;
                                 default:
+                                    console.log(key);
                                     target[key] = sourceVal;
                                     break;
                             }
                             break;
                         default:
+                            console.log(key);
                             target[key] = sourceVal;
                     }
                 }

@@ -37,7 +37,6 @@ var xtal;
                         },
                         inputMessage: {
                             type: String,
-                            observer: 'registerInputHandler'
                         },
                         inputMessageOptions: {
                             type: Object,
@@ -48,14 +47,17 @@ var xtal;
                     };
                 }
                 connectedCallback() {
+                    super.connectedCallback();
                     const jsonMergeInit = this.querySelector('json-merge[role="init"]');
+                    console.log({ jsonMergeInit: jsonMergeInit });
                     if (jsonMergeInit) {
                         customElements.whenDefined('json-merge').then(() => {
                             const initObjs = jsonMergeInit.loadJSON();
-                            debugger;
                             if (initObjs) {
                                 initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj));
                             }
+                            if (this.inputMessage)
+                                this.registerInputHandler();
                         });
                     }
                 }
@@ -70,30 +72,28 @@ var xtal;
                         this.addCustomEventListener('click', this.clickEventHandler);
                     }
                 }
-                registerInputHandler(newVal) {
-                    debugger;
-                    if (newVal) {
-                        if (!this.__inputDebouncer) {
-                            const _this = this;
-                            this.__inputDebouncer = xtal.elements['debounce']((e) => {
-                                if (!this.inputMessageOptions.detailFn) {
-                                    this.inputMessageOptions.detailFn = (e) => {
-                                        const src = e.srcElement;
-                                        return {
-                                            name: src.name,
-                                            value: src.value,
-                                        };
+                registerInputHandler() {
+                    console.log(this.inputMessageOptions);
+                    if (!this.__inputDebouncer) {
+                        const _this = this;
+                        this.__inputDebouncer = xtal.elements['debounce']((e) => {
+                            if (!this.inputMessageOptions.detailFn) {
+                                this.inputMessageOptions.detailFn = (e) => {
+                                    const src = e.srcElement;
+                                    return {
+                                        name: src.name,
+                                        value: src.value,
                                     };
-                                }
-                                _this.dispatchEvent(new CustomEvent(this.inputMessage, {
-                                    detail: _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
-                                    bubbles: _this.inputMessageOptions.bubbles,
-                                    composed: _this.inputMessageOptions.composed
-                                }));
-                            }, this.inputMessageOptions.debounceInterval);
-                        }
-                        this.addCustomEventListener('input', this.__inputDebouncer);
+                                };
+                            }
+                            _this.dispatchEvent(new CustomEvent(this.inputMessage, {
+                                detail: _this.inputMessageOptions.detailFn ? _this.inputMessageOptions.detailFn(e) : null,
+                                bubbles: _this.inputMessageOptions.bubbles,
+                                composed: _this.inputMessageOptions.composed
+                            }));
+                        }, this.inputMessageOptions.debounceInterval);
                     }
+                    this.addCustomEventListener('input', this.__inputDebouncer);
                 }
                 addCustomEventListener(key, listener) {
                     this.eventListeners[key] = listener;

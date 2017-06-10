@@ -74,6 +74,7 @@ var xtal;
                         if (!sourceVal)
                             continue; //TODO:  null out property?
                         if (!targetVal) {
+                            console.log(key);
                             target[key] = sourceVal;
                             continue;
                         }
@@ -102,11 +103,13 @@ var xtal;
                                         this.mergeDeep(targetVal, sourceVal);
                                         break;
                                     default:
+                                        console.log(key);
                                         target[key] = sourceVal;
                                         break;
                                 }
                                 break;
                             default:
+                                console.log(key);
                                 target[key] = sourceVal;
                         }
                     }
