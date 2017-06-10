@@ -3,7 +3,7 @@ var xtal;
     var elements;
     (function (elements) {
         function initXtalCurry() {
-            class XtalCurry extends Polymer.Element {
+            class XtalCurry extends xtal.elements['InitMerge'](Polymer.Element) {
                 constructor() {
                     super(...arguments);
                     this.eventListeners = {};
@@ -48,18 +48,10 @@ var xtal;
                 }
                 connectedCallback() {
                     super.connectedCallback();
-                    const jsonMergeInit = this.querySelector('json-merge[role="init"]');
-                    console.log({ jsonMergeInit: jsonMergeInit });
-                    if (jsonMergeInit) {
-                        customElements.whenDefined('json-merge').then(() => {
-                            const initObjs = jsonMergeInit.loadJSON();
-                            if (initObjs) {
-                                initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj));
-                            }
-                            if (this.inputMessage)
-                                this.registerInputHandler();
-                        });
-                    }
+                    this.init().then(() => {
+                        if (this.inputMessage)
+                            this.registerInputHandler();
+                    });
                 }
                 disconnectedCallback() {
                     super.disconnectedCallback();

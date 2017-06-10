@@ -54,9 +54,32 @@
                     document.head.appendChild(script);
                 });
             }
+
+              function InitMerge(superClass) {
+                return class extends superClass {
+                    init() {
+                        return new Promise((resolve, reject) =>{
+                            const jsonMergeInit = this.querySelector('json-merge[role="init"]');
+                            console.log({jsonMergeInit: jsonMergeInit});
+                            if(jsonMergeInit){
+                                customElements.whenDefined('json-merge').then(() =>{
+                                    const initObjs = jsonMergeInit.loadJSON();
+                                    if(initObjs){
+                                        initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj))
+                                        
+                                    }
+                                    resolve();
+                                });
+                            }
+                        });
+
+                    }
+                }
+            }
             elements.bootstrap = bootstrap;
             elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
             elements.debounce = debounce;
+            elements.InitMerge = InitMerge;
             
         })(elements = xtal.elements || (xtal.elements = {}));
     })(xtal || (xtal = {}));

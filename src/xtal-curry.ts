@@ -18,7 +18,7 @@ module xtal.elements{
     }
     function initXtalCurry(){
         
-        class XtalCurry extends Polymer.Element implements IXtalCurryProperties{
+        class XtalCurry extends xtal.elements['InitMerge'](Polymer.Element) implements IXtalCurryProperties{
             clickMessage:string;inputMessage:string;
             eventListeners : {[key: string]: (e: Event) => void} = {};
             __inputDebouncer;
@@ -54,18 +54,10 @@ module xtal.elements{
             }
             connectedCallback(){
                 super.connectedCallback();
-                const jsonMergeInit = <any>this.querySelector('json-merge[role="init"]') as xtal.elements.JSONMergeMethods;
-                console.log({jsonMergeInit: jsonMergeInit});
-                if(jsonMergeInit){
-                    customElements.whenDefined('json-merge').then(() =>{
-                        const initObjs = jsonMergeInit.loadJSON();
-                        if(initObjs){
-                            initObjs.forEach(initObj => jsonMergeInit.mergeDeep(this, initObj))
-                            
-                        }
-                         if(this.inputMessage) this.registerInputHandler();
-                    });
-                }
+                this.init().then(() =>{
+                    if(this.inputMessage) this.registerInputHandler();
+                });
+
                
             }
             disconnectedCallback(){
