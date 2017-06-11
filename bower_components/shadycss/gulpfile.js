@@ -54,17 +54,17 @@ gulp.task('test-modules', (cb) => {
 
 function closurify(entry) {
   gulp.task(`closure-${entry}`, () => {
-    return gulp.src(['src/*.js', 'entrypoints/*.js'], {base: './'})
+    return gulp.src(['src/*.js', 'entrypoints/*.js'])
     .pipe(sourcemaps.init())
     .pipe(closure({
       new_type_inf: true,
       compilation_level: 'ADVANCED',
       language_in: 'ES6_STRICT',
       language_out: 'ES5_STRICT',
-      isolation_mode: 'IIFE',
+      output_wrapper: '(function(){\n%output%\n}).call(self)',
       assume_function_wrapper: true,
       js_output_file: `${entry}.min.js`,
-      entry_point: `./entrypoints/${entry}.js`,
+      entry_point: `/entrypoints/${entry}.js`,
       dependency_mode: 'STRICT',
       warning_level: 'VERBOSE',
       rewrite_polyfills: false,
@@ -105,8 +105,6 @@ let debugTasks = entrypoints.map((e) => debugify(e));
 
 gulp.task('default', ['closure', 'test-modules']);
 
-gulp.task('closure', (cb) => {
-  runseq.apply(null, closureTasks.concat(cb))
-});
+gulp.task('closure', closureTasks);
 
 gulp.task('debug', debugTasks);

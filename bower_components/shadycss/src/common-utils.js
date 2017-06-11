@@ -10,8 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 'use strict';
 
-import { MIXIN_MATCH, VAR_ASSIGN } from './common-regex'
-
 /**
  * @param {Element} element
  * @param {Object=} properties
@@ -43,17 +41,4 @@ export function getComputedStyleValue(element, property) {
   } else {
     return value.trim();
   }
-}
-
-/**
- * return true if `cssText` contains a mixin definition or consumption
- * @param {string} cssText
- * @return {boolean}
- */
-export function detectMixin(cssText) {
-  const has = MIXIN_MATCH.test(cssText) || VAR_ASSIGN.test(cssText);
-  // reset state of the regexes
-  MIXIN_MATCH.lastIndex = 0;
-  VAR_ASSIGN.lastIndex = 0;
-  return has;
 }

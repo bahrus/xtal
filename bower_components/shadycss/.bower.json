@@ -1,22 +1,14 @@
 {
   "name": "shadycss",
   "main": "scoping-shim.min.js",
-  "description": "Styling helpers for ShadyDOM",
   "authors": [
-    "The Polymer Project Authors (https://polymer.github.io/AUTHORS.txt)"
+    "The Polymer Authors"
   ],
   "license": "BSD-3-Clause",
   "keywords": [
-    "shady-css",
-    "shadycss",
-    "shadow-css",
-    "shadowcss",
-    "web-components",
-    "webcomponents",
-    "polyfill",
-    "shim"
+    "webcomponents"
   ],
-  "homepage": "https://webcomponents.org/polyfills",
+  "homepage": "https://github.com/webcomponents/shadycss",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -27,20 +19,20 @@
   "devDependencies": {
     "web-component-tester": "^5",
     "es6-promise": "stefanpenner/es6-promise#^4.0.0",
-    "template": "webcomponents/template#^1.0.0-rc.1",
-    "html-imports": "webcomponents/html-imports#^1.0.0-rc.2",
-    "custom-elements": "webcomponents/custom-elements#^1.0.0-rc.1",
-    "shadydom": "webcomponents/shadydom#^1.0.0-rc.2",
-    "webcomponents-platform": "webcomponents/webcomponents-platform#^1.0.0-rc.1"
+    "template": "webcomponents/template#master",
+    "html-imports": "webcomponents/html-imports#master",
+    "custom-elements": "webcomponents/custom-elements#master",
+    "shadydom": "webcomponents/shadydom#master",
+    "webcomponents-platform": "webcomponents/webcomponents-platform#master"
   },
-  "version": "1.0.0",
-  "_release": "1.0.0",
+  "version": "1.0.0-rc.1",
+  "_release": "1.0.0-rc.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.0",
-    "commit": "584418d811076ea95b42fa59642649cf24a2a01d"
+    "tag": "v1.0.0-rc.1",
+    "commit": "69704abae0214e3a6516d10ddad44aca878b1c71"
   },
   "_source": "https://github.com/webcomponents/shadycss.git",
-  "_target": "^v1.0.0",
+  "_target": "v1.0.0-rc.1",
   "_originalSource": "webcomponents/shadycss"
 }

@@ -23,23 +23,21 @@ let resolveFn;
  * @param {?function()} callback
  */
 export default function documentWait(callback) {
-  requestAnimationFrame(function() {
-    if (whenReady) {
-      whenReady(callback)
-    } else {
-      if (!readyPromise) {
-        readyPromise = new Promise((resolve) => {resolveFn = resolve});
-        if (document.readyState === 'complete') {
-          resolveFn();
-        } else {
-          document.addEventListener('readystatechange', () => {
-            if (document.readyState === 'complete') {
-              resolveFn();
-            }
-          });
-        }
+  if (whenReady) {
+    whenReady(callback)
+  } else {
+    if (!readyPromise) {
+      readyPromise = new Promise((resolve) => {resolveFn = resolve});
+      if (document.readyState === 'complete') {
+        resolveFn();
+      } else {
+        document.addEventListener('readystatechange', () => {
+          if (document.readyState === 'complete') {
+            resolveFn();
+          }
+        });
       }
-      readyPromise.then(function(){ callback && callback(); });
     }
-  });
+    readyPromise.then(function(){ callback && callback(); });
+  }
 }

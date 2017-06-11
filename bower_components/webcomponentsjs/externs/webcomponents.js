@@ -18,5 +18,6 @@ var define;
 var module;
 var exports;
 
+var customElements;
 var ShadyDOM;
 var WebComponents;

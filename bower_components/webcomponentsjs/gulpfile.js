@@ -23,9 +23,8 @@ const del = require('del');
 const bower = require('bower');
 const runseq = require('run-sequence');
 const closure = require('google-closure-compiler').gulp();
-const babel = require('rollup-plugin-babel');
 
-function debugify(sourceName, fileName, extraRollupOptions) {
+function debugify(sourceName, fileName, needsContext) {
   if (!fileName)
     fileName = sourceName;
 
@@ -35,7 +34,11 @@ function debugify(sourceName, fileName, extraRollupOptions) {
     moduleName: 'webcomponentsjs'
   };
 
-  Object.assign(options, extraRollupOptions);
+  // The es6-promise polyfill needs to set the correct context.
+  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+  if (needsContext) {
+    options.context = 'window';
+  }
 
   return rollup(options)
   .pipe(source(`${sourceName}-index.js`), 'entrypoints')
@@ -117,10 +120,7 @@ gulp.task('debugify-hi-sd-ce', () => {
 });
 
 gulp.task('debugify-hi-sd-ce-pf', () => {
-  // The es6-promise polyfill needs to set the correct context.
-  // See https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-  const extraOptions = {context: 'window'};
-  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', extraOptions)
+  return debugify('webcomponents-hi-sd-ce-pf', 'webcomponents-lite', true)
 });
 
 gulp.task('debugify-sd-ce', () => {
@@ -147,25 +147,6 @@ gulp.task('closurify-sd-ce', () => {
   return closurify('webcomponents-sd-ce')
 });
 
-function singleLicenseComment() {
-  let hasLicense = false;
-  return (comment) => {
-    if (hasLicense) {
-      return false;
-    }
-    return hasLicense = /@license/.test(comment);
-  }
-}
-
-const babelOptions = {
-  presets: 'babili',
-  shouldPrintComment: singleLicenseComment()
-};
-
-gulp.task('debugify-ce-es5-adapter', () => {
-  return debugify('custom-elements-es5-adapter', '', {plugins: [babel(babelOptions)]});
-});
-
 gulp.task('refresh-bower', () => {
   return del('bower_components').then(() => {
     let resolve, reject;
@@ -180,8 +161,8 @@ gulp.task('default', (cb) => {
 });
 
 gulp.task('clean-builds', () => {
-  return del(['custom-elements-es5-adapter.js{,.map}', 'webcomponents*.js{,.map}', '!webcomponents-loader.js']);
-});
+  return del(['webcomponents*.js{,.map}', '!webcomponents-loader.js']);
+})
 
 gulp.task('debug', (cb) => {
   const tasks = [
@@ -189,8 +170,7 @@ gulp.task('debug', (cb) => {
     'debugify-hi-ce',
     'debugify-hi-sd-ce',
     'debugify-hi-sd-ce-pf',
-    'debugify-sd-ce',
-    'debugify-ce-es5-adapter'
+    'debugify-sd-ce'
   ];
   runseq('clean-builds', tasks, cb);
 });
@@ -201,8 +181,7 @@ gulp.task('closure', (cb) => {
     'closurify-hi-ce',
     'closurify-hi-sd-ce',
     'closurify-hi-sd-ce-pf',
-    'closurify-sd-ce',
-    'debugify-ce-es5-adapter'
+    'closurify-sd-ce'
   ];
   runseq('clean-builds', ...tasks, cb);
 });
