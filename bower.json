@@ -21,6 +21,7 @@
     "jquery-ui": "~1.8.23",
     "jquery.event": "threedubmedia/jquery.threedubmedia#2.2",
     "jquery-mousewheel": "jquery/jquery-mousewheel#3.0.6",
-    "iron-list": "PolymerElements/iron-list#^2.0.0"
+    "iron-list": "PolymerElements/iron-list#^2.0.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0"
   }
 }
