@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../bower_components/vaadin3_alpha/vaadin-grid.html">
+    <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+  </head>
+
+  <body>
+  <tree-grid></tree-grid>
+
+  <dom-module id="tree-grid">
+      <template>
+          <style>
+            img.flag {
+              height: 50px;
+              width: 75px;
+            }
+
+            vaadin-grid {
+              text-transform: none;
+              --vaadin-grid-cell: {
+                height: 50px;
+              };
+            }
+
+            span[file] {
+              margin-left: 16px;
+            }
+
+            paper-icon-button {
+              transition: transform 200ms linear;
+            }
+
+            paper-icon-button:not([expanded]) {
+              transform: rotate(-90deg)
+            }
+          </style>
+          <iron-ajax url="directory.json" auto last-response="{{data}}"></iron-ajax>
+          <vaadin-grid id="grid" aria-label="Dynamic Data Example" items="[[data]]" style="height:1024px">
+
+            <vaadin-grid-column>
+              <template class="header">
+                <span style="margin-left: 16px">Name</span>
+              </template>
+              <template>
+                <div style$="margin-left: calc([[_level(item.path)]] * 30px)">
+                  <paper-icon-button hidden="[[!item.children]]" icon="arrow-drop-down" on-tap="_toggle" expanded$="[[item.expanded]]"></paper-icon-button>
+                  <span file$="[[!item.children]]">[[item.name]]</span>
+                </div>
+              </template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column flex-grow="0" width="100px">
+              <template class="header">Size</template>
+              <template>[[item.size]]</template>
+            </vaadin-grid-column>
+
+          </vaadin-grid>
+        </template>
+        <script>
+          addEventListener('WebComponentsReady', function () {
+            Polymer({
+              is: 'tree-grid',
+
+              _level: function(path) {
+                return path && (path.replace('./').split('/').length - 1);
+              },
+
+              _toggle: function (e) {
+                var item = e.model.item;
+                var index = e.model.index;
+
+                item.expanded = !item.expanded;
+                this.$.grid.notifyPath('items.' + index + '.expanded', item.expanded);
+
+                if (item.expanded) {
+                  for (var i = 0; i < item.children.length; i++) {
+                    // faster to do than calling grid.splice which notifies on each call.
+                    this.$.grid.items.splice(index + 1 + i, 0, item.children[i]);
+                    this.$.grid.clearCache();
+                  }
+                } else {
+                  this.$.grid.splice('items', index + 1, item.children.length);
+                }
+              }
+            });
+          });
+        </script>
+      </dom-module>
+  </body>
+
+  
