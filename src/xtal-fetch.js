@@ -37,6 +37,10 @@ var xtal;
                             type: String,
                             observer: 'loadNewUrl'
                         },
+                        entities: {
+                            type: Array,
+                            observer: 'loadNewUrl'
+                        },
                         /**
                          * The expression for where to place the result.
                          */
@@ -52,15 +56,28 @@ var xtal;
                         return;
                     if (this.href) {
                         const _this = this;
-                        fetch(this.href, this.reqInit).then(resp => {
-                            resp[_this.as]().then(val => {
-                                _this['_setResult'](val);
-                                if (typeof val === 'string' && this.insertResults) {
-                                    this.innerHTML = val;
-                                }
-                                //_this.notifyPath('result');
+                        if (this.href.indexOf(':id') > -1) {
+                            if (!this.entities)
+                                return;
+                            this.entities.forEach(entity => {
+                                const href = this.href.replace(':id', entity.id);
+                                fetch(this.href, this.reqInit).then(resp => {
+                                    resp[_this.as]().then(val => {
+                                        entity.result = val;
+                                    });
+                                });
                             });
-                        });
+                        }
+                        else {
+                            fetch(this.href, this.reqInit).then(resp => {
+                                resp[_this.as]().then(val => {
+                                    _this['_setResult'](val);
+                                    if (typeof val === 'string' && this.insertResults) {
+                                        this.innerHTML = val;
+                                    }
+                                });
+                            });
+                        }
                     }
                 }
                 connectedCallback() {
@@ -73,6 +90,10 @@ var xtal;
             }
             customElements.define(XtalFetch.is, XtalFetch);
         }
+        customElements.whenDefined('dom-module').then(() => {
+            console.log('dom-module loaded.  Polymer.Element = ');
+            console.log(Polymer.Element);
+        });
         customElements.whenDefined('xtal-ball').then(() => initXtalFetch());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
