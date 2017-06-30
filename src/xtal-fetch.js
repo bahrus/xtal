@@ -37,9 +37,19 @@ var xtal;
                             type: String,
                             observer: 'loadNewUrl'
                         },
+                        /**
+                         * An array of entities that have child entities available via a restful api
+                         */
                         entities: {
                             type: Array,
                             observer: 'loadNewUrl'
+                        },
+                        /**
+                         * Comma delimited list of tokens in the Rest path to replace from the entity
+                         */
+                        keys: {
+                            type: String,
+                            value: 'id'
                         },
                         /**
                          * The expression for where to place the result.
@@ -60,8 +70,13 @@ var xtal;
                             if (!this.entities)
                                 return;
                             this.entities.forEach(entity => {
-                                const href = this.href.replace(':id', entity.id);
-                                fetch(this.href, this.reqInit).then(resp => {
+                                const keys = this.keys.split(',');
+                                let href = this.href;
+                                for (const key of keys) {
+                                    href = href.replace(':' + key, entity[key]);
+                                }
+                                //const href = this.href.replace(':id', entity.id);
+                                fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
                                         entity.result = val;
                                     });

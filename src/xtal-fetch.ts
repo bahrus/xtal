@@ -3,13 +3,14 @@ module xtal.elements{
     //     credentials?: 'include' | 'omit'
     // }
     interface IXtalFetchProperties{
-        entities: string | polymer.PropObjectType,
+        entities: any[] | polymer.PropObjectType,
         reqInit: RequestInit| polymer.PropObjectType,
         href: string | polymer.PropObjectType,
         debounceTimeInMs: number | polymer.PropObjectType,
         as: string | polymer.PropObjectType,
         result: any | polymer.PropObjectType,
         insertResults: boolean | polymer.PropObjectType,
+        keys: string | polymer.PropObjectType,
     }
     function initXtalFetch(){
         class XtalFetch  extends xtal.elements['InitMerge'](Polymer.Element)  implements IXtalFetchProperties{
@@ -19,6 +20,7 @@ module xtal.elements{
             href: string;
             entities: any[];
             result: object;
+            keys;
             as = 'text';
             _initialized = false;
             debounceTimeInMs: number;
@@ -48,9 +50,19 @@ module xtal.elements{
                         type: String,
                         observer: 'loadNewUrl'
                     },
+                    /**
+                     * An array of entities that have child entities available via a restful api
+                     */
                     entities:{
                         type: Array,
                         observer: 'loadNewUrl'
+                    },
+                    /**
+                     * Comma delimited list of tokens in the Rest path to replace from the entity
+                     */
+                    keys:{
+                        type: String,
+                        value: 'id'
                     },
                     /**
                      * The expression for where to place the result.
@@ -70,8 +82,13 @@ module xtal.elements{
                     if(this.href.indexOf(':id') > -1){
                         if(!this.entities) return;
                         this.entities.forEach(entity => {
-                            const href = this.href.replace(':id', entity.id);
-                            fetch(this.href, this.reqInit).then(resp =>{
+                            const keys = this.keys.split(',');
+                            let href = this.href;
+                            for(const key of keys){
+                                href = href.replace(':' + key, entity[key]);
+                            }
+                            //const href = this.href.replace(':id', entity.id);
+                            fetch(href, this.reqInit).then(resp =>{
                                 resp[_this.as]().then(val =>{
                                     entity.result = val;
                                 });
