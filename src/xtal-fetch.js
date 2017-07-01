@@ -32,7 +32,7 @@ var xtal;
                          * A comma delimited list of keys to pluck from in-entities
                          */
                         forEach: {
-                            type: Boolean
+                            type: String
                         },
                         /**
                          * Base url
