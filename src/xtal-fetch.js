@@ -98,6 +98,7 @@ var xtal;
                                 }
                                 fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
+                                        entity[this.setPath] = val;
                                         const detail = {
                                             entity: entity,
                                             href: href
@@ -107,7 +108,6 @@ var xtal;
                                             bubbles: true,
                                             composed: true
                                         }));
-                                        entity[this.setPath] = val;
                                     });
                                 });
                             });

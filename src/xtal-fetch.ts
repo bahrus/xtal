@@ -17,10 +17,9 @@ module xtal.elements{
     function initXtalFetch(){
         class XtalFetch  extends xtal.elements['InitMerge'](Polymer.Element)  implements IXtalFetchProperties{
             /**
-            * Fired  when the watched object changes.  Consumers of this component subscribe to this event, 
-            * in order to apply transformers on the object.
+            * Fired  when a fetch has finished.
             *
-            * @event fetch-completed
+            * @event fetch-complete
             */
             reqInit: RequestInit;
             href: string; inEntities: any[]; result: object; forEach; fetch; setPath;
@@ -117,6 +116,7 @@ module xtal.elements{
                             }
                             fetch(href, this.reqInit).then(resp =>{
                                 resp[_this.as]().then(val =>{
+                                    entity[this.setPath] = val;
                                     const detail = {
                                         entity: entity,
                                         href: href
@@ -126,7 +126,6 @@ module xtal.elements{
                                         bubbles: true,
                                         composed: true
                                     } as CustomEventInit));
-                                    entity[this.setPath] = val;
                                 });
                             
                             })
