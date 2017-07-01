@@ -9,7 +9,7 @@
         <table width="100%">
             <tr>
                 <td valign="top" width="50%">
-                    <xtal-fetch href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
+                    <xtal-fetch  id="testing" href="generated.json" as="json" result="{{generatedJSON}}"></xtal-fetch>
                     <json-merge watch="[[generatedJSON]]" refs="[[test]]"  wrap-object-with-path="data" result="{{gridInfoAndData}}" hidden>
                         [
                             {   
@@ -53,11 +53,13 @@
     
     <script>
         customElements.whenDefined("xtal-ball").then(() =>{
+            const s = new Symbol();
             class Example1a extends xtal.elements.bootstrap(){
                 constructor(){
                     super();
                     this.test = {
                         testFormatter: function(row, cell, value, columnDef, dataContext){
+                            const t = s;
                             return -1;
                         }
                     };

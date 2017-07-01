@@ -3,24 +3,27 @@ module xtal.elements{
     //     credentials?: 'include' | 'omit'
     // }
     interface IXtalFetchProperties{
-        entities: any[] | polymer.PropObjectType,
-        reqInit: RequestInit| polymer.PropObjectType,
-        href: string | polymer.PropObjectType,
-        debounceTimeInMs: number | polymer.PropObjectType,
         as: string | polymer.PropObjectType,
-        result: any | polymer.PropObjectType,
+        debounceTimeInMs: number | polymer.PropObjectType,
+        fetch: boolean | polymer.PropObjectType,
+        forEach: string | polymer.PropObjectType,
+        href: string | polymer.PropObjectType,
+        inEntities: any[] | polymer.PropObjectType,
         insertResults: boolean | polymer.PropObjectType,
-        keys: string | polymer.PropObjectType,
+        reqInit: RequestInit| polymer.PropObjectType,
+        result: any | polymer.PropObjectType,
+        setPath: string | polymer.PropObjectType,
     }
     function initXtalFetch(){
         class XtalFetch  extends xtal.elements['InitMerge'](Polymer.Element)  implements IXtalFetchProperties{
-            reqInit = {
-                credentials: 'include'
-            } as RequestInit;
-            href: string;
-            entities: any[];
-            result: object;
-            keys;
+            /**
+            * Fired  when the watched object changes.  Consumers of this component subscribe to this event, 
+            * in order to apply transformers on the object.
+            *
+            * @event EntityInfoReceived
+            */
+            reqInit: RequestInit;
+            href: string; inEntities: any[]; result: object; forEach; fetch; setPath;
             as = 'text';
             _initialized = false;
             debounceTimeInMs: number;
@@ -37,33 +40,49 @@ module xtal.elements{
                     debounceTimeInMs:{
                         type: Number
                     },
-                    // reqInfo: {
-                    //     type: Object,
-                    // },
-                    reqInit:{
-                        type: Object
+                    /**
+                     * Needs to be true for any request to be made.
+                     */
+                    fetch:{
+                        type:Boolean,
+                        observer: 'loadNewUrl'
                     },
-                    insertResults:{
+                    /**
+                     * A comma delimited list of keys to pluck from in-entities
+                     */
+                    forEach:{
                         type: Boolean
                     },
+                    /**
+                     * Base url
+                     */
                     href:{
                         type: String,
                         observer: 'loadNewUrl'
                     },
                     /**
-                     * An array of entities that have child entities available via a restful api
+                     * An array of entities that forEach keys will be plucked from.
+                     * Fetch requests will be made iteratively (but in parallel) for each such entity
                      */
-                    entities:{
+                    inEntities:{
                         type: Array,
                         observer: 'loadNewUrl'
                     },
                     /**
-                     * Comma delimited list of tokens in the Rest path to replace from the entity
+                     * Place the contents of the fetch inside the tag itself.
                      */
-                    keys:{
-                        type: String,
-                        value: 'id'
+                    insertResults:{
+                        type: Boolean
                     },
+                    /**
+                     * The second parameter of the fetch call.  
+                     * See, e.g. https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch
+                     */
+                    reqInit:{
+                        type: Object
+                    },
+                    
+                    
                     /**
                      * The expression for where to place the result.
                      */
@@ -72,16 +91,26 @@ module xtal.elements{
                         notify: true,
                         readOnly: true
                     },
+
+                    /**
+                     * When looping through entities, calling fetch, place the results of the fetch in the path specified by this 
+                     * property.
+                     */
+                    setPath:{
+                        type: String,
+                        value: 'result'
+                    }
                 }
             }
             loadNewUrl(){
                 if(!this._initialized) return;
-                
+                if(!this.fetch) return;
                 if(this.href){
                     const _this = this;
-                    if(this.href.indexOf(':id') > -1){
-                        if(!this.entities) return;
-                        this.entities.forEach(entity => {
+                    if(this.forEach){
+                        if(!this.inEntities) return;
+                        this.inEntities.forEach(entity => {
+                            if(!this.keys) throw "Must specify keys"
                             const keys = this.keys.split(',');
                             let href = this.href;
                             for(const key of keys){
@@ -90,7 +119,7 @@ module xtal.elements{
                             //const href = this.href.replace(':id', entity.id);
                             fetch(href, this.reqInit).then(resp =>{
                                 resp[_this.as]().then(val =>{
-                                    entity.result = val;
+                                    entity[this.setPath] = val;
                                 });
                             
                             })

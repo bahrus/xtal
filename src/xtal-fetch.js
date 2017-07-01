@@ -6,9 +6,6 @@ var xtal;
             class XtalFetch extends xtal.elements['InitMerge'](Polymer.Element) {
                 constructor() {
                     super(...arguments);
-                    this.reqInit = {
-                        credentials: 'include'
-                    };
                     this.as = 'text';
                     this._initialized = false;
                 }
@@ -24,32 +21,46 @@ var xtal;
                         debounceTimeInMs: {
                             type: Number
                         },
-                        // reqInfo: {
-                        //     type: Object,
-                        // },
-                        reqInit: {
-                            type: Object
+                        /**
+                         * Needs to be true for any request to be made.
+                         */
+                        fetch: {
+                            type: Boolean,
+                            observer: 'loadNewUrl'
                         },
-                        insertResults: {
+                        /**
+                         * A comma delimited list of keys to pluck from in-entities
+                         */
+                        forEach: {
                             type: Boolean
                         },
+                        /**
+                         * Base url
+                         */
                         href: {
                             type: String,
                             observer: 'loadNewUrl'
                         },
                         /**
-                         * An array of entities that have child entities available via a restful api
+                         * An array of entities that forEach keys will be plucked from.
+                         * Fetch requests will be made iteratively (but in parallel) for each such entity
                          */
-                        entities: {
+                        inEntities: {
                             type: Array,
                             observer: 'loadNewUrl'
                         },
                         /**
-                         * Comma delimited list of tokens in the Rest path to replace from the entity
+                         * Place the contents of the fetch inside the tag itself.
                          */
-                        keys: {
-                            type: String,
-                            value: 'id'
+                        insertResults: {
+                            type: Boolean
+                        },
+                        /**
+                         * The second parameter of the fetch call.
+                         * See, e.g. https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch
+                         */
+                        reqInit: {
+                            type: Object
                         },
                         /**
                          * The expression for where to place the result.
@@ -59,17 +70,29 @@ var xtal;
                             notify: true,
                             readOnly: true
                         },
+                        /**
+                         * When looping through entities, calling fetch, place the results of the fetch in the path specified by this
+                         * property.
+                         */
+                        setPath: {
+                            type: String,
+                            value: 'result'
+                        }
                     };
                 }
                 loadNewUrl() {
                     if (!this._initialized)
                         return;
+                    if (!this.fetch)
+                        return;
                     if (this.href) {
                         const _this = this;
-                        if (this.href.indexOf(':id') > -1) {
-                            if (!this.entities)
+                        if (this.forEach) {
+                            if (!this.inEntities)
                                 return;
-                            this.entities.forEach(entity => {
+                            this.inEntities.forEach(entity => {
+                                if (!this.keys)
+                                    throw "Must specify keys";
                                 const keys = this.keys.split(',');
                                 let href = this.href;
                                 for (const key of keys) {
@@ -78,7 +101,7 @@ var xtal;
                                 //const href = this.href.replace(':id', entity.id);
                                 fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
-                                        entity.result = val;
+                                        entity[this.setPath] = val;
                                     });
                                 });
                             });
