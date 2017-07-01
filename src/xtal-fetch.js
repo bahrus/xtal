@@ -98,6 +98,15 @@ var xtal;
                                 }
                                 fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
+                                        const detail = {
+                                            entity: entity,
+                                            href: href
+                                        };
+                                        this.dispatchEvent(new CustomEvent('fetch-complete', {
+                                            detail: detail,
+                                            bubbles: true,
+                                            composed: true
+                                        }));
                                         entity[this.setPath] = val;
                                     });
                                 });

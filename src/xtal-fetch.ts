@@ -20,7 +20,7 @@ module xtal.elements{
             * Fired  when the watched object changes.  Consumers of this component subscribe to this event, 
             * in order to apply transformers on the object.
             *
-            * @event EntityInfoReceived
+            * @event fetch-completed
             */
             reqInit: RequestInit;
             href: string; inEntities: any[]; result: object; forEach; fetch; setPath;
@@ -117,6 +117,15 @@ module xtal.elements{
                             }
                             fetch(href, this.reqInit).then(resp =>{
                                 resp[_this.as]().then(val =>{
+                                    const detail = {
+                                        entity: entity,
+                                        href: href
+                                    }
+                                    this.dispatchEvent(new CustomEvent('fetch-complete', {
+                                        detail: detail,
+                                        bubbles: true,
+                                        composed: true
+                                    } as CustomEventInit));
                                     entity[this.setPath] = val;
                                 });
                             
