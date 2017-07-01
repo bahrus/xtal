@@ -91,14 +91,11 @@ var xtal;
                             if (!this.inEntities)
                                 return;
                             this.inEntities.forEach(entity => {
-                                if (!this.keys)
-                                    throw "Must specify keys";
-                                const keys = this.keys.split(',');
+                                const keys = this.forEach.split(',');
                                 let href = this.href;
                                 for (const key of keys) {
                                     href = href.replace(':' + key, entity[key]);
                                 }
-                                //const href = this.href.replace(':id', entity.id);
                                 fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
                                         entity[this.setPath] = val;
