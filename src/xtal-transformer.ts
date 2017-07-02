@@ -17,11 +17,12 @@ module xtal.elements{
         * and applies a JavaScript method in the host custom element via event handling. 
         */
         class XtalTransformer extends Polymer.Element implements XtalTransformerProperties{
+            
             /**
             * Fired  when the watched object changes.  Consumers of this component subscribe to this event, 
-            * in order to apply transofmers on the object.
+            * in order to apply transforms on the object, and pass back other.
             *
-            * @event transform
+            * @event ready-for-processing
             */
             static get is(){return 'xtal-transformer';}
             static get properties() : XtalTransformerProperties{
@@ -70,7 +71,7 @@ module xtal.elements{
                 };
                 var detail = {obj: newVal, arg: arg};
                 //this.fire('transform', detail);
-                this.dispatchEvent(new CustomEvent('transform', {
+                this.dispatchEvent(new CustomEvent('ready-for-processing', {
                     detail: detail
                 }));
                 this['_setResult'](detail.obj);
@@ -81,6 +82,6 @@ module xtal.elements{
 
         customElements.define(XtalTransformer.is, XtalTransformer);        
     }
-    customElements.whenDefined('xtal-ball').then(() =>initXtalTransformer());
+    customElements.whenDefined('poly-prep').then(() =>initXtalTransformer());
 
 }

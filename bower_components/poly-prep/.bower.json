@@ -1,0 +1,28 @@
+{
+  "name": "poly-prep",
+  "description": "Helper elements to load polymer elements asynchronously.",
+  "main": "poly-prep.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  },
+  "homepage": "https://github.com/bahrus/poly-prep",
+  "version": "0.0.6",
+  "_release": "0.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.6",
+    "commit": "ad9f2603688d419bea763044d5aa45115f62bb9c"
+  },
+  "_source": "https://github.com/bahrus/poly-prep.git",
+  "_target": "^0.0.6",
+  "_originalSource": "bahrus/poly-prep",
+  "_direct": true
+}

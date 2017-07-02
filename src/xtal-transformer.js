@@ -10,9 +10,9 @@ var xtal;
             class XtalTransformer extends Polymer.Element {
                 /**
                 * Fired  when the watched object changes.  Consumers of this component subscribe to this event,
-                * in order to apply transofmers on the object.
+                * in order to apply transforms on the object, and pass back other.
                 *
-                * @event transform
+                * @event ready-for-processing
                 */
                 static get is() { return 'xtal-transformer'; }
                 static get properties() {
@@ -52,7 +52,7 @@ var xtal;
                     };
                     var detail = { obj: newVal, arg: arg };
                     //this.fire('transform', detail);
-                    this.dispatchEvent(new CustomEvent('transform', {
+                    this.dispatchEvent(new CustomEvent('ready-for-processing', {
                         detail: detail
                     }));
                     this['_setResult'](detail.obj);
@@ -60,7 +60,7 @@ var xtal;
             }
             customElements.define(XtalTransformer.is, XtalTransformer);
         }
-        customElements.whenDefined('xtal-ball').then(() => initXtalTransformer());
+        customElements.whenDefined('poly-prep').then(() => initXtalTransformer());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-transformer.js.map
