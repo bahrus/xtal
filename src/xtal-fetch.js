@@ -8,6 +8,10 @@ var xtal;
                     super(...arguments);
                     this.as = 'text';
                     this._initialized = false;
+                    this._cachedResults = {};
+                }
+                get cachedResults() {
+                    return this._cachedResults;
                 }
                 static get is() { return 'xtal-fetch'; }
                 static get properties() {
@@ -17,6 +21,12 @@ var xtal;
                          */
                         as: {
                             type: String
+                        },
+                        /**
+                         *
+                         */
+                        cacheResults: {
+                            type: Boolean
                         },
                         debounceTimeInMs: {
                             type: Number
@@ -96,8 +106,15 @@ var xtal;
                                 for (const key of keys) {
                                     href = href.replace(':' + key, entity[key]);
                                 }
+                                if (this.cacheResults) {
+                                    if (this.cachedResults[href]) {
+                                        return;
+                                    }
+                                }
                                 fetch(href, this.reqInit).then(resp => {
                                     resp[_this.as]().then(val => {
+                                        if (this.cacheResults)
+                                            this.cachedResults[href] = val;
                                         entity[this.setPath] = val;
                                         const detail = {
                                             entity: entity,
@@ -113,8 +130,16 @@ var xtal;
                             });
                         }
                         else {
+                            if (this.cacheResults) {
+                                if (this.cachedResults[this.href]) {
+                                    return;
+                                }
+                            }
                             fetch(this.href, this.reqInit).then(resp => {
                                 resp[_this.as]().then(val => {
+                                    if (this.cachedResults) {
+                                        this.cachedResults[this.href] = val;
+                                    }
                                     _this['_setResult'](val);
                                     if (typeof val === 'string' && this.insertResults) {
                                         this.innerHTML = val;

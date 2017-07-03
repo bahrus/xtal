@@ -4,6 +4,7 @@ module xtal.elements{
     // }
     interface IXtalFetchProperties{
         as: string | polymer.PropObjectType,
+        cacheResults: boolean | polymer.PropObjectType,
         debounceTimeInMs: number | polymer.PropObjectType,
         fetch: boolean | polymer.PropObjectType,
         forEach: string | polymer.PropObjectType,
@@ -22,9 +23,13 @@ module xtal.elements{
             * @event fetch-complete
             */
             reqInit: RequestInit;
-            href: string; inEntities: any[]; result: object; forEach; fetch; setPath;
+            href: string; inEntities: any[]; result: object; forEach; fetch; setPath;cacheResults;
             as = 'text';
             _initialized = false;
+            private _cachedResults: {[key:string] : any} = {};
+            get cachedResults(){
+                return this._cachedResults;
+            }
             debounceTimeInMs: number;
             insertResults: boolean;
             static get is(){return 'xtal-fetch';}
@@ -35,6 +40,12 @@ module xtal.elements{
                      */
                     as:{
                         type: String
+                    },
+                    /**
+                     * 
+                     */
+                    cacheResults:{
+                        type: Boolean
                     },
                     debounceTimeInMs:{
                         type: Number
@@ -114,8 +125,14 @@ module xtal.elements{
                             for(const key of keys){
                                 href = href.replace(':' + key, entity[key]);
                             }
+                            if(this.cacheResults){
+                                if(this.cachedResults[href]){
+                                    return;
+                                }
+                            }
                             fetch(href, this.reqInit).then(resp =>{
                                 resp[_this.as]().then(val =>{
+                                    if(this.cacheResults) this.cachedResults[href] = val;
                                     entity[this.setPath] = val;
                                     const detail = {
                                         entity: entity,
@@ -131,8 +148,16 @@ module xtal.elements{
                             })
                         })
                     }else{
+                        if(this.cacheResults){
+                            if(this.cachedResults[this.href]){
+                                return;
+                            }
+                        }
                         fetch(this.href, this.reqInit).then(resp =>{
                             resp[_this.as]().then(val =>{
+                                if(this.cachedResults){
+                                    this.cachedResults[this.href] = val;
+                                }
                                 _this['_setResult'](val);
                                 if(typeof val === 'string' && this.insertResults){
                                     this.innerHTML = val;
