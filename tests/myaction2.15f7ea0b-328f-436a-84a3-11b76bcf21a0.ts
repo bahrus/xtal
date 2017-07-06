@@ -1,0 +1,1 @@
+type myGuidTest2 = '15f7ea0b-328f-436a-84a3-11b76bcf21a0'
