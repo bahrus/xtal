@@ -39,14 +39,14 @@
             }
           </style>
           <iron-ajax url="directory.json" auto last-response="{{data}}"></iron-ajax>
-          <vaadin-grid id="grid" aria-label="Dynamic Data Example" items="[[data]]" style="height:1024px">
+          <vaadin-grid id="grid" aria-label="Dynamic Data Example" items="[[data]]" >
 
             <vaadin-grid-column>
               <template class="header">
                 <span style="margin-left: 16px">Name</span>
               </template>
               <template>
-                <div style$="margin-left: calc([[_level(item.path)]] * 30px)">
+                <div data-test="[[index]]" style$="margin-left: calc([[_level(item.path)]] * 30px)">
                   <paper-icon-button hidden="[[!item.children]]" icon="arrow-drop-down" on-tap="_toggle" expanded$="[[item.expanded]]"></paper-icon-button>
                   <span file$="[[!item.children]]">[[item.name]]</span>
                 </div>
@@ -55,7 +55,7 @@
 
             <vaadin-grid-column flex-grow="0" width="100px">
               <template class="header">Size</template>
-              <template>[[item.size]]</template>
+              <template>[[index]].[[item.size]]</template>
             </vaadin-grid-column>
 
           </vaadin-grid>
@@ -68,6 +68,8 @@
               _level: function(path) {
                 return path && (path.replace('./').split('/').length - 1);
               },
+
+              
 
               _toggle: function (e) {
                 var item = e.model.item;
@@ -90,6 +92,12 @@
           });
         </script>
       </dom-module>
+      <script>
+        var vaadinGrdi = document.querySelector('vaadin-grid');
+        vaadinGrdi.addEventListener('scroll', e =>{
+          console.log('in scroller');
+        })
+      </script>
   </body>
 
   

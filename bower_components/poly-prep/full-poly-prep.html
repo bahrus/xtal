@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<link async rel="import" href="../polymer/polymer.html" onload="xtal.elements.bootstrap()">
+<link async rel="import" href="../polymer/polymer.html" onload="xtal.elements.fullBootstrap()">
 <!--<dom-module id="poly-prep">
     <template>
         i am here
@@ -26,11 +26,23 @@
                         const template = this.querySelector('template');
                         if(!template) return;
                         var clone = document.importNode(template.content, true);
-                        const nd = this.appendChild(clone);
+                        var childNodes = clone.childNodes;
+                        setTimeout(() =>{
+                            for(var i = 0, ii = childNodes.length; i < ii; i++){
+                                var childNode = childNodes[i];
+                                if(childNode.tagName === "LINK"){
+                                    var href = childNode.getAttribute('href');
+                                    var resolvedHref = this.resolveUrl(href);
+                                    Polymer.importHref(resolvedHref);
+                                }
+                            }
+                        }, 50);
+                        
+                        //const nd = this.appendChild(clone);
                     }
                 }
-                customElements.define('full-poly-prep', PolyPrep);
-                return PolyPrep;
+                customElements.define('full-poly-prep', FullPolyPrep);
+                return FullPolyPrep;
             }
             function debounce(callback, wait, context = this) {
                 //from https://gist.github.com/beaucharman/1f93fdd7c72860736643d1ab274fee1a
@@ -91,7 +103,7 @@
                     }
                 }
             }
-            elements.bootstrap = bootstrap;
+            elements.fullBootstrap = bootstrap;
             elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
             elements.debounce = debounce;
             elements.InitMerge = InitMerge;

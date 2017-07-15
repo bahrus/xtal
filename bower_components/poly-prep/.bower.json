@@ -14,15 +14,14 @@
     "polymer": "^2.0.0"
   },
   "homepage": "https://github.com/bahrus/poly-prep",
-  "version": "0.0.6",
-  "_release": "0.0.6",
+  "version": "0.0.12",
+  "_release": "0.0.12",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.6",
-    "commit": "ad9f2603688d419bea763044d5aa45115f62bb9c"
+    "tag": "0.0.12",
+    "commit": "01578671a457c5f26d9a0c73ddaf1001eb85ecb7"
   },
   "_source": "https://github.com/bahrus/poly-prep.git",
-  "_target": "^0.0.6",
-  "_originalSource": "bahrus/poly-prep",
-  "_direct": true
+  "_target": "^0.0.12",
+  "_originalSource": "bahrus/poly-prep"
 }

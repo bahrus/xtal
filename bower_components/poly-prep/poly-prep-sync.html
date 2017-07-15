@@ -1,23 +1,21 @@
 <!DOCTYPE html>
+<link rel="import" href="../polymer/polymer-element.html">
+<!--<dom-module id="poly-prep">
+    <template>
+        i am here
+         <slot></slot>
+    </template>
+   
+</dom-module>-->
 <script>
     var xtal;
     (function (xtal) {
         var elements;
         (function (elements) {
             function bootstrap() {
-                let pp = customElements.get('poly-prep');
+                let pp = customElements.get('poly-prep-sync');
                 if(pp) return pp;
-                /**
-                * `poly-prep`
-                * Load contents inside the template tag of poly-prep only after polymer-element.html has loaded.
-                * `full-poly-prep` won't load the contents until polymer.html has loaded.
-                *  This allows components that assume the polymer library is already loaded, to be loaded asynchronously.
-                *
-                * @customElement
-                * @polymer
-                * @demo demo/index.html
-                */
-                class PolyPrep extends Polymer.Element {
+                class PolyPrepSync extends Polymer.Element {
                     // _attachDom(dom) {
                     //     if (dom) {
                     //         return this.appendChild(dom);
@@ -28,25 +26,11 @@
                         const template = this.querySelector('template');
                         if(!template) return;
                         var clone = document.importNode(template.content, true);
-                        var childNodes = clone.childNodes;
-                        setTimeout(() =>{
-                            for(var i = 0, ii = childNodes.length; i < ii; i++){
-                                var childNode = childNodes[i];
-                                if(childNode.tagName === "LINK"){
-                                    var href = childNode.getAttribute('href');
-                                    var resolvedHref = this.resolveUrl(href);
-                                    var link = document.createElement('link');
-                                    link.setAttribute('rel', 'import');
-                                    link.setAttribute('href', resolvedHref);
-                                    document.head.appendChild(link);
-                                    //Polymer.importHref(resolvedHref);
-                                }
-                            }
-                        }, 50);
+                        const nd = this.appendChild(clone);
                     }
                 }
-                customElements.define('poly-prep', PolyPrep);
-                return PolyPrep;
+                customElements.define('poly-prep-sync', PolyPrepSync);
+                return PolyPrepSync;
             }
             function debounce(callback, wait, context = this) {
                 //from https://gist.github.com/beaucharman/1f93fdd7c72860736643d1ab274fee1a
@@ -107,12 +91,11 @@
                     }
                 }
             }
-            elements.bootstrap = bootstrap;
+            elements.syncBootstrap = bootstrap;
             elements.downloadJSFilesInParallelButLoadInSequence = downloadJSFilesInParallelButLoadInSequence;
             elements.debounce = debounce;
             elements.InitMerge = InitMerge;
-            
+            bootstrap();
         })(elements = xtal.elements || (xtal.elements = {}));
     })(xtal || (xtal = {}));
 </script>
-<link async rel="import" href="../polymer/polymer-element.html" onload="xtal.elements.bootstrap()">

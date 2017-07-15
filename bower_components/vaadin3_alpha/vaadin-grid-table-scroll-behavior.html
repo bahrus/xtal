@@ -151,6 +151,7 @@
     },
 
     _onWheel: function(e) {
+      console.log('_onWheel');
       if (e.ctrlKey || this._hasScrolledAncestor(e.target, e.deltaX, e.deltaY)) {
         return;
       }
@@ -204,6 +205,7 @@
      * items in the viewport and recycle tiles as needed.
      */
     _scrollHandler: function(e) {
+      console.log('_scrollHandler');
       // clamp the `scrollTop` value
       var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
       var delta = scrollTop - this._scrollPosition;
@@ -265,7 +267,7 @@
         var bottomSpace = physicalBottom - scrollBottom;
         var virtualEnd = this._virtualEnd;
         var lastVirtualItemIndex = this._virtualCount - 1;
-
+        console.log('lastvirtualitemindex = ' + lastVirtualItemIndex);
         recycledTileSet = [];
 
         kth = this._physicalStart;
@@ -376,19 +378,21 @@
       var body = Polymer.dom(this.$.items);
       var items = body.querySelectorAll('.vaadin-grid-row');
       var _adjustedVirtualStart = this._virtualStart + this._vidxOffset;
-
+      //console.log('_adjustedVirtualStart = ' + _adjustedVirtualStart);
       // DOM index of the element with the lowest index
       var physicalIndexOfFirst = items.length - (items[0].index - _adjustedVirtualStart);
-
+      //console.log('physicalIndexOfFirst = ' + physicalIndexOfFirst);
       // Reorder the DOM elements
       if (physicalIndexOfFirst < items.length / 2) {
         // Append all the preceding elements after the last element
         for (var i = 0; i < physicalIndexOfFirst; i++) {
+          console.log('appending item ' + i)
           body.appendChild(items[i]);
         }
       } else {
         // Prepend all the trailing elements before the first element
         for (var j = physicalIndexOfFirst; j < items.length; j++) {
+          console.log('insertingBefore ' + j);
           body.insertBefore(items[j], items[0]);
         }
       }
