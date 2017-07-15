@@ -28,7 +28,8 @@
     "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^2.0.0",
     "wow-tabs": "matthewp/wow-tabs#^1.0.0",
     "poly-prep": "bahrus/poly-prep#^0.0.6",
-    "xtal-in-hash": "bahrus/xtal-in-hash#^0.0.3"
+    "xtal-in-hash": "bahrus/xtal-in-hash#^0.0.3",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0"
   },
   "resolutions": {
     "poly-prep": "^0.0.12"
