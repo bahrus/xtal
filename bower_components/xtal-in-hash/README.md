@@ -5,7 +5,7 @@
 
 Allow location.hash to provide an input channel for web components.  
 
-Click on demo link in lower left screen to see a demo.
+Because of the nature of this component, the best demo link to use is [this](http://rawgit.com/bahrus/xtal/master/bower_components/xtal-in-hash/demo/index.html).
 
 location.hash can serve as a useful way to pass properties to components.  It has these advantages:
 
@@ -39,8 +39,6 @@ In the case of a component being inside a nested iFrame, one can specify to use 
  *  Right hand side marker: ``` 
 
 This component parses the string inside the markers above using JSON.parse.  It then applies these properties to the child component(s) with attribute hash-tag. 
-
-[To be implemented]:
 
 Our next level of complexity is if we additionally want the binding to work the other way -- if, in the course of the application life cycle, we want those changes to reflect back to location.hash, then we modify the markup to look like this:
 

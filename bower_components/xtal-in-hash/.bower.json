@@ -15,15 +15,14 @@
     "polymer": "^2.0.0"
   },
   "homepage": "https://github.com/bahrus/xtal-in-hash",
-  "version": "0.0.3",
-  "_release": "0.0.3",
+  "version": "0.0.6",
+  "_release": "0.0.6",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.3",
-    "commit": "f0f2e304c0a2e9f7fd90d0862b1e05457a7fbf20"
+    "tag": "0.0.6",
+    "commit": "11045feb6d52243085fc666cc03421f41cfe53c1"
   },
   "_source": "https://github.com/bahrus/xtal-in-hash.git",
-  "_target": "^0.0.3",
-  "_originalSource": "bahrus/xtal-in-hash",
-  "_direct": true
+  "_target": "^0.0.6",
+  "_originalSource": "bahrus/xtal-in-hash"
 }
