@@ -22,7 +22,7 @@ The `items` property specifies an array of list item data.
 For performance reasons, not every item in the list is rendered at once;
 instead a small subset of actual template elements *(enough to fill the viewport)*
 are rendered and reused as the user scrolls. As such, it is important that all
-state of the list template be bound to the model driving it, since the view may
+state of the list template is bound to the model driving it, since the view may
 be reused with a new model at any time. Particularly, any state that may change
 as the result of a user interaction with the list item must be bound to the model
 to avoid view state inconsistency.
@@ -292,6 +292,7 @@ will only render 20.
 
   /* Polymer.OptionalMutableDataBehavior is only available with Polymer 2.0. */
   if (!Polymer.OptionalMutableDataBehavior) {
+    /* @polymerBehavior */
     Polymer.OptionalMutableDataBehavior = {};
   }
 
@@ -359,7 +360,8 @@ will only render 20.
       grid: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: '_gridChanged'
       },
 
       /**
@@ -629,7 +631,8 @@ will only render 20.
      * The largest n-th value for an item such that it can be rendered in `_physicalStart`.
      */
     get _maxVirtualStart() {
-      return Math.max(0, this._virtualCount - this._physicalCount);
+      var virtualCount = this._convertIndexToCompleteRow(this._virtualCount);
+      return Math.max(0, virtualCount - this._physicalCount);
     },
 
     set _virtualStart(val) {
@@ -765,13 +768,6 @@ will only render 20.
       return Math.ceil(this._physicalCount / this._itemsPerRow);
     },
 
-    /**
-     * The parent node for the _userTemplate.
-     */
-    get _itemsParent() {
-      return Polymer.dom(Polymer.dom(this._userTemplate).parentNode);
-    },
-
     get _scrollOffset() {
       return this._scrollerPaddingTop + this.scrollOffset;
     },
@@ -798,7 +794,7 @@ will only render 20.
      */
     _setOverflow: function(scrollTarget) {
       this.style.webkitOverflowScrolling = scrollTarget === this ? 'touch' : '';
-      this.style.overflow = scrollTarget === this ? 'auto' : '';
+      this.style.overflowY = scrollTarget === this ? 'auto' : '';
       // Clear cache.
       this._lastVisibleIndexVal = null;
       this._firstVisibleIndexVal = null;
@@ -973,6 +969,14 @@ will only render 20.
     _increasePoolIfNeeded: function(count) {
       var nextPhysicalCount = this._clamp(this._physicalCount + count,
           DEFAULT_PHYSICAL_COUNT, this._virtualCount - this._virtualStart);
+      nextPhysicalCount = this._convertIndexToCompleteRow(nextPhysicalCount);
+      if (this.grid) {
+        var correction = nextPhysicalCount % this._itemsPerRow;
+        if (correction && nextPhysicalCount - correction <= this._physicalCount) {
+          nextPhysicalCount += this._itemsPerRow;
+        }
+        nextPhysicalCount -= correction;
+      }
       var delta = nextPhysicalCount - this._physicalCount;
       var nextIncrease = Math.round(this._physicalCount * 0.5);
 
@@ -997,7 +1001,9 @@ will only render 20.
         this._templateCost = (window.performance.now() - ts) / delta;
         nextIncrease = Math.round(this._physicalCount * 0.5);
       }
-      if (this._virtualEnd === this._virtualCount - 1 || nextIncrease === 0) {
+      // The upper bounds is not fixed when dealing with a grid that doesn't
+      // fill it's last row with the exact number of items per row.
+      if (this._virtualEnd >= this._virtualCount - 1 || nextIncrease === 0) {
         // Do nothing.
       } else if (!this._isClientFull()) {
         this._debounceRender(
@@ -1058,6 +1064,13 @@ will only render 20.
       this.templatize(this._userTemplate, this.mutableData);
     },
 
+    _gridChanged: function(newGrid, oldGrid) {
+      if (typeof oldGrid === 'undefined') return;
+      this.notifyResize();
+      Polymer.flush ? Polymer.flush() : Polymer.dom.flush();
+      newGrid && this._updateGridMetrics();
+    },
+
     /**
      * Called when the items have changed. That is, ressignments
      * to `items`, splices or updates to a single item.
@@ -1109,9 +1122,11 @@ will only render 20.
       var offscreenItem = this._offscreenFocusedItem;
       var isIndexRendered = this._isIndexRendered(idx);
       var inst;
+      var pidx;
 
       if (isIndexRendered) {
-        inst = this.modelForElement(this._physicalItems[this._getPhysicalIndex(idx)]);
+        pidx = this._getPhysicalIndex(idx);
+        inst = this.modelForElement(this._physicalItems[pidx]);
       } else if (offscreenItem) {
         inst = this.modelForElement(offscreenItem);
       }
@@ -1126,7 +1141,7 @@ will only render 20.
       inst._flushProperties && inst._flushProperties(true);
       // TODO(blasten): V1 doesn't do this and it's a bug
       if (isIndexRendered) {
-        this._updateMetrics([idx]);
+        this._updateMetrics([pidx]);
         this._positionItems();
         this._updateScrollerSize();
       }
@@ -1157,6 +1172,7 @@ will only render 20.
       // remove the current focused item
       if (this._focusedItem && this.modelForElement(this._focusedItem)[this.as] === item) {
         this._removeFocusedItem();
+        document.activeElement && document.activeElement.blur && document.activeElement.blur();
       }
     },
 
@@ -1257,7 +1273,9 @@ will only render 20.
         this._updateGridMetrics();
         this._physicalSize = Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
       } else {
+        oldPhysicalSize = (this._itemsPerRow === 1) ? oldPhysicalSize :  Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
         this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+        this._itemsPerRow = 1;
       }
       // Update the average if it measured something.
       if (this._physicalAverageCount !== prevAvgCount) {
@@ -1446,6 +1464,9 @@ will only render 20.
      */
     _resizeHandler: function() {
       this._debounceRender(function() {
+        // clear cached visible index.
+        this._firstVisibleIndexVal = null;
+        this._lastVisibleIndexVal = null;
         // Skip the resize event on touch devices when the address bar slides up.
         var delta = Math.abs(this._viewportHeight - this._scrollTargetHeight);
         this.updateViewportBoundaries();
@@ -1475,7 +1496,7 @@ will only render 20.
      * Selects the item at the given index in the items array.
      *
      * @method selectIndex
-     * @param {Object} index The item instance.
+     * @param {number} index The index of the item in the items array.
      */
     selectIndex: function(index) {
       if (index < 0 || index >= this._virtualCount) {
@@ -1668,6 +1689,16 @@ will only render 20.
       }
     },
 
+    /**
+     * Converts a random index to the index of the item that completes it's row.
+     * Allows for better order and fill computation when grid == true.
+     */
+    _convertIndexToCompleteRow: function(idx) {
+      // when grid == false _itemPerRow can be unset.
+      this._itemsPerRow = this._itemsPerRow || 1;
+      return this.grid ? Math.ceil(idx / this._itemsPerRow) * this._itemsPerRow : idx;
+    },
+
     _isIndexRendered: function(idx) {
       return idx >= this._virtualStart && idx <= this._virtualEnd;
     },
@@ -1678,6 +1709,10 @@ will only render 20.
 
     _getPhysicalIndex: function(idx) {
       return (this._physicalStart + (idx - this._virtualStart)) % this._physicalCount;
+    },
+
+    focusItem: function(idx) {
+      this._focusPhysicalItem(idx);
     },
 
     _focusPhysicalItem: function(idx) {
@@ -1779,7 +1814,7 @@ will only render 20.
       var focusedModel = this.modelForElement(this._focusedItem);
       var hasOffscreenFocusedItem = this._offscreenFocusedItem !== null;
       var fidx = this._focusedVirtualIndex;
-      if (!targetModel || !focusedModel) {
+      if (!targetModel) {
         return;
       }
       if (focusedModel === targetModel) {
@@ -1790,7 +1825,9 @@ will only render 20.
       } else {
         this._restoreFocusedItem();
         // Restore tabIndex for the currently focused item.
-        focusedModel.tabIndex = -1;
+        if (focusedModel) {
+          focusedModel.tabIndex = -1;
+        }
         // Set the tabIndex for the next focused item.
         targetModel.tabIndex = 0;
         fidx = targetModel[this.indexAs];
@@ -1841,7 +1878,7 @@ will only render 20.
       }
     },
 
-    _forwardProperty(inst, name, value) {
+    _forwardProperty: function(inst, name, value) {
       if (IS_V2) {
         inst._setPendingProperty(name, value);
       } else {

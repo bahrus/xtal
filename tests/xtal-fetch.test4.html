@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Xtal Fetch Test 4</title>
+    <link async rel="import" href="../bower_components/xtal-fetch/xtal-fetch.html" />
+    <script>
+        function initMyComponents() {
+            class MyComponent extends HTMLElement {
+                set myProp(val){
+                    this.innerHTML = val;
+                }
+            }
+            customElements.define('my-component', MyComponent);
+            class MyContainer extends Polymer.PropertyEffects(HTMLElement) {
+                
+            }
+            customElements.define('my-container', MyContainer);
+        }
+        customElements.whenDefined('xtal-fetch').then(() => initMyComponents());
+    </script>
+</head>
+
+<body>
+    <my-container>
+        <xtal-fetch fetch href="sampleHTMLFragment.html" result="{{myResult}}"></xtal-fetch>
+        <my-component my-prop="[[myResult]]"></my-component>
+    </my-container>
+</body>
+
+</html>
