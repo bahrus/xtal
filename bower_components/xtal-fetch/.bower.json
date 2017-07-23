@@ -1,0 +1,29 @@
+{
+  "name": "xtal-fetch",
+  "description": "Polymer based web component wrapper around the fetch api",
+  "main": "xtal-fetch.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "poly-prep": "bahrus/poly-prep#^0.0.11"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  },
+  "homepage": "https://github.com/bahrus/xtal-fetch",
+  "version": "0.0.8",
+  "_release": "0.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.8",
+    "commit": "534e9aa78f3d3a7b83723ef76e8cbfbd381dea5d"
+  },
+  "_source": "https://github.com/bahrus/xtal-fetch.git",
+  "_target": "^0.0.8",
+  "_originalSource": "bahrus/xtal-fetch",
+  "_direct": true
+}

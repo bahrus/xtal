@@ -29,7 +29,8 @@
     "wow-tabs": "matthewp/wow-tabs#^1.0.0",
     "poly-prep": "bahrus/poly-prep#^0.0.6",
     "xtal-in-hash": "bahrus/xtal-in-hash#^0.0.6",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0"
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "xtal-fetch": "bahrus/xtal-fetch#^0.0.8"
   },
   "resolutions": {
     "poly-prep": "^0.0.12"
