@@ -7,17 +7,17 @@ var xtal;
         var xslickgrid;
         (function (xslickgrid) {
             function filterNode(item, container, calledFilterTreeNodes) {
-                let treeNode = item;
-                const data = container._data;
+                var treeNode = item;
+                var data = container._data;
                 if (treeNode.parent !== null) {
-                    let parent = data[treeNode.parent];
-                    while (parent) {
-                        if (parent._collapsed) {
+                    var parent_1 = data[treeNode.parent];
+                    while (parent_1) {
+                        if (parent_1._collapsed) {
                             return false;
                         }
-                        if (parent.parent === null)
+                        if (parent_1.parent === null)
                             break;
-                        parent = data[parent.parent];
+                        parent_1 = data[parent_1.parent];
                     }
                 }
                 if (calledFilterTreeNodes) {
@@ -34,32 +34,32 @@ var xtal;
             xslickgrid.filterNode = filterNode;
             function linkChildren(container) {
                 //const nodeLookup: {[key: string] : ITreeNode[]} = {};
-                const hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
-                const data = container._data;
+                var hasCheckBoxSelector = container.useSlickCheckboxSelectColumn;
+                var data = container._data;
                 //children always come after parent
-                data.forEach(row => {
+                data.forEach(function (row) {
                     delete row.childIndices;
                     row._noOfCheckedChildren = 0;
                     row._noOfIndeterminateChildren = 0;
                     row._noOfUncheckedChildren = 0;
                 });
-                for (let i = 0, ii = data.length; i < ii; i++) {
-                    const node = data[i];
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    var node = data[i];
                     if (node.parent !== null) {
-                        const parent = data[node.parent];
-                        if (parent) {
-                            if (!parent.childIndices)
-                                parent.childIndices = [];
-                            parent.childIndices.push(i);
+                        var parent_2 = data[node.parent];
+                        if (parent_2) {
+                            if (!parent_2.childIndices)
+                                parent_2.childIndices = [];
+                            parent_2.childIndices.push(i);
                             if (hasCheckBoxSelector) {
                                 if (node._checked) {
-                                    parent._noOfCheckedChildren++;
+                                    parent_2._noOfCheckedChildren++;
                                 }
                                 else if (node._indeterminate) {
-                                    parent._noOfIndeterminateChildren++;
+                                    parent_2._noOfIndeterminateChildren++;
                                 }
                                 else {
-                                    parent._noOfUncheckedChildren++;
+                                    parent_2._noOfUncheckedChildren++;
                                 }
                             }
                         }
@@ -68,36 +68,36 @@ var xtal;
             }
             xslickgrid.linkChildren = linkChildren;
             function analyzeTreeNodes(itemFilter) {
-                const container = this;
+                var container = this;
                 linkChildren(container);
-                const data = container._data;
-                for (let i = 0, ii = data.length; i < ii; i++) {
-                    const node = data[i];
-                    const item = node;
+                var data = container._data;
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    var node = data[i];
+                    var item = node;
                     node._matchesFilter = itemFilter(item);
                     node._hasDescendantThatMatchesFilter = false;
                     node._hasAncestorThatMatchesFilter = false;
                     node._collapsed = true;
                     //if(node._matchesFilter) node._collapsed = true;
                 }
-                const nodesThatMatchFilter = data.filter(node => node._matchesFilter);
-                for (let i = 0, ii = nodesThatMatchFilter.length; i < ii; i++) {
-                    const node = nodesThatMatchFilter[i];
+                var nodesThatMatchFilter = data.filter(function (node) { return node._matchesFilter; });
+                for (var i = 0, ii = nodesThatMatchFilter.length; i < ii; i++) {
+                    var node = nodesThatMatchFilter[i];
                     markChildren(node, data);
                     if (node.parent !== null) {
-                        let parent = data[node.parent];
-                        while (parent) {
-                            if (parent._hasDescendantThatMatchesFilter)
+                        var parent_3 = data[node.parent];
+                        while (parent_3) {
+                            if (parent_3._hasDescendantThatMatchesFilter)
                                 break;
-                            parent._hasDescendantThatMatchesFilter = true;
-                            if (!parent._matchesFilter) {
-                                parent._collapsed = false;
+                            parent_3._hasDescendantThatMatchesFilter = true;
+                            if (!parent_3._matchesFilter) {
+                                parent_3._collapsed = false;
                             }
                             else {
                                 break;
                             }
-                            if (parent.parent !== null) {
-                                parent = data[parent.parent];
+                            if (parent_3.parent !== null) {
+                                parent_3 = data[parent_3.parent];
                             }
                             else {
                                 //parent = null;
@@ -109,43 +109,43 @@ var xtal;
             }
             xslickgrid.analyzeTreeNodes = analyzeTreeNodes;
             function markChildren(node, nodes) {
-                const children = node.childIndices;
+                var children = node.childIndices;
                 if (!children)
                     return;
-                for (let i = 0, ii = children.length; i < ii; i++) {
-                    const child = nodes[children[i]];
+                for (var i = 0, ii = children.length; i < ii; i++) {
+                    var child = nodes[children[i]];
                     child._hasAncestorThatMatchesFilter = true;
                     markChildren(child, nodes);
                 }
             }
             function sortColumn(args) {
-                const container = this;
+                var container = this;
                 linkChildren(container);
-                const fieldName = args.sortCol.field;
-                const data = container._data;
+                var fieldName = args.sortCol.field;
+                var data = container._data;
                 // debugger;
                 // console.log('data', data);
                 //const data_clone = data.slice(0); //Internet explorer starts modifying the order of an array while sorting
-                const compareFn = (lhs, rhs) => {
-                    const lhsVal = data[lhs][fieldName];
-                    const rhsVal = data[rhs][fieldName];
+                var compareFn = function (lhs, rhs) {
+                    var lhsVal = data[lhs][fieldName];
+                    var rhsVal = data[rhs][fieldName];
                     if (lhsVal === rhsVal)
                         return 0;
                     if (lhsVal > rhsVal)
                         return args.sortAsc ? 1 : -1;
                     return args.sortAsc ? -1 : 1;
                 };
-                const root = {
+                var root = {
                     childIndices: [],
                 };
-                for (let i = 0, ii = data.length; i < ii; i++) {
-                    const row = data[i];
+                for (var i = 0, ii = data.length; i < ii; i++) {
+                    var row = data[i];
                     if (row.parent === null)
                         root.childIndices.push(i);
                 }
                 sortChildIndices(root, compareFn, data);
                 console.log('root', root);
-                const newData = [];
+                var newData = [];
                 addData(root, newData, data, {
                     parentIdx: -1,
                     currentIndx: 0,
@@ -156,27 +156,27 @@ var xtal;
                 //console.log(container._data);
                 linkChildren(container);
                 console.log(container._data);
-                const dataProvider = container.dataProvider;
+                var dataProvider = container.dataProvider;
                 dataProvider.beginUpdate();
                 dataProvider.setItems(newData);
                 container._data = newData;
                 dataProvider.endUpdate();
                 //container.setInitialData()
                 console.log('rerender');
-                const grid = container.grid;
+                var grid = container.grid;
                 grid.invalidate();
                 grid.render();
             }
             xslickgrid.sortColumn = sortColumn;
             function sortChildIndices(node, compareFn, data) {
-                const childIndices = node.childIndices;
+                var childIndices = node.childIndices;
                 if (!childIndices)
                     return;
                 node.sortedChildIndices = childIndices.slice(0);
                 node.sortedChildIndices.sort(compareFn);
-                for (let i = 0, ii = childIndices.length; i < ii; i++) {
-                    const childIdx = childIndices[i];
-                    const child = data[childIdx];
+                for (var i = 0, ii = childIndices.length; i < ii; i++) {
+                    var childIdx = childIndices[i];
+                    var child = data[childIdx];
                     sortChildIndices(child, compareFn, data);
                 }
             }
@@ -186,13 +186,13 @@ var xtal;
                 // }else{
                 //     listPointer.isArtificial = false;
                 // }
-                const sortedChildIndices = node.sortedChildIndices;
-                const parentIdx = listPointer.parentIdx;
+                var sortedChildIndices = node.sortedChildIndices;
+                var parentIdx = listPointer.parentIdx;
                 if (!sortedChildIndices)
                     return;
-                for (let i = 0, ii = sortedChildIndices.length; i < ii; i++) {
-                    const childIdx = sortedChildIndices[i];
-                    const child = data[childIdx];
+                for (var i = 0, ii = sortedChildIndices.length; i < ii; i++) {
+                    var childIdx = sortedChildIndices[i];
+                    var child = data[childIdx];
                     if (parentIdx !== -1) {
                         child.parent = parentIdx;
                     }
@@ -211,26 +211,26 @@ var xtal;
             }
             xslickgrid.collapseAndHideNodes = collapseAndHideNodes;
             function attachToggleClickEvent(container, useSlickCheckboxSelectColumn) {
-                container['addEventListener']('checkbox-checked', (e, args) => {
-                    const cb = e.target;
-                    const row = parseInt(cb.dataset.row);
-                    const item = container.dataProvider.getItem(row);
+                container['addEventListener']('checkbox-checked', function (e, args) {
+                    var cb = e.target;
+                    var row = parseInt(cb.dataset.row);
+                    var item = container.dataProvider.getItem(row);
                     //cb.indeterminate = false;
-                    const didAnythingChange = checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
+                    var didAnythingChange = checkItemAndChildrenRecursively(container.dataProvider, item, cb.isChecked);
                     if (didAnythingChange) {
                         console.log('call updateParentRecursively');
                         updateParentRecursively(container.dataProvider, item, cb.isChecked, cb.isInterminate);
                     }
                     //debugger;
-                    const grid = container.grid;
+                    var grid = container.grid;
                     grid.invalidate();
                     grid.render();
                 });
-                container.grid.onClick.subscribe((e, args) => {
-                    const target = e['target'];
-                    const $target = $(target);
+                container.grid.onClick.subscribe(function (e, args) {
+                    var target = e['target'];
+                    var $target = $(target);
                     if ($target.hasClass('xsg_toggle')) {
-                        const item = container.dataProvider.getItem(args.row);
+                        var item = container.dataProvider.getItem(args.row);
                         if (item) {
                             if (!item._collapsed) {
                                 item._collapsed = true;
@@ -252,7 +252,7 @@ var xtal;
                     console.log({ checked: item._checked, value: value });
                     return false; // no change
                 }
-                const childIndexCount = item.childIndices ? item.childIndices.length : 0;
+                var childIndexCount = item.childIndices ? item.childIndices.length : 0;
                 if (value) {
                     item._noOfCheckedChildren = childIndexCount;
                     item._noOfUncheckedChildren = 0;
@@ -265,9 +265,9 @@ var xtal;
                 item._checked = value;
                 console.log({ item_checked: item._checked });
                 if (childIndexCount > 0) {
-                    for (let i = 0; i < childIndexCount; i++) {
-                        const childIdx = item.childIndices[i];
-                        const childItem = dataProvider.getItem(childIdx);
+                    for (var i = 0; i < childIndexCount; i++) {
+                        var childIdx = item.childIndices[i];
+                        var childItem = dataProvider.getItem(childIdx);
                         checkItemAndChildrenRecursively(dataProvider, childItem, value);
                     }
                 }
@@ -276,7 +276,7 @@ var xtal;
             function updateParentRecursively(dataProvider, item, value, wasIndeterminate) {
                 if (typeof item.parent === 'undefined')
                     return;
-                let parent = dataProvider.getItem(item.parent);
+                var parent = dataProvider.getItem(item.parent);
                 console.log('parent', parent);
                 console.log('args', { value: value, wasIndeterminate: wasIndeterminate });
                 if (!parent)
@@ -286,7 +286,7 @@ var xtal;
                 if (!parent._checked && (!parent._indeterminate && (!value && !wasIndeterminate)))
                     return; //nothing changed
                 console.log('updating parent');
-                const parentWasIndeterminate = parent._indeterminate;
+                var parentWasIndeterminate = parent._indeterminate;
                 if (value) {
                     parent._noOfCheckedChildren++;
                     if (wasIndeterminate) {
@@ -306,8 +306,8 @@ var xtal;
                         parent._noOfCheckedChildren--;
                     }
                 }
-                const noOfChildren = parent.childIndices.length;
-                let needToUpdateParent = false;
+                var noOfChildren = parent.childIndices.length;
+                var needToUpdateParent = false;
                 switch (noOfChildren) {
                     case parent._noOfCheckedChildren:
                         if (!parent._checked || parentWasIndeterminate) {
@@ -337,13 +337,13 @@ var xtal;
                     updateParentRecursively(dataProvider, parent, parent._checked, parent._indeterminate);
                 }
             }
-            const ampRegExp = /&/g;
-            const ltRegExp = /</g;
-            const gtRegExp = />/g;
+            var ampRegExp = /&/g;
+            var ltRegExp = /</g;
+            var gtRegExp = />/g;
             function nodeColumnFormatter(row, cell, value, columnDef, dataContext, container) {
                 value = value.replace(ampRegExp, "&amp;").replace(ltRegExp, "&lt;").replace(gtRegExp, "&gt;");
                 var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
-                const data = container._data;
+                var data = container._data;
                 var idx = container.dataProvider.getIdxById(dataContext.id);
                 if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
                     if (dataContext._collapsed) {
@@ -359,20 +359,20 @@ var xtal;
             }
             xslickgrid.nodeColumnFormatter = nodeColumnFormatter;
             function setAllItemsToValue(container, fieldName, value) {
-                const items = container.dataProvider.getItems();
-                items.forEach(item => {
+                var items = container.dataProvider.getItems();
+                items.forEach(function (item) {
                     item._collapsed = value;
                 });
                 container.dataProvider.refresh(container);
                 container.grid.invalidate();
             }
             function collapseAll() {
-                const container = this;
+                var container = this;
                 setAllItemsToValue(container, '_collapsed', true);
             }
             xslickgrid.collapseAll = collapseAll;
             function expandAll() {
-                const container = this;
+                var container = this;
                 setAllItemsToValue(container, '_collapsed', false);
             }
             xslickgrid.expandAll = expandAll;

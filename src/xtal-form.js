@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var xtal;
 (function (xtal) {
     var elements;
@@ -7,23 +17,23 @@ var xtal;
                 return;
             }
             //var i, j, q = [];
-            let q;
-            let p;
+            var q;
+            var p;
             if (asObject) {
                 p = {};
             }
             else {
                 q = [];
             }
-            for (let i = form.elements.length - 1; i >= 0; i = i - 1) {
-                const elm = form.elements[i];
+            for (var i = form.elements.length - 1; i >= 0; i = i - 1) {
+                var elm = form.elements[i];
                 if (elm.name === "") {
                     continue;
                 }
                 if (elm.name.indexOf('_ignore_') === 0) {
                     continue;
                 }
-                let val;
+                var val = void 0;
                 if (q) {
                     val = encodeURIComponent(elm.value);
                 }
@@ -83,11 +93,11 @@ var xtal;
                                 }
                                 break;
                             case 'select-multiple':
-                                const selm = elm;
-                                const options = selm.options;
-                                for (let j = options.length - 1; j >= 0; j = j - 1) {
+                                var selm = elm;
+                                var options = selm.options;
+                                for (var j = options.length - 1; j >= 0; j = j - 1) {
                                     if (options[j]['selected']) {
-                                        let val2;
+                                        var val2 = void 0;
                                         if (q) {
                                             val2 = encodeURIComponent(options[j]['value']);
                                         }
@@ -135,13 +145,13 @@ var xtal;
             }
         }
         function validateInputElement(inputEl) {
-            const val = inputEl.value;
+            var val = inputEl.value;
             if (inputEl.required && val.length === 0)
                 return false;
             if (inputEl.maxLength != -1 && val.length > inputEl.maxLength)
                 return false;
             if (inputEl.pattern) {
-                const regExp = new RegExp(inputEl.pattern);
+                var regExp = new RegExp(inputEl.pattern);
                 if (!regExp.test(val))
                     return false;
             }
@@ -149,72 +159,83 @@ var xtal;
             return true;
         }
         function initXtalForm() {
-            class XtalForm extends Polymer.Element {
-                constructor() {
-                    super(...arguments);
-                    this.disabled = false;
-                    this.recomputeOnEnable = false;
+            var XtalForm = (function (_super) {
+                __extends(XtalForm, _super);
+                function XtalForm() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.disabled = false;
+                    _this.recomputeOnEnable = false;
+                    return _this;
                 }
-                static get is() { return 'xtal-form'; }
-                static get properties() {
-                    return {
-                        disabled: {
-                            type: Boolean,
-                            observer: 'onDisabledChange'
-                        },
-                        serializedForm: {
-                            type: Object,
-                            notify: true,
-                            readOnly: true,
-                        },
-                        computedRequestUrl: {
-                            type: String,
-                            notify: true,
-                            readOnly: true,
-                        },
-                        computedRequestBody: {
-                            type: String,
-                            notify: true,
-                            readOnly: true,
-                        }
-                    };
-                }
-                validate(formElm, serializedForm) {
+                Object.defineProperty(XtalForm, "is", {
+                    get: function () { return 'xtal-form'; },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(XtalForm, "properties", {
+                    get: function () {
+                        return {
+                            disabled: {
+                                type: Boolean,
+                                observer: 'onDisabledChange'
+                            },
+                            serializedForm: {
+                                type: Object,
+                                notify: true,
+                                readOnly: true,
+                            },
+                            computedRequestUrl: {
+                                type: String,
+                                notify: true,
+                                readOnly: true,
+                            },
+                            computedRequestBody: {
+                                type: String,
+                                notify: true,
+                                readOnly: true,
+                            }
+                        };
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                XtalForm.prototype.validate = function (formElm, serializedForm) {
                     if (!formElm)
                         formElm = this.querySelector('form');
                     if (!serializedForm)
                         serializedForm = serialize(formElm, true);
-                    const validator = this.querySelector('js-validator');
-                    let customValidatorFns;
+                    var validator = this.querySelector('js-validator');
+                    var customValidatorFns;
                     if (validator) {
                         customValidatorFns = eval(validator.innerText);
                     }
                     if (customValidatorFns) {
-                        for (const customValidatorFn of customValidatorFns) {
+                        for (var _i = 0, customValidatorFns_1 = customValidatorFns; _i < customValidatorFns_1.length; _i++) {
+                            var customValidatorFn = customValidatorFns_1[_i];
                             if (!customValidatorFn(serializedForm))
                                 return false;
                         }
                     }
                     return true;
-                }
-                updateInfo(formElm) {
+                };
+                XtalForm.prototype.updateInfo = function (formElm) {
                     if (!formElm)
                         formElm = this.querySelector('form');
                     if (this.disabled) {
                         this.recomputeOnEnable = true;
                         return;
                     }
-                    const formData = serialize(formElm, true);
+                    var formData = serialize(formElm, true);
                     if (!this.validate(formElm, formData))
                         return;
                     this['_setSerializedForm'](formData);
-                    const queryString = serialize(formElm, false);
-                    const method = formElm.method.toLowerCase();
-                    const action = formElm.action;
+                    var queryString = serialize(formElm, false);
+                    var method = formElm.method.toLowerCase();
+                    var action = formElm.action;
                     console.log(method);
                     switch (method) {
                         case 'get':
-                            const delim = action.indexOf('?') > -1 ? '&' : '?';
+                            var delim = action.indexOf('?') > -1 ? '&' : '?';
                             this['_setComputedRequestUrl'](action + delim + queryString);
                             this['_setComputedRequestBody']('');
                             break;
@@ -223,15 +244,15 @@ var xtal;
                             this['_setComputedRequestBody'](queryString);
                             break;
                     }
-                }
-                ready() {
-                    super.ready();
-                    const formElm = this.querySelector('form');
+                };
+                XtalForm.prototype.ready = function () {
+                    _super.prototype.ready.call(this);
+                    var formElm = this.querySelector('form');
                     if (!formElm)
                         throw 'Need a form inside this element';
-                    const childInputs = formElm.querySelectorAll('input');
-                    for (let i = 0, ii = childInputs.length; i < ii; i++) {
-                        const childInput = childInputs[i];
+                    var childInputs = formElm.querySelectorAll('input');
+                    for (var i = 0, ii = childInputs.length; i < ii; i++) {
+                        var childInput = childInputs[i];
                         childInput['_value'] = childInput.value;
                         Object.defineProperty(childInput, "value", {
                             get: function () { return this._value; },
@@ -244,15 +265,16 @@ var xtal;
                         });
                     }
                     this.updateInfo(formElm);
-                }
-                onDisabledChange(newVal) {
+                };
+                XtalForm.prototype.onDisabledChange = function (newVal) {
                     if (newVal)
                         this.updateInfo(null);
-                }
-            }
+                };
+                return XtalForm;
+            }(Polymer.Element));
             customElements.define(XtalForm.is, XtalForm);
         }
-        customElements.whenDefined('xtal-ball').then(() => initXtalForm());
+        customElements.whenDefined('xtal-ball').then(function () { return initXtalForm(); });
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-form.js.map

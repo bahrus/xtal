@@ -4,9 +4,9 @@ var crystal;
     (function (elements) {
         elements.jsXtaInitTagName = 'js-xtal-init';
         function nextDomBindElement(el) {
-            let nextElement = el.nextElementSibling;
+            var nextElement = el.nextElementSibling;
             while (nextElement) {
-                const isAttr = nextElement.getAttribute('is');
+                var isAttr = nextElement.getAttribute('is');
                 if (isAttr && (isAttr == 'dom-bind')) {
                     break;
                 }
@@ -16,10 +16,10 @@ var crystal;
         }
         elements.nextDomBindElement = nextDomBindElement;
         function nextNonScriptSibling(el) {
-            let nextElement = el.nextElementSibling;
+            var nextElement = el.nextElementSibling;
             if (!nextElement)
                 return null;
-            let tagName = nextElement.tagName;
+            var tagName = nextElement.tagName;
             while (nextElement) {
                 //let bKeepGoing = false
                 switch (tagName) {
@@ -45,16 +45,16 @@ var crystal;
             }
         }
         function extend(dest, obj, deep) {
-            const h = dest.$$hashKey;
+            var h = dest.$$hashKey;
             //for (let i = 0, ii = src.length; i < ii; ++i) {
             //const obj = src[i];
             if ((typeof obj !== 'object') && (typeof obj !== 'function')) {
                 return;
             }
-            const keys = Object.keys(obj);
-            for (let j = 0, jj = keys.length; j < jj; j++) {
-                const key = keys[j];
-                const src = obj[key];
+            var keys = Object.keys(obj);
+            for (var j = 0, jj = keys.length; j < jj; j++) {
+                var key = keys[j];
+                var src = obj[key];
                 if (deep && (typeof src === 'object')) {
                     if (src instanceof Date) {
                         dest[key] = new Date(src.valueOf());
@@ -75,9 +75,9 @@ var crystal;
         }
         elements.extend = extend;
         function performCustElActions(actions, target) {
-            let htmlActionContext;
-            for (let i = 0, ii = actions.length; i < ii; i++) {
-                const action = actions[i];
+            var htmlActionContext;
+            for (var i = 0, ii = actions.length; i < ii; i++) {
+                var action = actions[i];
                 if (Array.isArray(action)) {
                     performCustElActions(action, target);
                     continue;
@@ -85,9 +85,9 @@ var crystal;
                 if (action.debug) {
                     debugger;
                 }
-                const doFn = action.do;
+                var doFn = action.do;
                 if (doFn && typeof (doFn === 'function')) {
-                    const polymerAction = action;
+                    var polymerAction = action;
                     if (!htmlActionContext) {
                         htmlActionContext = {
                             element: target,
@@ -98,11 +98,11 @@ var crystal;
                     continue;
                 }
                 //#region merge object into custom element
-                for (const key in action) {
+                for (var key in action) {
                     if (target['get'] && target['set']) {
                         //polymer element
-                        const currVal = target['get'](key);
-                        const newOrExtendedVal = action[key];
+                        var currVal = target['get'](key);
+                        var newOrExtendedVal = action[key];
                         if (!currVal) {
                             target['set'](key, newOrExtendedVal);
                         }
@@ -123,14 +123,14 @@ var crystal;
         }
         elements.performCustElActions = performCustElActions;
         function evalInner(element, isTS) {
-            let inner = element['getEffectiveChildNodes']()[0].nodeValue;
+            var inner = element['getEffectiveChildNodes']()[0].nodeValue;
             if (isTS) {
                 inner = util.stripTypings(inner);
             }
-            const actionGetter = eval(inner);
-            let actions;
+            var actionGetter = eval(inner);
+            var actions;
             if (typeof actionGetter === 'function') {
-                const context = {
+                var context = {
                     element: element,
                 };
                 actions = actionGetter(context);
@@ -147,13 +147,13 @@ var crystal;
         (function (util) {
             function stripTypings(text) {
                 //const tokenArray = multiSplit(text, [';', ','])
-                const tokenArray = text.split(' ');
-                for (let i = 0, ii = tokenArray.length; i < ii; i++) {
-                    const token = tokenArray[i];
+                var tokenArray = text.split(' ');
+                for (var i = 0, ii = tokenArray.length; i < ii; i++) {
+                    var token = tokenArray[i];
                     switch (token) {
                         case 'const':
                             if (i + 2 < ii) {
-                                const nextToken = tokenArray[i + 1];
+                                var nextToken = tokenArray[i + 1];
                                 if (nextToken.indexOf(':') > -1) {
                                     tokenArray[i + 1] = nextToken.replace(':', '');
                                     tokenArray[i + 2] = '';
@@ -162,16 +162,16 @@ var crystal;
                             continue;
                     }
                 }
-                const text2 = tokenArray.join(' ');
-                const tokenArray2 = splitPairs(text2, { lhs: '(', rhs: ')' });
-                for (let i = 0, ii = tokenArray2.length; i < ii; i++) {
-                    const token = tokenArray2[i];
+                var text2 = tokenArray.join(' ');
+                var tokenArray2 = splitPairs(text2, { lhs: '(', rhs: ')' });
+                for (var i = 0, ii = tokenArray2.length; i < ii; i++) {
+                    var token = tokenArray2[i];
                     if (token === '(' && i + 2 < ii) {
                         if (tokenArray2[i + 2] != ')') {
                             throw "Invalid expression";
                         }
-                        const args = tokenArray2[i + 1].split(',');
-                        const newArgs = args.map(s => substringBefore(s, ';'));
+                        var args = tokenArray2[i + 1].split(',');
+                        var newArgs = args.map(function (s) { return substringBefore(s, ';'); });
                         tokenArray2[i + 1] = newArgs.join(',');
                     }
                 }
@@ -179,10 +179,10 @@ var crystal;
             }
             util.stripTypings = stripTypings;
             function splitPairs(text, pair) {
-                const returnObj = [];
-                let region = [];
-                for (let i = 0, ii = text.length; i < ii; i++) {
-                    const chr = text[i];
+                var returnObj = [];
+                var region = [];
+                for (var i = 0, ii = text.length; i < ii; i++) {
+                    var chr = text[i];
                     switch (chr) {
                         case pair.rhs:
                         case pair.lhs:
@@ -202,7 +202,7 @@ var crystal;
             }
             util.splitPairs = splitPairs;
             function substringBefore(value, search) {
-                const iPos = value.indexOf(search);
+                var iPos = value.indexOf(search);
                 if (iPos < -1)
                     return value;
                 return value.substr(0, iPos);
