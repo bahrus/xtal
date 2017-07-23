@@ -1,16 +1,6 @@
 ///<reference path='../../node_modules/@types/slickgrid/index.d.ts'/>
 ///<reference path='../../node_modules/@types/jquery/index.d.ts'/>
 ///<reference path='js/treeGridHelper.ts'/>
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var xtal;
 (function (xtal) {
     var elements;
@@ -54,13 +44,13 @@ var xtal;
         //     });
         // }
         function addCSSLinks(refs) {
-            var notLoadedYet = {};
-            var nonNullRefs = refs.filter(function (ref) { return ref !== null; });
-            nonNullRefs.forEach(function (ref) {
+            const notLoadedYet = {};
+            const nonNullRefs = refs.filter(ref => ref !== null);
+            nonNullRefs.forEach(ref => {
                 notLoadedYet[ref.href] = true;
             });
             //from http://stackoverflow.com/questions/574944/how-to-load-up-css-files-using-javascript
-            nonNullRefs.forEach(function (ref) {
+            nonNullRefs.forEach(ref => {
                 var head = document.getElementsByTagName('head')[0];
                 var link = document.createElement('link');
                 //link.id   = cssId;
@@ -84,93 +74,86 @@ var xtal;
         function attachEventHandlers(grid, handlers) {
             if (!handlers)
                 return;
-            for (var key in handlers) {
-                var handler = handlers[key];
+            for (const key in handlers) {
+                const handler = handlers[key];
                 grid[key].subscribe(handler);
             }
         }
         elements.attachEventHandlers = attachEventHandlers;
         function initXtalXSlickGrid() {
-            var XtalXSlickGrid = (function (_super) {
-                __extends(XtalXSlickGrid, _super);
-                function XtalXSlickGrid() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
+            class XtalXSlickGrid extends Polymer.Element {
+                constructor() {
+                    super(...arguments);
                     //Begin field initialization
-                    _this.height = '500px';
-                    _this.width = '600px';
-                    _this.renderCount = 0;
-                    _this.clickedCellIndex = 0;
-                    _this.clickedRowIndex = 0;
-                    _this.numberOfWidthDeltas = 0;
-                    _this.numberOfOrderChanges = 0;
-                    _this.isContextMenuOpen = false;
-                    _this.lastClickedXValue = 0;
-                    _this.lastClickedYValue = 0;
+                    this.height = '500px';
+                    this.width = '600px';
+                    this.renderCount = 0;
+                    this.clickedCellIndex = 0;
+                    this.clickedRowIndex = 0;
+                    this.numberOfWidthDeltas = 0;
+                    this.numberOfOrderChanges = 0;
+                    this.isContextMenuOpen = false;
+                    this.lastClickedXValue = 0;
+                    this.lastClickedYValue = 0;
                     //TODO:  type these
-                    _this.wcOptions = null;
-                    _this._data = null;
-                    _this.gridDiv = null;
-                    _this.grid = null;
-                    _this._dataProvider = null;
-                    _this.collapseAll = null;
-                    _this.expandAll = null;
-                    return _this;
+                    this.wcOptions = null;
+                    this._data = null;
+                    this.gridDiv = null;
+                    this.grid = null;
+                    this._dataProvider = null;
+                    this.collapseAll = null;
+                    this.expandAll = null;
                 }
-                Object.defineProperty(XtalXSlickGrid, "is", {
-                    get: function () {
-                        return 'x-slick-grid';
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                XtalXSlickGrid.prototype.fillContainerBothDimImpl = function () {
+                static get is() {
+                    return 'x-slick-grid';
+                }
+                fillContainerBothDimImpl() {
                     this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', false);
                     this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
-                };
-                XtalXSlickGrid.prototype.fillContainerHeightImpl = function () {
+                }
+                fillContainerHeightImpl() {
                     this.fillContainerXImpl('offsetTop', 'clientHeight', 'height', true);
-                };
-                XtalXSlickGrid.prototype.fillContainerWidthImpl = function () {
+                }
+                fillContainerWidthImpl() {
                     this.fillContainerXImpl('offsetLeft', 'clientWidth', 'width', true);
-                };
-                XtalXSlickGrid.prototype.fillContainerXImpl = function (offsetDim, clientDim, cssDim, resize) {
-                    var thisGrid = this.querySelector('[role="grid"]');
-                    var $thisGrid = $(thisGrid);
-                    var offset = this[offsetDim];
-                    var containerLength = this.parentElement[clientDim];
-                    var thisLength = containerLength - offset;
+                }
+                fillContainerXImpl(offsetDim, clientDim, cssDim, resize) {
+                    const thisGrid = this.querySelector('[role="grid"]');
+                    const $thisGrid = $(thisGrid);
+                    const offset = this[offsetDim];
+                    const containerLength = this.parentElement[clientDim];
+                    const thisLength = containerLength - offset;
                     if (thisLength > 0) {
                         $thisGrid.css(cssDim, thisLength);
                         if (resize && this.grid) {
                             this.grid.resizeCanvas();
                         }
                     }
-                };
-                XtalXSlickGrid.prototype.setEditorAndFormatter = function (columns) {
-                    for (var i = 0, ii = columns.length; i < ii; i++) {
-                        var col = columns[i];
+                }
+                setEditorAndFormatter(columns) {
+                    for (let i = 0, ii = columns.length; i < ii; i++) {
+                        let col = columns[i];
                         if (col.editorFn) {
                             col.editor = col.editorFn(col);
                         }
                         if (col.formatterFn) {
                             col.formatter = col.formatterFn(col);
                         }
-                        var childColumns = col.columns;
+                        const childColumns = col.columns;
                         if (childColumns)
                             this.setEditorAndFormatter(childColumns);
                     }
-                };
-                XtalXSlickGrid.prototype.setInitialData = function (data, columns, gridOptions, wcOptions) {
-                    var _this = this;
+                }
+                setInitialData(data, columns, gridOptions, wcOptions) {
                     //this.data = data;
                     //this.columns = columns;
                     if (!this.readyFnInitialized) {
-                        setTimeout(function () {
-                            _this.setInitialData(data, columns, gridOptions, wcOptions);
+                        setTimeout(() => {
+                            this.setInitialData(data, columns, gridOptions, wcOptions);
                         }, 10);
                         return;
                     }
-                    var checkboxSelector = null;
+                    let checkboxSelector = null;
                     if (this.useSlickCheckboxSelectColumn) {
                         //console.log('add checkbox selector');
                         checkboxSelector = new Slick['CheckboxSelectColumn']({
@@ -185,7 +168,7 @@ var xtal;
                         gridOptions = {};
                     gridOptions['_container'] = this;
                     if (data['addItem']) {
-                        var dataProvider = data;
+                        const dataProvider = data;
                         dataProvider['container'] = this;
                         this._dataProvider = dataProvider;
                         this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
@@ -195,13 +178,13 @@ var xtal;
                             this._data = data;
                         }
                         if (wcOptions && wcOptions.dataProvider) {
-                            var dataProvider = wcOptions.dataProvider(data);
+                            const dataProvider = wcOptions.dataProvider(data);
                             dataProvider['container'] = this;
                             this._dataProvider = dataProvider;
                             this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
                         }
                         else if (this.useDataViewDataProvider) {
-                            var dataProvider = new Slick.Data.DataView({ inlineFilters: true });
+                            const dataProvider = new Slick.Data.DataView({ inlineFilters: true });
                             dataProvider['container'] = this;
                             this._dataProvider = dataProvider;
                             this.grid = new Slick.Grid(this.gridDiv, dataProvider, columns, gridOptions);
@@ -215,7 +198,7 @@ var xtal;
                         this.collapseAll = xtal.elements.xslickgrid.collapseAll;
                         this.expandAll = xtal.elements.xslickgrid.expandAll;
                     }
-                    var grid = this.grid;
+                    const grid = this.grid;
                     switch (this.selectionModel) {
                         case 'Cell':
                             grid.setSelectionModel((new Slick.CellSelectionModel()));
@@ -239,30 +222,30 @@ var xtal;
                         if (wcOptions.trackCurrentRow) {
                             this.clickedCellIndex = -1;
                             this.clickedRowIndex = -1;
-                            grid.onClick.subscribe(function (e) {
+                            grid.onClick.subscribe(e => {
                                 var cell = grid.getCellFromEvent(e);
-                                _this.clickedCellIndex = cell.cell;
-                                _this.clickedRowIndex = cell.row;
+                                this.clickedCellIndex = cell.cell;
+                                this.clickedRowIndex = cell.row;
                             });
                         }
                         if (wcOptions.trackColumnChanges) {
                             this.numberOfWidthDeltas = 0;
                             this.numberOfOrderChanges = 0;
-                            grid.onColumnsResized.subscribe(function (e) {
-                                _this.numberOfWidthDeltas++;
+                            grid.onColumnsResized.subscribe(e => {
+                                this.numberOfWidthDeltas++;
                             });
-                            grid.onColumnsReordered.subscribe(function (e) {
-                                _this.numberOfOrderChanges++;
+                            grid.onColumnsReordered.subscribe(e => {
+                                this.numberOfOrderChanges++;
                             });
                         }
                         if (wcOptions.trackContextMenu) {
                             this.isContextMenuOpen = false;
-                            grid.onContextMenu.subscribe(function (e) {
+                            grid.onContextMenu.subscribe(e => {
                                 e.preventDefault();
-                                _this.isContextMenuOpen = true;
-                                _this.lastClickedXValue = e['pageX'];
-                                _this.lastClickedYValue = e['pageY'];
-                                var _thisEl = _this;
+                                this.isContextMenuOpen = true;
+                                this.lastClickedXValue = e['pageX'];
+                                this.lastClickedYValue = e['pageY'];
+                                const _thisEl = this;
                                 $("body").one("click", function () {
                                     _thisEl.isContextMenuOpen = false;
                                 });
@@ -295,195 +278,172 @@ var xtal;
                     }
                     this.renderCount++;
                     return grid;
-                };
-                XtalXSlickGrid.prototype.onNewGridRenderParams = function (newVal) {
+                }
+                onNewGridRenderParams(newVal) {
                     this.setInitialData(newVal.data, newVal.columns, newVal.gridOptions, newVal.wcOptions);
-                };
-                Object.defineProperty(XtalXSlickGrid.prototype, "columns", {
-                    get: function () {
-                        return this.grid.getColumns();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(XtalXSlickGrid.prototype, "data", {
-                    get: function () {
-                        return this.grid.getData();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(XtalXSlickGrid.prototype, "selectedRow", {
-                    get: function () {
-                        if (this.clickedRowIndex === -1)
-                            return null;
-                        return this.data[this.clickedRowIndex];
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(XtalXSlickGrid.prototype, "options", {
-                    get: function () {
-                        return this.grid.getOptions();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(XtalXSlickGrid.prototype, "dataProvider", {
-                    get: function () {
-                        //const grid = this.grid as Slick.Grid<any>;
-                        return this._dataProvider;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(XtalXSlickGrid, "properties", {
-                    //End field initialization
-                    get: function () {
-                        return {
-                            /**
-                            * The height of the grid.
-                            */
-                            height: {
-                                type: String,
-                                value: '500px',
-                            },
-                            /**
-                             * The width of the grid
-                             */
-                            width: {
-                                type: String,
-                                value: '600px'
-                            },
-                            /**
-                             *  If attribute is present, stretch the grid to the bottom edge of the containing element
-                            */
-                            fillContainerHeight: {
-                                type: Boolean,
-                                value: false
-                            },
-                            /**
-                             * If attribute is present, stretch the grid to the right edge of the containing element
-                             */
-                            fillContainerWidth: {
-                                type: Boolean,
-                                value: false
-                            },
-                            /**
-                             * Count of how many times the grid has been rendered.
-                             */
-                            renderCount: {
-                                type: Number,
-                                value: 0,
-                                notify: true,
-                                reflectToAttribute: true,
-                            },
-                            /**
-                            * Indicates the last clicked cell index
-                            */
-                            clickedCellIndex: {
-                                type: Number,
-                                notify: true,
-                                reflectToAttribute: true,
-                                readOnly: true,
-                            },
-                            /**
-                             * Indicates the last clicked row index
-                             */
-                            clickedRowIndex: {
-                                type: Number,
-                                notify: true,
-                                reflectToAttribute: true
-                            },
-                            numberOfWidthDeltas: {
-                                type: Number,
-                                notify: true,
-                            },
-                            numberOfOrderChanges: {
-                                type: Number,
-                                notify: true,
-                            },
-                            isContextMenuOpen: {
-                                type: Boolean,
-                                notify: true,
-                                reflectToAttribute: true
-                            },
-                            lastClickedXValue: {
-                                type: Number,
-                                notify: true,
-                            },
-                            lastClickedYValue: {
-                                type: Number,
-                                notify: true,
-                            },
-                            /**
-                             * Possible values are 'Cell', 'Row' 'RowPlus'
-                             */
-                            selectionModel: {
-                                type: String,
-                            },
-                            /**
-                             * If specified, then the needed references, will try to load from the cdn from the specified base path.
-                             * If that fails, then it will load from the local web service
-                             */
-                            basePath: {
-                                type: String
-                            },
-                            useSlickAutoToolTips: {
-                                type: Boolean,
-                            },
-                            useSlickCellCopyManager: {
-                                type: Boolean,
-                            },
-                            useSlickCheckboxSelectColumn: {
-                                type: Boolean,
-                            },
-                            useDataViewDataProvider: {
-                                type: Boolean,
-                            },
-                            useSlickPaging: {
-                                type: Boolean,
-                            },
-                            useSlickColumnPicker: {
-                                type: Boolean
-                            },
-                            useSlickFormatters: {
-                                type: Boolean
-                            },
-                            useSlickEditors: {
-                                type: Boolean,
-                                value: false
-                            },
-                            useTreeGridHelper: {
-                                type: Boolean,
-                            },
-                            gridRenderParams: {
-                                type: Object,
-                                observer: 'onNewGridRenderParams'
-                            },
-                            readyFnInitialized: {
-                                type: Boolean,
-                                notify: true,
-                            }
-                        };
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                XtalXSlickGrid.prototype.ready = function () {
-                    var _this = this;
-                    _super.prototype.ready.call(this);
-                    this.innerHTML = "\n                <div role=\"grid\"></div>\n                ";
-                    var $IsDefined = (typeof ($) !== 'undefined');
-                    var sm = this.selectionModel;
-                    var incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
-                    var incRow = ((sm === 'Row') || (sm === 'RowPlus'));
-                    var slickCSSDependencies = [
+                }
+                get columns() {
+                    return this.grid.getColumns();
+                }
+                get data() {
+                    return this.grid.getData();
+                }
+                get selectedRow() {
+                    if (this.clickedRowIndex === -1)
+                        return null;
+                    return this.data[this.clickedRowIndex];
+                }
+                get options() {
+                    return this.grid.getOptions();
+                }
+                get dataProvider() {
+                    //const grid = this.grid as Slick.Grid<any>;
+                    return this._dataProvider;
+                }
+                //End field initialization
+                static get properties() {
+                    return {
+                        /**
+                        * The height of the grid.
+                        */
+                        height: {
+                            type: String,
+                            value: '500px',
+                        },
+                        /**
+                         * The width of the grid
+                         */
+                        width: {
+                            type: String,
+                            value: '600px'
+                        },
+                        /**
+                         *  If attribute is present, stretch the grid to the bottom edge of the containing element
+                        */
+                        fillContainerHeight: {
+                            type: Boolean,
+                            value: false
+                        },
+                        /**
+                         * If attribute is present, stretch the grid to the right edge of the containing element
+                         */
+                        fillContainerWidth: {
+                            type: Boolean,
+                            value: false
+                        },
+                        /**
+                         * Count of how many times the grid has been rendered.
+                         */
+                        renderCount: {
+                            type: Number,
+                            value: 0,
+                            notify: true,
+                            reflectToAttribute: true,
+                        },
+                        /**
+                        * Indicates the last clicked cell index
+                        */
+                        clickedCellIndex: {
+                            type: Number,
+                            notify: true,
+                            reflectToAttribute: true,
+                            readOnly: true,
+                        },
+                        /**
+                         * Indicates the last clicked row index
+                         */
+                        clickedRowIndex: {
+                            type: Number,
+                            notify: true,
+                            reflectToAttribute: true
+                        },
+                        numberOfWidthDeltas: {
+                            type: Number,
+                            notify: true,
+                        },
+                        numberOfOrderChanges: {
+                            type: Number,
+                            notify: true,
+                        },
+                        isContextMenuOpen: {
+                            type: Boolean,
+                            notify: true,
+                            reflectToAttribute: true
+                        },
+                        lastClickedXValue: {
+                            type: Number,
+                            notify: true,
+                        },
+                        lastClickedYValue: {
+                            type: Number,
+                            notify: true,
+                        },
+                        /**
+                         * Possible values are 'Cell', 'Row' 'RowPlus'
+                         */
+                        selectionModel: {
+                            type: String,
+                        },
+                        /**
+                         * If specified, then the needed references, will try to load from the cdn from the specified base path.
+                         * If that fails, then it will load from the local web service
+                         */
+                        basePath: {
+                            type: String
+                        },
+                        useSlickAutoToolTips: {
+                            type: Boolean,
+                        },
+                        useSlickCellCopyManager: {
+                            type: Boolean,
+                        },
+                        useSlickCheckboxSelectColumn: {
+                            type: Boolean,
+                        },
+                        useDataViewDataProvider: {
+                            type: Boolean,
+                        },
+                        useSlickPaging: {
+                            type: Boolean,
+                        },
+                        useSlickColumnPicker: {
+                            type: Boolean
+                        },
+                        useSlickFormatters: {
+                            type: Boolean
+                        },
+                        useSlickEditors: {
+                            type: Boolean,
+                            value: false
+                        },
+                        useTreeGridHelper: {
+                            type: Boolean,
+                        },
+                        gridRenderParams: {
+                            type: Object,
+                            observer: 'onNewGridRenderParams'
+                        },
+                        readyFnInitialized: {
+                            type: Boolean,
+                            notify: true,
+                        }
+                    };
+                }
+                ready() {
+                    super.ready();
+                    this.innerHTML = `
+                <div role="grid"></div>
+                `;
+                    const $IsDefined = (typeof ($) !== 'undefined');
+                    const sm = this.selectionModel;
+                    const incCell = ((sm === 'Cell') || (sm === 'RowPlus'));
+                    const incRow = ((sm === 'Row') || (sm === 'RowPlus'));
+                    const slickCSSDependencies = [
                         this.useSlickPaging ? { href: this.resolveUrl('controls/slick.pager.css') } : null,
                         this.useSlickColumnPicker ? { href: this.resolveUrl('controls/slick.columnpicker.css') } : null,
                         this.useTreeGridHelper ? { href: this.resolveUrl('css/treeGridHelper.css') } : null,
                     ];
-                    var slickJSDependencies = [
+                    const slickJSDependencies = [
                         !$IsDefined ? { src: this.resolveUrl('../../bower_components/jquery/jquery.min.js') } : null,
                         !$IsDefined || !$['ui'] ? { src: this.resolveUrl('../../bower_components/jquery-ui/jquery-ui.min.js') } : null,
                         !$IsDefined || !$.fn.drag ? { src: this.resolveUrl('../../bower_components/jquery.event/event.drag/jquery.event.drag.js') } : null,
@@ -507,44 +467,43 @@ var xtal;
                     ];
                     //xtal.elements.importHrefs(slickDependencies, this);
                     xtal.elements.addCSSLinks(slickCSSDependencies);
-                    xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, function () {
-                        var thisGrid = _this.querySelector('[role]');
-                        var $thisGrid = $(thisGrid);
+                    xtal.elements.downloadJSFilesInParallelButLoadInSequence(slickJSDependencies, () => {
+                        const thisGrid = this.querySelector('[role]');
+                        const $thisGrid = $(thisGrid);
                         $thisGrid
-                            .css('height', _this.height)
-                            .css('width', _this.width);
-                        _this.gridDiv = $thisGrid;
-                        if (_this.fillContainerWidth || _this.fillContainerHeight) {
-                            window.addEventListener('resize', function (e) {
-                                if (_this.fillContainerWidth && _this.fillContainerHeight) {
-                                    _this.debounce('fillContainerBothDim', _this.fillContainerBothDimImpl, 500);
+                            .css('height', this.height)
+                            .css('width', this.width);
+                        this.gridDiv = $thisGrid;
+                        if (this.fillContainerWidth || this.fillContainerHeight) {
+                            window.addEventListener('resize', e => {
+                                if (this.fillContainerWidth && this.fillContainerHeight) {
+                                    this.debounce('fillContainerBothDim', this.fillContainerBothDimImpl, 500);
                                 }
-                                else if (_this.fillContainerHeight) {
-                                    _this.debounce('fillContainerHeight', _this.fillContainerHeightImpl, 500);
+                                else if (this.fillContainerHeight) {
+                                    this.debounce('fillContainerHeight', this.fillContainerHeightImpl, 500);
                                 }
                                 else {
-                                    _this.debounce('fillContainerWidth', _this.fillContainerWidthImpl, 500);
+                                    this.debounce('fillContainerWidth', this.fillContainerWidthImpl, 500);
                                 }
                             });
                         }
-                        if (_this.useTreeGridHelper) {
-                            _this['analyzeTreeNodes'] = xtal.elements.xslickgrid.analyzeTreeNodes;
-                            _this['sortColumn'] = xtal.elements.xslickgrid.sortColumn;
+                        if (this.useTreeGridHelper) {
+                            this['analyzeTreeNodes'] = xtal.elements.xslickgrid.analyzeTreeNodes;
+                            this['sortColumn'] = xtal.elements.xslickgrid.sortColumn;
                         }
-                        _this.readyFnInitialized = true;
+                        this.readyFnInitialized = true;
                         //this['fire']('loadedDependencies');
-                        _this.dispatchEvent(new CustomEvent('loadedDependencies'));
+                        this.dispatchEvent(new CustomEvent('loadedDependencies'));
                     });
-                };
-                return XtalXSlickGrid;
-            }(Polymer.Element));
+                }
+            }
             customElements.define(XtalXSlickGrid.is, XtalXSlickGrid);
         }
         // function waitForPolymerElement(){if(typeof Polymer === 'undefined' || Polymer.Element === undefined){setTimeout(waitForPolymerElement, 50);return;}
         //     initXtalXSlickGrid();
         // }
         // waitForPolymerElement();
-        customElements.whenDefined('xtal-ball').then(function () { return initXtalXSlickGrid(); });
+        customElements.whenDefined('xtal-ball').then(() => initXtalXSlickGrid());
     })(elements = xtal.elements || (xtal.elements = {}));
 })(xtal || (xtal = {}));
 //# sourceMappingURL=x-slick-grid.js.map

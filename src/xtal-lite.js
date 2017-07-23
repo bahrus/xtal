@@ -1,43 +1,31 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var xtal;
 (function (xtal) {
     xtal.domLite = {};
-    var caseMap = {};
-    var CAMEL_TO_DASH = /([A-Z])/g;
-    var DASH_TO_CAMEL = /-[a-z]/g;
+    const caseMap = {};
+    const CAMEL_TO_DASH = /([A-Z])/g;
+    const DASH_TO_CAMEL = /-[a-z]/g;
     /**
      * Base class for "Polymer Lite".  This class is meant as a stepping stone to full blown
      * Polymer elements but for scenarios where the contents can't work easily with Shadow DOM.
      * Supports getting content from <dom-lite> custom elements
      */
-    var XtalLite = (function (_super) {
-        __extends(XtalLite, _super);
-        function XtalLite() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.dashedChildren = {};
-            _this.listeningInners = {};
-            _this.listeningAttributes = {};
-            return _this;
+    class XtalLite extends HTMLElement {
+        constructor() {
+            super(...arguments);
+            this.dashedChildren = {};
+            this.listeningInners = {};
+            this.listeningAttributes = {};
         }
-        XtalLite.prototype.connectedCallback = function () {
-            var id = this.tagName.toLowerCase();
-            var template = xtal.domLite[id];
+        connectedCallback() {
+            const id = this.tagName.toLowerCase();
+            const template = xtal.domLite[id];
             var clone = document.importNode(template.content, true);
-            var nd = this.appendChild(clone);
+            const nd = this.appendChild(clone);
             this.processChildren(this);
             // customElements.whenDefined('xtal-fetch').then(() =>{
             //     console.log(customElements.get('xtal-fetch'));
             // });
-        };
+        }
         // disconnectedCallback(){
         //     super.discon
         //     // this.listeningInners = null; //is this necessary?
@@ -52,9 +40,9 @@ var xtal;
         * @param {string} camel Camel-case identifier
         * @return {string} Dash-case representation of the identifier
         */
-        XtalLite.prototype.camelToDashCase = function (camel) {
+        camelToDashCase(camel) {
             return caseMap[camel] || (caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase());
-        };
+        }
         /**
          * Converts "dash-case" identifier (e.g. `foo-bar-baz`) to "camelCase"
          * (e.g. `fooBarBaz`).
@@ -63,83 +51,78 @@ var xtal;
          * @param {string} dash Dash-case identifier
          * @return {string} Camel-case representation of the identifier
          */
-        XtalLite.prototype.dashToCamelCase = function (dash) {
-            return caseMap[dash] || (caseMap[dash] = dash.indexOf('-') < 0 ? dash : dash.replace(DASH_TO_CAMEL, function (m) { return m[1].toUpperCase(); }));
-        };
-        XtalLite.prototype.addListener = function (nd, construct) {
-            var _this = this;
-            var cp = construct.properties;
+        dashToCamelCase(dash) {
+            return caseMap[dash] || (caseMap[dash] = dash.indexOf('-') < 0 ? dash : dash.replace(DASH_TO_CAMEL, (m) => m[1].toUpperCase()));
+        }
+        addListener(nd, construct) {
+            const cp = construct.properties;
             if (typeof cp !== 'object')
                 return;
-            var _loop_1 = function (key) {
-                var prop = cp[key];
+            for (let key in cp) {
+                const prop = cp[key];
                 if (prop['notify'] === true) {
-                    var resultPath = nd.getAttribute(key);
+                    let resultPath = nd.getAttribute(key);
                     if (resultPath === undefined)
-                        return "continue";
-                    var innerBinding_1 = this_1.getInnerBinding(resultPath, '{{', '}}');
-                    if (innerBinding_1 === null)
-                        return "continue";
+                        continue;
+                    const innerBinding = this.getInnerBinding(resultPath, '{{', '}}');
+                    if (innerBinding === null)
+                        continue;
                     //console.log('innerBinding = ' + innerBinding);
-                    nd.addEventListener(this_1.camelToDashCase(key) + '-changed', function (e) {
+                    nd.addEventListener(this.camelToDashCase(key) + '-changed', e => {
                         //console.log(e, resultPath);
-                        var val = e['detail'].value;
-                        _this[innerBinding_1] = val;
-                        var innerListeners = _this.listeningInners[innerBinding_1];
+                        const val = e['detail'].value;
+                        this[innerBinding] = val;
+                        const innerListeners = this.listeningInners[innerBinding];
                         if (innerListeners) {
-                            innerListeners.forEach(function (il) {
+                            innerListeners.forEach(il => {
                                 il.innerHTML = val;
                             });
                         }
-                        var attrListeners = _this.listeningAttributes[innerBinding_1];
+                        const attrListeners = this.listeningAttributes[innerBinding];
                         if (attrListeners) {
-                            attrListeners.forEach(function (al) {
-                                al.el[_this.dashToCamelCase(al.propertyKey)] = val;
+                            attrListeners.forEach(al => {
+                                al.el[this.dashToCamelCase(al.propertyKey)] = val;
                             });
                         }
                     });
                 }
-            };
-            var this_1 = this;
-            for (var key in cp) {
-                _loop_1(key);
             }
-        };
-        XtalLite.prototype.getInnerBinding = function (s, openStr, closedStr) {
+        }
+        getInnerBinding(s, openStr, closedStr) {
             if (s === null)
                 return null;
             if (s.substring(0, 2) !== openStr)
                 return null;
-            var len = s.length;
+            const len = s.length;
             if (s.substr(len - 2) !== closedStr)
                 return null;
             return s.substring(2, len - 2);
-        };
-        XtalLite.prototype.processChildren = function (nd) {
+        }
+        processChildren(nd) {
             if (nd.children.length === 0) {
-                var tc = nd.textContent.trim();
+                const tc = nd.textContent.trim();
                 //console.log(nd.outerHTML, tc);
-                var innerBinding = this.getInnerBinding(tc, '{{', '}}');
+                const innerBinding = this.getInnerBinding(tc, '{{', '}}');
                 if (innerBinding !== null) {
                     nd.innerHTML = '';
-                    var li = this.listeningInners;
+                    const li = this.listeningInners;
                     if (!li[innerBinding])
                         li[innerBinding] = [];
                     li[innerBinding].push(nd);
                 }
                 return;
             }
-            var _this = this;
-            var _loop_2 = function (i, cn, ii) {
-                var childNd = cn[i];
-                var tagName = childNd.tagName;
+            const _this = this;
+            for (let i = 0, cn = nd.children, ii = cn.length; i < ii; i++) {
+                const childNd = cn[i];
+                let tagName = childNd.tagName;
                 if (tagName.indexOf('-') > 0) {
                     tagName = tagName.toLowerCase();
-                    for (var j = 0, jj = childNd.attributes.length; j < jj; j++) {
-                        var atr = childNd.attributes[j];
-                        var innerBinding = this_2.getInnerBinding(atr.value, '[[', ']]');
+                    for (let j = 0, jj = childNd.attributes.length; j < jj; j++) {
+                        const atr = childNd.attributes[j];
+                        const innerBinding = this.getInnerBinding(atr.value, '[[', ']]');
                         if (innerBinding) {
-                            var la = this_2.listeningAttributes;
+                            const la = this.listeningAttributes;
                             if (!la[innerBinding])
                                 la[innerBinding] = [];
                             la[innerBinding].push({
@@ -149,43 +132,33 @@ var xtal;
                         }
                         //console.log(atr);
                     }
-                    var dc_1 = this_2.dashedChildren;
-                    if (dc_1[tagName] === undefined) {
-                        dc_1[tagName] = null;
-                        customElements.whenDefined(tagName).then(function () {
-                            var construct = customElements.get(tagName);
-                            dc_1[tagName] = construct;
+                    const dc = this.dashedChildren;
+                    if (dc[tagName] === undefined) {
+                        dc[tagName] = null;
+                        customElements.whenDefined(tagName).then(() => {
+                            const construct = customElements.get(tagName);
+                            dc[tagName] = construct;
                             _this.addListener(childNd, construct);
                         });
                     }
                     else {
-                        _this.addListener(childNd, dc_1[tagName]);
+                        _this.addListener(childNd, dc[tagName]);
                     }
                 }
                 else {
-                    this_2.processChildren(childNd);
+                    this.processChildren(childNd);
                 }
-            };
-            var this_2 = this;
-            for (var i = 0, cn = nd.children, ii = cn.length; i < ii; i++) {
-                _loop_2(i, cn, ii);
             }
-        };
-        return XtalLite;
-    }(HTMLElement));
+        }
+    }
     xtal.XtalLite = XtalLite;
     customElements.define('xtal-lite', XtalLite);
-    var DOMLite = (function (_super) {
-        __extends(DOMLite, _super);
-        function DOMLite() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DOMLite.prototype.connectedCallback = function () {
-            var domTemplate = this.querySelector('template');
+    class DOMLite extends HTMLElement {
+        connectedCallback() {
+            const domTemplate = this.querySelector('template');
             xtal.domLite[this.id] = domTemplate;
-        };
-        return DOMLite;
-    }(HTMLElement));
+        }
+    }
     customElements.define('dom-lite', DOMLite);
 })(xtal || (xtal = {}));
 //# sourceMappingURL=xtal-lite.js.map

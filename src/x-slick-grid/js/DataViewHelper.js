@@ -28,13 +28,13 @@ var xtal;
                 }
                 dataView.onRowCountChanged.subscribe(function (e, args) {
                     console.log('onRowCountChanged');
-                    var grid = options.containerFinder().grid;
+                    const grid = options.containerFinder().grid;
                     grid.updateRowCount();
                     grid.render();
                 });
                 dataView.onRowsChanged.subscribe(function (e, args) {
                     //console.log('onRowsChanged');
-                    var grid = options.containerFinder().grid;
+                    const grid = options.containerFinder().grid;
                     grid.invalidateRows(args.rows);
                     grid.render();
                 });
