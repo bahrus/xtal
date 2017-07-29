@@ -82,8 +82,8 @@
                   for (var i = 0; i < item.children.length; i++) {
                     // faster to do than calling grid.splice which notifies on each call.
                     this.$.grid.items.splice(index + 1 + i, 0, item.children[i]);
-                    this.$.grid.clearCache();
                   }
+                  this.$.grid.clearCache();
                 } else {
                   this.$.grid.splice('items', index + 1, item.children.length);
                 }
